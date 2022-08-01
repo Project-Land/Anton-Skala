@@ -24,15 +24,15 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        Role::create(
+        Role::insert([
             ['name' => 'admin'],
             ['name' => 'student'],
             ['name' => 'teacher']
-        );
+        ]);
 
-        User::create(
+        User::insert([
             ['name' => 'Aleksandar', 'email' => 'amarkovic@projectland.rs', 'role_id' => 1, 'password' => Hash::make('00000000'), 'lang' => 'sr'],
-            ['name' => 'Nikola', 'email' => '', 'nstamenkovski@projectland.rs' => 1, 'password' => Hash::make('00000000'), 'lang' => 'sr'],
-        );
+            ['name' => 'Nikola', 'email' => 'nstamenkovski@projectland.rs', 'role_id' => 1, 'password' => Hash::make('00000000'), 'lang' => 'sr']
+        ]);
     }
 }
