@@ -13,10 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('subjects', function (Blueprint $table) {
+        Schema::create('lessons', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('image', 255)->nullable();
+            $table->string('image')->nullable();
+            $table->string('pdf')->nullable();
+            $table->foreignId('field_id')->constrained();
             $table->string('lang', 15);
             $table->timestamps();
         });
@@ -29,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('subjects');
+        Schema::dropIfExists('lessons');
     }
 };

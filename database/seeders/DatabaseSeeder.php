@@ -3,7 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Role;
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DatabaseSeeder extends Seeder
@@ -26,6 +28,11 @@ class DatabaseSeeder extends Seeder
             ['name' => 'admin'],
             ['name' => 'student'],
             ['name' => 'teacher']
+        );
+
+        User::create(
+            ['name' => 'Aleksandar', 'email' => 'amarkovic@projectland.rs', 'role_id' => 1, 'password' => Hash::make('00000000')],
+            ['name' => 'Nikola', 'email' => '', 'nstamenkovski@projectland.rs' => 1, 'password' => Hash::make('00000000')],
         );
     }
 }

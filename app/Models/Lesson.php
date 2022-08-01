@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Subject extends Model
+class Lesson extends Model
 {
     use HasFactory;
 
     protected $guarded = [];
 
-    public function fields()
+    public function field()
     {
-        return $this->hasMany(Field::class);
+        return $this->belongsTo(Field::class);
     }
 }
