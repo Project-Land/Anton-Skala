@@ -31,8 +31,8 @@ class DatabaseSeeder extends Seeder
         );
 
         User::create(
-            ['name' => 'Aleksandar', 'email' => 'amarkovic@projectland.rs', 'role_id' => 1, 'password' => Hash::make('00000000')],
-            ['name' => 'Nikola', 'email' => '', 'nstamenkovski@projectland.rs' => 1, 'password' => Hash::make('00000000')],
+            ['name' => 'Aleksandar', 'email' => 'amarkovic@projectland.rs', 'role_id' => 1, 'password' => Hash::make('00000000'), 'lang' => 'sr'],
+            ['name' => 'Nikola', 'email' => '', 'nstamenkovski@projectland.rs' => 1, 'password' => Hash::make('00000000'), 'lang' => 'sr'],
         );
     }
 }
