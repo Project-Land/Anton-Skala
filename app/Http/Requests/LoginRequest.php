@@ -17,8 +17,7 @@ class LoginRequest extends FormRequest
     {
         return [
             'username' => ['required', 'string'],
-            'password' => ['required', 'string'],
-            'device_token' => ['required']
+            'password' => ['required', 'string']
         ];
     }
 
@@ -26,8 +25,7 @@ class LoginRequest extends FormRequest
     {
         return [
             'username.required' => __('Unesite korisniko ime'),
-            'password.required' => __('Unesite lozinku'),
-            'device_token.required' => __('Token je obavezan')
+            'password.required' => __('Unesite lozinku')
         ];
     }
 

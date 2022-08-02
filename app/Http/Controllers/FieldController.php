@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Field;
+use App\Models\Subject;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FieldController extends Controller
 {
@@ -12,9 +14,12 @@ class FieldController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        return view('pages.fields.index', [
+            'fields' => Field::where('lang', Auth::user()->lang)->where('subject_id', $request->subject_id)->get(),
+            'subject_name' => Subject::find($request->subject_id)->name
+        ]);
     }
 
     /**
@@ -24,7 +29,7 @@ class FieldController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.fields.create');
     }
 
     /**
@@ -35,7 +40,8 @@ class FieldController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Field::create($request->all());
+        return redirect()->route('fields.index', ['subject_id' => $request->subject_id])->with('message', __('Oblast kreirana'));
     }
 
     /**

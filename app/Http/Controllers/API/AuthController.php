@@ -28,10 +28,11 @@ class AuthController extends Controller
                 'role_id' => Role::STUDENT,
             ]);
             event(new Registered($user));
+            $token = $user->createToken('auth')->plainTextToken;
         } catch (Throwable $e) {
             throw new HttpResponseException(response()->json(['message' => __('Došlo je do greške. Pokušajte ponovo.'.$e->getMessage())], 400));
         }
-        return response()->json(['message' => __('Korisnički nalog uspešno kreiran')], 200);
+        return response()->json(['message' => __('Korisnički nalog uspešno kreiran'), 'access_token' => $token], 200);
     }
 
     public function login(LoginRequest $request)
@@ -41,12 +42,9 @@ class AuthController extends Controller
             return response()->json(['message' => __('Neispravni podaci')], 400);
         }
 
-        if ($user->tokens->count()) {
+        /*if ($user->tokens->count()) {
             $user->tokens()->delete();
-        }
-
-        $user->device_token = $request->device_token;
-        $user->save();
+        }*/
 
         $token = $user->createToken('auth')->plainTextToken;
 

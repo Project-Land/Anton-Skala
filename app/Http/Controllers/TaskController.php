@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use App\Models\Lesson;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -12,9 +13,9 @@ class TaskController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        return view('pages.tasks.index', ['lesson_id' => $request->lesson_id]);
     }
 
     /**
@@ -22,9 +23,9 @@ class TaskController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        return view('pages.tasks.create', ['lesson_id' => $request->lesson_id]);
     }
 
     /**

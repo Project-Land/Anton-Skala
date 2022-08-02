@@ -19,6 +19,7 @@ return new class extends Migration
             $table->smallInteger('type');
             $table->string('description');
             $table->json('content');
+            $table->smallInteger('display_order');
             $table->timestamps();
         });
     }
