@@ -20,10 +20,10 @@ class LessonController extends Controller
 
         return view('pages.lessons.index', [
             'lessons' => Lesson::whereIn('lang', $lang)->where('field_id', $request->field_id)->get(),
-            'subject_name' => Field::find($request->field_id)->subject->name,
-            'subject_id' => Field::find($request->field_id)->subject_id,
-            'field_name' => Field::find($request->field_id)->name,
-            'field_id' => Field::find($request->field_id)->id,
+            'subject_name' => Field::findOrFail($request->field_id)->subject->name,
+            'subject_id' => Field::findOrFail($request->field_id)->subject_id,
+            'field_name' => Field::findOrFail($request->field_id)->name,
+            'field_id' => Field::findOrFail($request->field_id)->id,
         ]);
     }
 

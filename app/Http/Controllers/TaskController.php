@@ -15,7 +15,14 @@ class TaskController extends Controller
      */
     public function index(Request $request)
     {
-        return view('pages.tasks.index', ['lesson_id' => $request->lesson_id]);
+        return view('pages.tasks.index', [
+            'subject_name' => Lesson::findOrFail($request->lesson_id)->field->subject->name,
+            'subject_id' => Lesson::findOrFail($request->lesson_id)->field->subject_id,
+            'field_name' => Lesson::findOrFail($request->lesson_id)->field->name,
+            'field_id' => Lesson::findOrFail($request->lesson_id)->field_id,
+            'lesson_id' => $request->lesson_id,
+            'lesson_name' => Lesson::findOrFail($request->lesson_id)->name,
+        ]);
     }
 
     /**
@@ -28,6 +35,14 @@ class TaskController extends Controller
         return view('pages.tasks.create', ['lesson_id' => $request->lesson_id]);
     }
 
+    public function createSpecificTask(Request $request)
+    {
+        return view('pages.tasks.types.'.$request->type, [
+            'type' => $request->type,
+            'lesson_id' => $request->lesson_id
+        ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -36,7 +51,7 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request->all());
     }
 
     /**

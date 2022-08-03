@@ -25,6 +25,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('fields', FieldController::class);
     Route::resource('lessons', LessonController::class);
     Route::resource('tasks', TaskController::class);
+    Route::get('create-task', [TaskController::class, 'createSpecificTask'])->name('tasks.type');
 });
 
 require __DIR__.'/auth.php';

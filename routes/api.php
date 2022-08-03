@@ -18,8 +18,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //Auth
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/auth', [AuthController::class, 'show']);
 });
 
-Route::get('/auth', [AuthController::class, 'show']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);

@@ -18,32 +18,26 @@
         </div>
 
         <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-            <form action="{{ route('tasks.store') }}" method="POST" enctype="multipart/form-data">
-                @csrf
+            <form action="{{ route('tasks.type') }}" method="GET">
                 <input type="hidden" name="lesson_id" value="{{ request()->lesson_id }}">
 
                 <div class="mb-6">
-                    <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ __('Tekstualni opis zadatka') }}</label>
-                    <input type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500" required>
-                    @error('name')
-                    <span class="text-xs text-red-600 dark:text-red-400">{{ $message }}</span>
-                    @enderror
-                </div>
-
-                <div class="mb-6">
-                    <label for="type" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ __('Tip zadatka') }}</label>
+                    <label for="type" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ __('Odaberi tip zadatka') }}</label>
                     <select name="type" id="type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
-                        <option value="1">{{ __('Prevlačenje') }}</option>
-                        <option value="2">{{ __('Jedan tačan odgovor') }}</option>
-                        <option value="3">{{ __('Više tačnih odgovora') }}</option>
-                        <option value="4">{{ __('Prevlačenje po kolonama') }}</option>
+                        <option value="drag_and_drop" selected>{{ __('Prevlačenje') }}</option>
+                        <option value="correct_answer">{{ __('Jedan ili više tačnih odgovora') }}</option>
+                        <option value="column_sorting">{{ __('Prevlačenje po kolonama') }}</option>
                     </select>
                     @error('type')
                     <span class="text-xs text-red-600 dark:text-red-400">{{ $message }}</span>
                     @enderror
                 </div>
 
-                <button type="submit" class="w-1/2 md:w-1/5 mt-4 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-lime">{{ __('Kreiraj') }}</button>
+                <button type="submit" class="inline-flex justify-between items-center w-1/2 md:w-1/5 mt-4 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-lime">{{ __('Nastavi') }}
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                </button>
             </form>
         </div>
     </div>

@@ -18,7 +18,7 @@ class FieldController extends Controller
     {
         return view('pages.fields.index', [
             'fields' => Field::where('lang', Auth::user()->lang)->where('subject_id', $request->subject_id)->get(),
-            'subject_name' => Subject::find($request->subject_id)->name
+            'subject_name' => Subject::findOrFail($request->subject_id)->name
         ]);
     }
 
