@@ -211,7 +211,7 @@
                             <div class="border-r-2 col-span-3">
                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Audio zapis') }}</label>
                                 <label class="block">
-                                    <input type="file" name="answer_audio" accept="audio/*" class="block w-full text-sm text-slate-500
+                                    <input type="file" name="answer_audio[]" accept="audio/*" class="block w-full text-sm text-slate-500
                                     file:mr-4 file:py-2 file:px-4
                                     file:rounded-full file:border-0
                                     file:text-sm file:font-semibold
