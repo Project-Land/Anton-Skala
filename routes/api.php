@@ -21,7 +21,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/fields', [MaterialController::class, 'fields']);
     Route::get('/lessons', [MaterialController::class, 'lessons']);
     Route::get('/tasks', [MaterialController::class, 'lessonTasks']);
-    Route::get('/task/{task}', [MaterialController::class, 'task']);
+    Route::get('/task/{task}', [MaterialController::class, 'task'])->missing(function () {
+        return response(['message' => 'Task not found'], 404);
+    });
 
     // Auth
     Route::post('/logout', [AuthController::class, 'logout']);

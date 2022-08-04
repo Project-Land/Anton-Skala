@@ -11,7 +11,7 @@
             <div class="mb-2 md:my-6">
                 <a href="{{ route('tasks.create', ['lesson_id' => $lesson_id]) }}"
                     class="flex items-center justify-between w-full px-2 md:px-4 py-1 md:py-2 text-xs md:text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-lime">
-                    {{ __('Dodaj novi slajd') }}
+                    {{ __('Dodaj novi zadatak') }}
                     <span class="ml-2" aria-hidden="true">+</span>
                 </a>
             </div>
@@ -66,7 +66,7 @@
         <div class="overflow-x-auto relative grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-8 text-center">
             @foreach($tasks as $task)
 
-            <a href="" class="block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+            <a href="{{ route('tasks.edit', $task) }}" class="block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
                 <span class="text-lg">({{ $task->display_order }})</span>
                 <h5 class="mb-2 text-lg sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ __($task->description) }}</h5>
             </a>

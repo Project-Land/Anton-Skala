@@ -28,6 +28,8 @@ Route::middleware(['auth'])->group(function () {
     // Tasks
     Route::resource('tasks', TaskController::class);
     Route::get('create-task', [TaskController::class, 'createSpecificTask'])->name('tasks.type');
+    Route::get('edit-task/{task}', [TaskController::class, 'editSpecificTask'])->name('tasks.edit');
+
     Route::post('tasks/store-correct-answer-type', [TaskController::class, 'storeCorrectAnswerType'])->name('tasks.store-correct-answer-type');
 
 });

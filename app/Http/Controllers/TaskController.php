@@ -106,7 +106,7 @@ class TaskController extends Controller
                 'lesson_id' => $request->lesson_id,
                 'type' => $request->type,
                 'description' => $request->description,
-                'display_order' => 1,
+                'display_order' => Task::where('lesson_id', $request->lesson_id)->count() + 1,
                 'content' => json_encode($content)
             ]);
 
@@ -119,46 +119,35 @@ class TaskController extends Controller
         return redirect('tasks?lesson_id='.$request->lesson_id);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Task  $task
-     * @return \Illuminate\Http\Response
-     */
+
     public function show(Task $task)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Task  $task
-     * @return \Illuminate\Http\Response
-     */
+    public function editSpecificTask(Task $task)
+    {
+        $object = (array)json_decode($task->content);
+
+        return view('pages.tasks.types.edit.edit_'.$task->type, [
+            'type' => $task->type,
+            'lesson_id' => $task->lesson_id,
+            'task' => $task,
+            'content' => Task::hydrate($object)
+        ]);
+    }
+
     public function edit(Task $task)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Task  $task
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, Task $task)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Task  $task
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Task $task)
     {
         //
