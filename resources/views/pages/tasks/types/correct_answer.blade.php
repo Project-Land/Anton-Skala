@@ -3,6 +3,7 @@
     <x-slot name="title">| {{ __('Zadatak') }}</x-slot>
 
     <div class="container px-6 lg:px-32 mx-auto grid">
+
         @include('components.alert')
 
         <div class="flex items-center justify-between">
@@ -18,14 +19,15 @@
         </div>
 
         <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-            <form action="{{ route('tasks.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('tasks.store-correct-answer-type') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="lesson_id" value="{{ request()->lesson_id }}">
                 <input type="hidden" name="type" value="{{ request()->type }}">
 
                 <div class="mb-6">
                     <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ __('Tekstualni opis zadatka') }}</label>
-                    <input type="text" name="description" id="description" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500" required>
+                    <input type="text" name="description" id="description" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
+                        value="{{ old('description') }}" required>
                     @error('description')
                     <span class="text-xs text-red-600 dark:text-red-400">{{ $message }}</span>
                     @enderror
@@ -37,7 +39,8 @@
                     <div class="border border-purple-600 rounded-lg p-4 grid grid-cols-3 gap-6">
                         <div>
                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Tekst') }}</label>
-                            <input type="text" name="question_text" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
+                            <input type="text" name="question_text" id="" value="{{ old('question_text') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
                         </div>
 
                         <div class="inline-flex border-l-2 border-r-2 px-6">
@@ -62,7 +65,7 @@
                         <div>
                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Audio zapis') }}</label>
                             <label class="block">
-                                <input type="file" name="question_audio" class="block w-full text-sm text-slate-500
+                                <input type="file" name="question_audio" accept="audio/*" class="block w-full text-sm text-slate-500
                                   file:mr-4 file:py-2 file:px-4
                                   file:rounded-full file:border-0
                                   file:text-sm file:font-semibold
@@ -108,7 +111,7 @@
                                 <div class="border-r-2 col-span-3">
                                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Audio zapis') }}</label>
                                     <label class="block">
-                                        <input type="file" name="answer_audio[]" class="block w-full text-sm text-slate-500
+                                        <input type="file" name="answer_audio[]" accept="audio/*" class="block w-full text-sm text-slate-500
                                         file:mr-4 file:py-2 file:px-4
                                         file:rounded-full file:border-0
                                         file:text-sm file:font-semibold
@@ -118,8 +121,8 @@
                                     </label>
                                 </div>
                                 <div class="col-span-1">
-                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Tačan odgovor?') }}</label>
-                                    <select name="answer_correct[]" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
+                                    <label class="block mb-2 text-xs font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Tačan odgovor?') }}</label>
+                                    <select name="answer_correct[]" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
                                         <option value="0" selected>{{ __('Ne') }}</option>
                                         <option value="1">{{ __('Da') }}</option>
                                     </select>
@@ -162,7 +165,7 @@
                             <div class="border-r-2 col-span-3">
                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Audio zapis') }}</label>
                                 <label class="block">
-                                    <input type="file" name="answer_audio[]" class="block w-full text-sm text-slate-500
+                                    <input type="file" name="answer_audio[]" accept="audio/*" class="block w-full text-sm text-slate-500
                                     file:mr-4 file:py-2 file:px-4
                                     file:rounded-full file:border-0
                                     file:text-sm file:font-semibold
@@ -172,8 +175,8 @@
                                 </label>
                             </div>
                             <div class="col-span-1">
-                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Tačan odgovor?') }}</label>
-                                <select name="answer_correct[]" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
+                                <label class="block mb-2 text-xs font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Tačan odgovor?') }}</label>
+                                <select name="answer_correct[]" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
                                     <option value="0" selected>{{ __('Ne') }}</option>
                                     <option value="1">{{ __('Da') }}</option>
                                 </select>
@@ -208,7 +211,7 @@
                             <div class="border-r-2 col-span-3">
                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Audio zapis') }}</label>
                                 <label class="block">
-                                    <input type="file" name="answer_audio" class="block w-full text-sm text-slate-500
+                                    <input type="file" name="answer_audio" accept="audio/*" class="block w-full text-sm text-slate-500
                                     file:mr-4 file:py-2 file:px-4
                                     file:rounded-full file:border-0
                                     file:text-sm file:font-semibold
@@ -218,8 +221,8 @@
                                 </label>
                             </div>
                             <div class="col-span-1">
-                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Tačan odgovor?') }}</label>
-                                <select name="answer_correct[]" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
+                                <label class="block mb-2 text-xs font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Tačan odgovor?') }}</label>
+                                <select name="answer_correct[]" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
                                     <option value="0" selected>{{ __('Ne') }}</option>
                                     <option value="1">{{ __('Da') }}</option>
                                 </select>

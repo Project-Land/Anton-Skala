@@ -8,6 +8,7 @@ use App\Models\Lesson;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TaskResource;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\FieldResource;
 use App\Http\Resources\LessonResource;
 
@@ -15,7 +16,7 @@ class MaterialController extends Controller
 {
     public function fields(Request $request)
     {
-        $lang = in_array($request->lang, ['sr_lat', 'sr_cir']) ? "sr" : $request->lang;
+        $lang = in_array(Auth::user()->lang, ['sr_lat', 'sr_cir']) ? "sr" : Auth::user()->lang;
 
         $fields = Field::where([
             'lang' => $lang,
@@ -27,7 +28,7 @@ class MaterialController extends Controller
     public function lessons(Request $request)
     {
         $lessons = Lesson::where([
-            'lang' => $request->lang,
+            'lang' => Auth::user()->lang,
             'field_id' => $request->field_id
         ])->get();
         return response()->json(LessonResource::collection($lessons));

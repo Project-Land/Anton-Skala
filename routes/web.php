@@ -24,8 +24,12 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('subjects', SubjectController::class);
     Route::resource('fields', FieldController::class);
     Route::resource('lessons', LessonController::class);
+
+    // Tasks
     Route::resource('tasks', TaskController::class);
     Route::get('create-task', [TaskController::class, 'createSpecificTask'])->name('tasks.type');
+    Route::post('tasks/store-correct-answer-type', [TaskController::class, 'storeCorrectAnswerType'])->name('tasks.store-correct-answer-type');
+
 });
 
 require __DIR__.'/auth.php';
