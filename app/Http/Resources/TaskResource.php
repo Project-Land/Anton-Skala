@@ -16,6 +16,12 @@ class TaskResource extends JsonResource
             'description' => $this->description,
             'display_order' => $this->display_order,
             'content' => json_decode($this->content),
+            //'answers'=> json_decode($this->content, TRUE)['answers'],
+            //'questions'=> json_decode($this->content, TRUE)['questions'],
+            //'answers_shuffle' =>
+            //'questions_shuffle' =>
+            //'borders_in_color' =>
+            //'no_of_correct_answers =>'
         ];
     }
 }

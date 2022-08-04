@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\TaskResource;
 use Exception;
 use App\Models\Task;
 use App\Models\Lesson;
@@ -37,6 +38,7 @@ class TaskController extends Controller
 
     public function storeCorrectAnswerType(Request $request)
     {
+        //dd($request->all());
         try{
             $numberOfAnswers = count($request->answer_text);
             $answers = [];
@@ -120,6 +122,103 @@ class TaskController extends Controller
     }
 
 
+
+    public function storeDragAndDropType(Request $request)
+    {   //dd($request->all());
+        try{
+            $numberOfAnswers = count($request->answer_text);
+            $answers = [];
+            $numberOfQuestions = count($request->question_text);
+            $questions = [];
+
+
+        for($i = 0; $i < $numberOfAnswers; $i++) {
+            $answers += [
+                $i => [
+                    'text' => $request->answer_text[$i],
+                    'image' => $request->answer_image[$i] ?? null,
+                    'audio' => $request->answer_audio[$i] ?? null,
+
+                ]
+            ];
+        }
+
+        for($i = 0; $i < $numberOfQuestions; $i++) {
+            $questions += [
+                $i => [
+                    'text' => $request->question_text[$i],
+                    'image' => $request->question_image[$i] ?? null,
+                    'audio' => $request->question_audio[$i] ?? null,
+
+                ]
+            ];
+        }
+
+
+        $content = [
+            'answers' => $answers,
+            'questions' => $questions
+        ];
+        //dd($content);
+        foreach($content['answers'] as $key => $answer){
+            if($answer['image']){
+                $image = $answer['image'];
+                $image_name = time().'.'.$image->getClientOriginalExtension();
+                $image->move(public_path('material/images'), $image_name);
+                $content['answers'][$key]['image'] = 'material/images/'.$image_name;
+            }
+           // dump($image_name);
+            if($content['answers'][$key]['audio']){
+                $audio = $content['answers'][$key]['audio'];
+                $audio_name = time().'.'.$audio->getClientOriginalExtension();
+                $audio->move(public_path('material/audio'), $audio_name);
+                $content['answers'][$key]['audio'] = 'material/audio/'.$audio_name;
+            }
+        }
+
+        foreach($content['questions'] as $key => $question){
+            if($question['image']){
+                $image = $question['image'];
+                $image_name = time().'.'.$image->getClientOriginalExtension();
+                $image->move(public_path('material/images'), $image_name);
+                $content['questions'][$key]['image'] = 'material/images/'.$image_name;
+            }
+           // dump($image_name);
+            if($content['questions'][$key]['audio']){
+                $audio = $content['question'][$key]['audio'];
+                $audio_name = time().'.'.$audio->getClientOriginalExtension();
+                $audio->move(public_path('material/audio'), $audio_name);
+                $content['questions'][$key]['audio'] = 'material/audio/'.$audio_name;
+            }
+        }
+
+
+       // dd($content);
+       $task= Task::create([
+            'lesson_id' => $request->lesson_id,
+            'type' => $request->type,
+            'description' => $request->description,
+            'display_order' => 1,
+            'content' => json_encode($content)
+        ]);
+
+
+        $request->session()->flash('message', __('Zadatak je uspešno kreiran'));
+
+    } catch(Exception $e){
+        $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo'.$e->getMessage()));
+    }
+
+    return redirect('tasks?lesson_id='.$request->lesson_id);
+
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Task  $task
+     * @return \Illuminate\Http\Response
+     */
     public function show(Task $task)
     {
         //
