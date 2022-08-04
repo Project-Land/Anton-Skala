@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\API\AuthController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\MaterialController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,7 +17,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function () {
 
-    //Auth
+    // Material
+    Route::get('/fields', [MaterialController::class, 'fields']);
+    Route::get('/lessons', [MaterialController::class, 'lessons']);
+    Route::get('/tasks', [MaterialController::class, 'lessonTasks']);
+    Route::get('/task/{task}', [MaterialController::class, 'task']);
+
+    // Auth
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/auth', [AuthController::class, 'show']);
 });
