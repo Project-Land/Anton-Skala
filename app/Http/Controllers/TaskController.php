@@ -120,6 +120,79 @@ class TaskController extends Controller
         dd($content);
     }
 
+
+
+    public function storeDragAndDropType(Request $request)
+    {
+        dd($request->all());
+        $numberOfAnswers = count($request->answer_text);
+        $answers = [];
+
+        for($i = 0; $i < $numberOfAnswers; $i++) {
+            $answers += [
+                $i => [
+                    'text' => $request->answer_text[$i],
+                    'image' => $request->answer_image[$i] ?? null,
+                    'audio' => $request->answer_audio[$i] ?? null,
+                    'is_correct' => $request->answer_correct[$i] == 0 ? false : true
+                ]
+            ];
+        }
+
+        // provera ako nije izabran nijedan tačan odgovor
+        if(!count(collect($answers)->where('is_correct', true))){
+            return redirect()->back()->withInput()->with(['error' => __('Izaberite bar jedan tačan odgovor')]);
+        }
+
+        if($request->question_image){
+            $image = $request->question_image;
+            $image_name = time().'.'.$image->getClientOriginalExtension();
+            $image->move(public_path('material/images'), $image_name);
+            $question_image_path = 'material/images/'.$image_name;
+        }
+        else{
+            $question_image_path = null;
+        }
+
+        if($request->question_audio){
+            $audio = $request->question_audio;
+            $audio_name = time().'.'.$audio->getClientOriginalExtension();
+            $audio->move(public_path('material/audio'), $audio_name);
+            $question_audio_path = 'material/audio/'.$audio_name;
+        }
+        else{
+            $question_audio_path = null;
+        }
+
+        $content = [
+            'question' => [
+                'text' => $request->question_text,
+                'image' => $question_image_path,
+                'audio' => $question_audio_path,
+            ],
+            'answers' => $answers
+        ];
+
+        foreach($content['answers'] as $key => $answer){
+            if($answer['image']){
+                $image = $answer['image'];
+                $image_name = time().'.'.$image->getClientOriginalExtension();
+                $image->move(public_path('material/images'), $image_name);
+                $content['answers'][$key]['image'] = 'material/images/'.$image_name;
+            }
+            dump($image_name);
+            if($content['answers'][$key]['audio']){
+                $audio = $content['answers'][$key]['audio'];
+                $audio_name = time().'.'.$audio->getClientOriginalExtension();
+                $audio->move(public_path('material/audio'), $audio_name);
+                $content['answers'][$key]['audio'] = 'material/audio/'.$audio_name;
+            }
+        }
+
+        dd($content);
+
+    }
+
     /**
      * Display the specified resource.
      *
