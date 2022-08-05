@@ -4,8 +4,6 @@
 
     <div class="container px-6 mx-auto grid">
 
-        @include('components.alert')
-
         <div class="flex flex-col md:flex-row justify-between items-center mb-2">
             <h2 class="my-3 md:my-6 text-lg md:text-2xl font-semibold text-gray-700 dark:text-gray-200">{{ $lesson_name }} - {{ __('Lista zadataka') }}</h2>
             <div class="mb-2 md:my-6">

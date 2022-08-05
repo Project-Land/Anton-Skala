@@ -1,4 +1,6 @@
 <div>
+    @include('components.alert')
+
     <ul wire:sortable="updateOrder" class="grid grid-rows gap-4">
         @foreach ($tasks as $task)
         <li wire:sortable.item="{{ $task->id }}" wire:key="task-{{ $task->id }}" wire:sortable.handle class="w-full cursor-move bg-white px-2 py-4 inline-flex justify-between rounded-lg border">
