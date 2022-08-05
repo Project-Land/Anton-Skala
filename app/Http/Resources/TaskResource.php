@@ -9,6 +9,8 @@ class TaskResource extends JsonResource
 
     public function toArray($request)
     {
+        $totalTasks = $this->lesson->tasks()->count();
+
         return [
             'id' => $this->id,
             'lesson_id' => $this->lesson_id,
@@ -16,6 +18,7 @@ class TaskResource extends JsonResource
             'description' => $this->description,
             'display_order' => $this->display_order,
             'content' => json_decode($this->content),
+            'next_task_id' =>  $totalTasks == $this->display_order ? null : $this->display_order + 1,
             //'answers'=> json_decode($this->content, TRUE)['answers'],
             //'questions'=> json_decode($this->content, TRUE)['questions'],
             //'answers_shuffle' =>

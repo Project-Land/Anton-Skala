@@ -36,7 +36,7 @@ class MaterialController extends Controller
 
     public function lessonTasks(Request $request)
     {
-        $tasks = Task::where('lesson_id', $request->lesson_id)->get();
+        $tasks = Task::where('lesson_id', $request->lesson_id)->orderBy('display_order')->get()->first();
         return response()->json(TaskResource::collection($tasks));
     }
 
