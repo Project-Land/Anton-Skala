@@ -43,23 +43,117 @@
                     <div class="grid grid-rows-1 gap-8 border rounded-lg p-4">
 
                         <template id="template">
-                            <div class="border border-2 border-violet-300 rounded-lg p-4 grid gap-6">
-                            <div class="border border-violet-300 rounded-lg p-4 grid grid-cols-12 gap-6" x-data="imageViewer()">
-                                <div class="col-span-3">
-                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Tekst') }}</label>
-                                    <input type="text" name="question_text[]" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
-                                </div>
-                                <div class="inline-flex border-l-2 border-r-2 px-6 col-span-4">
-                                    <div>
-                                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Slika') }}</label>
-                                        <label class="block">
-                                            <input type="file" name="question_image[]" value="ss" class="block w-full text-sm text-slate-500
+                            <div class="border-2 border-violet-300 rounded-lg p-4 grid gap-6">
+                                <div class="border border-violet-300 rounded-lg p-4 grid grid-cols-12 gap-6" x-data="imageViewer()">
+                                    <div class="col-span-3">
+                                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Tekst') }}</label>
+                                        <input type="text" name="question_text[]" id=""
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
+                                    </div>
+                                    <div class="inline-flex border-l-2 border-r-2 px-6 col-span-4">
+                                        <div>
+                                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Slika') }}</label>
+                                            <label class="block">
+                                                <input type="file" name="question_image[]" value="ss" class="block w-full text-sm text-slate-500
                                             file:mr-4 file:py-2 file:px-4
                                             file:rounded-full file:border-0
                                             file:text-sm file:font-semibold
                                             file:bg-violet-50 file:text-violet-700
                                             hover:file:bg-violet-100
                                             " accept="image/*" @change="fileChosen" />
+                                            </label>
+                                        </div>
+                                        <template x-if="imageUrl">
+                                            <div class="shrink-0">
+                                                <img class="h-16 w-16 object-cover rounded-sm" :src="imageUrl" alt="Current profile photo" />
+                                            </div>
+                                        </template>
+                                    </div>
+                                    <div class="border-r-2 col-span-4">
+                                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Audio zapis') }}</label>
+                                        <label class="block">
+                                            <input type="file" name="question_audio[]" accept="audio/*" class="block w-full text-sm text-slate-500
+                                        file:mr-4 file:py-2 file:px-4
+                                        file:rounded-full file:border-0
+                                        file:text-sm file:font-semibold
+                                        file:bg-violet-50 file:text-violet-700
+                                        hover:file:bg-violet-100
+                                        " />
+                                        </label>
+                                    </div>
+
+                                    <span onclick="this.parentElement.parentElement.remove()" class="col-span-1 pt-6 pl-8 cursor-pointer hover:text-red-500">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </span>
+                                </div>
+
+                                <div class="border border-violet-300 rounded-lg p-4 grid grid-cols-12 gap-6" x-data="imageViewer()">
+                                    <div class="col-span-3">
+                                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Tekst') }}</label>
+                                        <input type="text" name="answer_text[]" id=""
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
+                                    </div>
+                                    <div class="inline-flex border-l-2 border-r-2 px-6 col-span-4">
+                                        <div>
+                                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Slika') }}</label>
+                                            <label class="block">
+                                                <input type="file" name="answer_image[]" value="" class="block w-full  text-sm text-slate-500
+                                            file:mr-4 file:py-2 file:px-4
+                                            file:rounded-full file:border-0
+                                            file:text-sm file:font-semibold
+                                            file:bg-violet-50 file:text-violet-700
+                                            hover:file:bg-violet-100
+                                            " accept="image/*" @change="fileChosen" />
+                                            </label>
+                                        </div>
+                                        <template x-if="imageUrl">
+                                            <div class="shrink-0">
+                                                <img class="h-16 w-16 object-cover rounded-sm" :src="imageUrl" alt="Current profile photo" />
+                                            </div>
+                                        </template>
+                                    </div>
+                                    <div class="border-r-2 col-span-4">
+                                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Audio zapis') }}</label>
+                                        <label class="block">
+                                            <input type="file" name="answer_audio[]" accept="audio/*" class="block w-full text-sm text-slate-500
+                                        file:mr-4 file:py-2 file:px-4
+                                        file:rounded-full file:border-0
+                                        file:text-sm file:font-semibold
+                                        file:bg-violet-50 file:text-violet-700
+                                        hover:file:bg-violet-100
+                                        " />
+                                        </label>
+                                    </div>
+
+                                    <span onclick="this.parentElement.parentElement.remove()" class="col-span-1 pt-6 pl-8 cursor-pointer hover:text-red-500">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </span>
+                                </div>
+                            </div>
+                        </template>
+
+                        <!-- One block -->
+                        <div class="border-2 border-violet-300 rounded-lg p-4 grid gap-6">
+                            <div class="border border-violet-300 rounded-lg p-4 grid grid-cols-12 gap-6" x-data="imageViewer()">
+                                <div class="col-span-3">
+                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Tekst') }}</label>
+                                    <input type="text" name="question_text[]" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
+                                </div>
+                                <div class="inline-flex border-l-2 border-r-2 px-6 col-span-5">
+                                    <div>
+                                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Slika') }}</label>
+                                        <label class="block">
+                                            <input type="file" name="question_image[]" value="" class="block w-full text-sm text-slate-500
+                                        file:mr-4 file:py-2 file:px-4
+                                        file:rounded-full file:border-0
+                                        file:text-sm file:font-semibold
+                                        file:bg-violet-50 file:text-violet-700
+                                        hover:file:bg-violet-100
+                                        " accept="image/*" @change="fileChosen" />
                                         </label>
                                     </div>
                                     <template x-if="imageUrl">
@@ -72,38 +166,34 @@
                                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Audio zapis') }}</label>
                                     <label class="block">
                                         <input type="file" name="question_audio[]" accept="audio/*" class="block w-full text-sm text-slate-500
-                                        file:mr-4 file:py-2 file:px-4
-                                        file:rounded-full file:border-0
-                                        file:text-sm file:font-semibold
-                                        file:bg-violet-50 file:text-violet-700
-                                        hover:file:bg-violet-100
-                                        " />
+                                    file:mr-4 file:py-2 file:px-4
+                                    file:rounded-full file:border-0
+                                    file:text-sm file:font-semibold
+                                    file:bg-violet-50 file:text-violet-700
+                                    hover:file:bg-violet-100
+                                    " />
                                     </label>
                                 </div>
 
-                                <span onclick="this.parentElement.parentElement.remove()" class="col-span-1 pt-6 pl-8 cursor-pointer hover:text-red-500">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                </span>
                             </div>
 
+                            <!-- One block -->
                             <div class="border border-violet-300 rounded-lg p-4 grid grid-cols-12 gap-6" x-data="imageViewer()">
                                 <div class="col-span-3">
                                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Tekst') }}</label>
                                     <input type="text" name="answer_text[]" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
                                 </div>
-                                <div class="inline-flex border-l-2 border-r-2 px-6 col-span-4">
+                                <div class="inline-flex border-l-2 border-r-2 px-6 col-span-5">
                                     <div>
                                         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Slika') }}</label>
                                         <label class="block">
-                                            <input type="file" name="answer_image[]" value="" class="block w-full  text-sm text-slate-500
-                                            file:mr-4 file:py-2 file:px-4
-                                            file:rounded-full file:border-0
-                                            file:text-sm file:font-semibold
-                                            file:bg-violet-50 file:text-violet-700
-                                            hover:file:bg-violet-100
-                                            " accept="image/*" @change="fileChosen" />
+                                            <input type="file" name="answer_image[]" value="" class="block w-full text-sm text-slate-500
+                                        file:mr-4 file:py-2 file:px-4
+                                        file:rounded-full file:border-0
+                                        file:text-sm file:font-semibold
+                                        file:bg-violet-50 file:text-violet-700
+                                        hover:file:bg-violet-100
+                                        " accept="image/*" @change="fileChosen" />
                                         </label>
                                     </div>
                                     <template x-if="imageUrl">
@@ -115,105 +205,17 @@
                                 <div class="border-r-2 col-span-4">
                                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Audio zapis') }}</label>
                                     <label class="block">
-                                        <input type="file" name="answer_audio[]" accept="audio/*" class="block w-full text-sm text-slate-500
-                                        file:mr-4 file:py-2 file:px-4
-                                        file:rounded-full file:border-0
-                                        file:text-sm file:font-semibold
-                                        file:bg-violet-50 file:text-violet-700
-                                        hover:file:bg-violet-100
-                                        " />
-                                    </label>
-                                </div>
-
-                                <span onclick="this.parentElement.parentElement.remove()" class="col-span-1 pt-6 pl-8 cursor-pointer hover:text-red-500">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                </span>
-                            </div>
-                        </div>
-                        </template>
-
-                        <!-- One block -->
-                        <div class="border border-2 border-violet-300 rounded-lg p-4 grid gap-6">
-                        <div class="border border-violet-300 rounded-lg p-4 grid grid-cols-12 gap-6" x-data="imageViewer()">
-                            <div class="col-span-3">
-                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Tekst') }}</label>
-                                <input type="text" name="question_text[]" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
-                            </div>
-                            <div class="inline-flex border-l-2 border-r-2 px-6 col-span-5">
-                                <div>
-                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Slika') }}</label>
-                                    <label class="block">
-                                        <input type="file" name="question_image[]" value="" class="block w-full text-sm text-slate-500
-                                        file:mr-4 file:py-2 file:px-4
-                                        file:rounded-full file:border-0
-                                        file:text-sm file:font-semibold
-                                        file:bg-violet-50 file:text-violet-700
-                                        hover:file:bg-violet-100
-                                        " accept="image/*" @change="fileChosen" />
-                                    </label>
-                                </div>
-                                <template x-if="imageUrl">
-                                    <div class="shrink-0">
-                                        <img class="h-16 w-16 object-cover rounded-sm" :src="imageUrl" alt="Current profile photo" />
-                                    </div>
-                                </template>
-                            </div>
-                            <div class="border-r-2 col-span-4">
-                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Audio zapis') }}</label>
-                                <label class="block">
-                                    <input type="file" name="question_audio[]" accept="audio/*" class="block w-full text-sm text-slate-500
+                                        <input type="file" name="answer_audio" accept="audio/*" class="block w-full text-sm text-slate-500
                                     file:mr-4 file:py-2 file:px-4
                                     file:rounded-full file:border-0
                                     file:text-sm file:font-semibold
                                     file:bg-violet-50 file:text-violet-700
                                     hover:file:bg-violet-100
                                     " />
-                                </label>
-                            </div>
-
-                        </div>
-
-                        <!-- One block -->
-                        <div class="border border-violet-300 rounded-lg p-4 grid grid-cols-12 gap-6" x-data="imageViewer()">
-                            <div class="col-span-3">
-                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Tekst') }}</label>
-                                <input type="text" name="answer_text[]" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
-                            </div>
-                            <div class="inline-flex border-l-2 border-r-2 px-6 col-span-5">
-                                <div>
-                                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Slika') }}</label>
-                                    <label class="block">
-                                        <input type="file" name="answer_image[]" value="" class="block w-full text-sm text-slate-500
-                                        file:mr-4 file:py-2 file:px-4
-                                        file:rounded-full file:border-0
-                                        file:text-sm file:font-semibold
-                                        file:bg-violet-50 file:text-violet-700
-                                        hover:file:bg-violet-100
-                                        " accept="image/*" @change="fileChosen" />
                                     </label>
                                 </div>
-                                <template x-if="imageUrl">
-                                    <div class="shrink-0">
-                                        <img class="h-16 w-16 object-cover rounded-sm" :src="imageUrl" alt="Current profile photo" />
-                                    </div>
-                                </template>
-                            </div>
-                            <div class="border-r-2 col-span-4">
-                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Audio zapis') }}</label>
-                                <label class="block">
-                                    <input type="file" name="answer_audio" accept="audio/*" class="block w-full text-sm text-slate-500
-                                    file:mr-4 file:py-2 file:px-4
-                                    file:rounded-full file:border-0
-                                    file:text-sm file:font-semibold
-                                    file:bg-violet-50 file:text-violet-700
-                                    hover:file:bg-violet-100
-                                    " />
-                                </label>
-                            </div>
 
-                        </div>
+                            </div>
                         </div>
 
                         <div id="newAnswers" class="grid gap-8">

@@ -1,13 +1,13 @@
 <x-app-layout>
 
-    <x-slot name="title">| {{ $lesson_name }} - {{ __('Zadatak') }}</x-slot>
+    <x-slot name="title">| {{ $lesson_name }} - {{ __('Lista zadataka') }}</x-slot>
 
     <div class="container px-6 mx-auto grid">
 
         @include('components.alert')
 
         <div class="flex flex-col md:flex-row justify-between items-center mb-2">
-            <h2 class="my-3 md:my-6 text-lg md:text-2xl font-semibold text-gray-700 dark:text-gray-200">{{ $lesson_name }} - {{ __('Zadatak') }}</h2>
+            <h2 class="my-3 md:my-6 text-lg md:text-2xl font-semibold text-gray-700 dark:text-gray-200">{{ $lesson_name }} - {{ __('Lista zadataka') }}</h2>
             <div class="mb-2 md:my-6">
                 <a href="{{ route('tasks.create', ['lesson_id' => $lesson_id]) }}"
                     class="flex items-center justify-between w-full px-2 md:px-4 py-1 md:py-2 text-xs md:text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-lime">
@@ -63,15 +63,6 @@
             </ol>
         </nav>
 
-        <div class="overflow-x-auto relative grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-8 text-center">
-            @foreach($tasks as $task)
-
-            <a href="{{ route('tasks.edit', $task) }}" class="block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-                <span class="text-lg">({{ $task->display_order }})</span>
-                <h5 class="mb-2 text-lg sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ __($task->description) }}</h5>
-            </a>
-            @endforeach
-        </div>
+        @livewire('tasks', ['lesson_id' => $lesson_id])
     </div>
-
 </x-app-layout>

@@ -83,11 +83,6 @@
                                 " />
                                 </label>
                             </div>
-                            {{-- <div class="shrink-0">
-                                <audio controls class="h-16 w-32">
-                                    <source src="" type="audio/mpeg">
-                                </audio>
-                            </div> --}}
                             @if($content['question']->audio)
                             <div class="shrink-0">
                                 <audio controls class="h-16 w-32">
@@ -193,7 +188,7 @@
                                     </div>
                                 </template>
                             </div>
-                            <div class="inline-flex px-6 border-r-2 col-span-4">
+                            <div class="inline-flex px-6 border-r-2 col-span-3">
                                 <div>
                                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Audio zapis') }}</label>
                                     <label class="block">
@@ -221,6 +216,11 @@
                                     <option value="1" {{ $answer['is_correct']==true ? "selected" :"" }}>{{ __('Da') }}</option>
                                 </select>
                             </div>
+                            <span onclick="this.parentElement.remove()" class="col-span-1 pt-6 pl-8 cursor-pointer hover:text-red-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </span>
                         </div>
                         @endforeach
 

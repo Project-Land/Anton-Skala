@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\TaskResource;
 use Exception;
 use App\Models\Task;
 use App\Models\Lesson;
@@ -18,8 +17,7 @@ class TaskController extends Controller
             'field_name' => Lesson::findOrFail($request->lesson_id)->field->name,
             'field_id' => Lesson::findOrFail($request->lesson_id)->field_id,
             'lesson_id' => $request->lesson_id,
-            'lesson_name' => Lesson::findOrFail($request->lesson_id)->name,
-            'tasks' => Task::where('lesson_id', $request->lesson_id)->get()
+            'lesson_name' => Lesson::findOrFail($request->lesson_id)->name
         ]);
     }
 
@@ -38,12 +36,13 @@ class TaskController extends Controller
 
     public function storeCorrectAnswerType(Request $request)
     {
-        //dd($request->all());
         try{
             $numberOfAnswers = count($request->answer_text);
             $answers = [];
+            $numberOfCorrectAnswers = 0;
 
             for($i = 0; $i < $numberOfAnswers; $i++) {
+                $request->answer_correct[$i] == 1 ? $numberOfCorrectAnswers++ : $numberOfCorrectAnswers;
                 $answers += [
                     $i => [
                         'text' => $request->answer_text[$i],
@@ -84,6 +83,7 @@ class TaskController extends Controller
                     'text' => $request->question_text,
                     'image' => $question_image_path,
                     'audio' => $question_audio_path,
+                    'number_of_correct_answers' => $numberOfCorrectAnswers
                 ],
                 'answers' => $answers
             ];
@@ -193,15 +193,13 @@ class TaskController extends Controller
         }
 
 
-       // dd($content);
-       $task= Task::create([
+       $task = Task::create([
             'lesson_id' => $request->lesson_id,
             'type' => $request->type,
             'description' => $request->description,
             'display_order' => 1,
             'content' => json_encode($content)
         ]);
-
 
         $request->session()->flash('message', __('Zadatak je uspešno kreiran'));
 
@@ -224,17 +222,17 @@ class TaskController extends Controller
         //
     }
 
-    public function editSpecificTask(Task $task)
-    {
-        $object = (array)json_decode($task->content);
+    // public function editSpecificTask(Task $task)
+    // {
+    //     $object = (array)json_decode($task->content);
 
-        return view('pages.tasks.types.edit.edit_'.$task->type, [
-            'type' => $task->type,
-            'lesson_id' => $task->lesson_id,
-            'task' => $task,
-            'content' => Task::hydrate($object)
-        ]);
-    }
+    //     return view('pages.tasks.types.edit.edit_'.$task->type, [
+    //         'type' => $task->type,
+    //         'lesson_id' => $task->lesson_id,
+    //         'task' => $task,
+    //         'content' => Task::hydrate($object)
+    //     ]);
+    // }
 
     public function edit(Task $task)
     {
