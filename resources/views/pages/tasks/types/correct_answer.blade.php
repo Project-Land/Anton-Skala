@@ -247,6 +247,8 @@
                 </button>
             </form>
         </div>
+        <img src="/images/correct_answer.png" alt="tacan odgovor">
+
     </div>
 
     <script>

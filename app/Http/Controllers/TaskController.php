@@ -48,7 +48,8 @@ class TaskController extends Controller
                         'text' => $request->answer_text[$i],
                         'image' => $request->answer_image[$i] ?? null,
                         'audio' => $request->answer_audio[$i] ?? null,
-                        'is_correct' => $request->answer_correct[$i] == 0 ? false : true
+                        'is_correct' => $request->answer_correct[$i] == 0 ? false : true,
+                        'id' => $i+1
                     ]
                 ];
             }
@@ -197,7 +198,7 @@ class TaskController extends Controller
             'lesson_id' => $request->lesson_id,
             'type' => $request->type,
             'description' => $request->description,
-            'display_order' => 1,
+            'display_order' => Task::where('lesson_id', $request->lesson_id)->count() + 1,
             'content' => json_encode($content)
         ]);
 
@@ -210,6 +211,95 @@ class TaskController extends Controller
     return redirect('tasks?lesson_id='.$request->lesson_id);
 
     }
+
+
+    public function storeDescriptionType(Request $request)
+    {   //dd($request->lesson_id,$request->type);
+        $content = [];
+        $content['image'] = null;
+        $content ['text'] = $request->text;
+        if($request->file('image')){
+            $image_name = time().'.'.$request->file('image')->getClientOriginalExtension();
+            $request->file('image')->move(public_path('material/images'), $image_name);
+            $content['image'] = 'material/images/'.$image_name;
+        }
+
+
+        try{
+            $task = Task::create([
+                'lesson_id' => $request->lesson_id,
+                'type' => $request->type,
+                'display_order' => Task::where('lesson_id', $request->lesson_id)->count() + 1,
+                'content' => json_encode($content)
+            ]);
+
+            $request->session()->flash('message', __('Zadatak je uspešno kreiran'));
+
+        } catch(Exception $e){
+            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo'.$e->getMessage()));
+        }
+
+        return redirect('tasks?lesson_id='.$request->lesson_id);
+
+    }
+
+
+    public function storeColumnSortingType(Request $request)
+    {
+        try{
+            $numberOfColumns = count($request->column_text);
+            $columns = [];
+
+
+            for($i = 0; $i < $numberOfColumns; $i++) {
+
+                $columns += [
+                    $i => [
+                        'text' => $request->column_text[$i],
+                        'image' => $request->column_image[$i] ?? null,
+                        'audio' => $request->column_audio[$i] ?? null,
+                    ]
+                ];
+            }
+
+            $content = [
+                'rows' => $request->rows,
+                'columns' => $columns
+            ];
+
+            foreach($content['columns'] as $key => $column){
+                if($column['image']){
+                    $image = $column['image'];
+                    $image_name = time().rand().'.'.$image->getClientOriginalExtension();
+                    $image->move(public_path('material/images'), $image_name);
+                    $content['columns'][$key]['image'] = 'material/images/'.$image_name;
+                }
+
+                if($column['audio']){
+                    $audio = $column['audio'];
+                    $audio_name = time().rand().'.'.$audio->getClientOriginalExtension();
+                    $audio->move(public_path('material/audio'), $audio_name);
+                    $content['columns'][$key]['audio'] = 'material/audio/'.$audio_name;
+                }
+            }
+
+            Task::create([
+                'lesson_id' => $request->lesson_id,
+                'type' => $request->type,
+                'description' => $request->description,
+                'display_order' => Task::where('lesson_id', $request->lesson_id)->count() + 1,
+                'content' => json_encode($content)
+            ]);
+
+            $request->session()->flash('message', __('Zadatak je uspešno kreiran'));
+
+        } catch(Exception $e){
+            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo'.$e->getMessage()));
+        }
+
+        return redirect('tasks?lesson_id='.$request->lesson_id);
+    }
+
 
     /**
      * Display the specified resource.

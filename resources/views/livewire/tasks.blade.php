@@ -5,7 +5,7 @@
         @foreach ($tasks as $task)
         <li wire:sortable.item="{{ $task->id }}" wire:key="task-{{ $task->id }}" wire:sortable.handle class="w-full cursor-move bg-white px-2 py-4 inline-flex justify-between rounded-lg border">
             <div>
-                <h4 class="pl-2">{{ $task->display_order }}. {{ $task->description }}</h4>
+                <h4 class="pl-2">{{ $task->display_order }}. {{ $task->description ?? "Uvod" }}</h4>
             </div>
             <button wire:click="removeTask({{ $task->id }})" class="mr-4">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transition-all hover:text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">

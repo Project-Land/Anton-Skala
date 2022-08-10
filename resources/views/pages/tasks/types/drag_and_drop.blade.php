@@ -236,6 +236,8 @@
                 </button>
             </form>
         </div>
+        <img src="/images/drag_and_drop1.png" alt="prevlacenje">
+        <img src="/images/drag_and_drop2.png" alt="prevlacenje">
     </div>
 
     <script>
