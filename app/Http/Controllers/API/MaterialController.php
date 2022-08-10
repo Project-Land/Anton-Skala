@@ -42,6 +42,22 @@ class MaterialController extends Controller
 
     public function task(Task $task)
     {
+        Auth::user()->last_task = $task->id;
+        Auth::user()->save();
         return response()->json(new TaskResource($task));
+    }
+
+    public function nextTask(Request $request)
+    {
+        $task = Task::find(Auth::user()->last_task);
+        $lesson= $task->lesson;
+        $maxDisplayOrder = $lesson->tasks()->max('display_order');
+        $currentOrderNo = $task->order_no;
+        $next = $task->display_order + 1;
+        if($maxDisplayOrder == $currentOrderNo){
+             return null;
+        }
+        $nextTask = $lesson->tasks()->where('display_order', $next)->get();
+        return response()->json(TaskResource::collection($nextTask));
     }
 }
