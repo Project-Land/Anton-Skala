@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Models\Task;
+use App\Models\User;
 use App\Models\Field;
 use App\Models\Lesson;
 use Illuminate\Http\Request;
@@ -42,22 +43,43 @@ class MaterialController extends Controller
 
     public function task(Task $task)
     {
-        Auth::user()->last_task = $task->id;
-        Auth::user()->save();
+        $lesson = $task->lesson;
+        $user = Auth::user() ?? User::find(1);
+        $user_lesson = $user->lessons()->where('lesson_id', $lesson->id)->get();
+
+        $user_lesson->count() ?
+        $user->lessons()->wherePivot('lesson_id' , $lesson->id)->update([ 'task_id' => $task->id]) :
+        $user->lessons()->attach($lesson,['task_id' => $task->id]);
         return response()->json(new TaskResource($task));
     }
 
-    public function nextTask(Request $request)
+    public function nextTask(Request $request, Lesson $lesson)
     {
-        $task = Task::find(Auth::user()->last_task);
-        $lesson= $task->lesson;
-        $maxDisplayOrder = $lesson->tasks()->max('display_order');
-        $currentOrderNo = $task->order_no;
+        $user = Auth::user();
+        $user_lesson = $user->lessons()->where('lesson_id', $lesson->id)->get();
+
+        if($user_lesson->count()){
+            if($request->current_task){
+                return $user_lesson[0]->pivot->task_id;
+            }
+            $lastTaskId = $user_lesson[0]->pivot->task_id;
+
+        }else{
+            return $lesson->tasks()->where('display_order', 1)->sole()->id;
+        }
+
+        $task = Task::find($lastTaskId);
+        $tasks = $lesson->tasks;
+        $maxDisplayOrder = $tasks->max('display_order');
+        $currentOrderNo = $task->display_order;
         $next = $task->display_order + 1;
         if($maxDisplayOrder == $currentOrderNo){
-             return null;
+           return $nextTask = null;
         }
-        $nextTask = $lesson->tasks()->where('display_order', $next)->get();
-        return response()->json(TaskResource::collection($nextTask));
+        $nextTask = $tasks->where('display_order', $next)->values()[0]->id;
+        return $nextTask;
+
     }
+
+
 }

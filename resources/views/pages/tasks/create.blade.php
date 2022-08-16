@@ -27,7 +27,8 @@
                         <option value="description" selected>{{ __('Uvod') }}</option>
                         <option value="drag_and_drop" >{{ __('Prevlačenje') }}</option>
                         <option value="correct_answer">{{ __('Jedan ili više tačnih odgovora') }}</option>
-                        <option value="column_sorting">{{ __('Prevlačenje po kolonama') }}</option>
+                        <option value="column_sorting">{{ __('Prevlačenje po kolonama(isti pojmovi)') }}</option>
+                        <option value="column_sorting_multiple">{{ __('Prevlačenje po kolonama(različiti pojmovi)') }}</option>
                     </select>
                     @error('type')
                     <span class="text-xs text-red-600 dark:text-red-400">{{ $message }}</span>
