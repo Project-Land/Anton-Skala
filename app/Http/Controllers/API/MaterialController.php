@@ -42,51 +42,23 @@ class MaterialController extends Controller
         return response()->json(TaskResource::collection($tasks));
     }
 
-    public function task(Task $task)
+    public function task(Request $request, Task $task)
     {
         if(!auth('sanctum')->user()){
             return response()->json(new TaskResource($task));
         }
         $lesson = $task->lesson;
-        $user = Auth::user();
-        $user_lesson = $user->lessons()->where('lesson_id', $lesson->id)->get();
+        $user = auth('sanctum')->user();
+        if($request->previous){
+            $user_lesson = $user->lessons()->where('lesson_id', $lesson->id)->get();
+            $user_lesson->count() ?
+            $user->lessons()->wherePivot('lesson_id', $lesson->id)->update(['task_id' => $task->id]) :
+            $user->lessons()->attach($lesson, ['task_id' => $task->id]);
+        }
 
-        $user_lesson->count() ?
-        $user->lessons()->wherePivot('lesson_id', $lesson->id)->update(['task_id' => $task->id]) :
-        $user->lessons()->attach($lesson, ['task_id' => $task->id]);
         return response()->json(new TaskResource($task));
     }
 
-    public function nextTask(Request $request, Lesson $lesson)
-    {
-        if(!auth('sanctum')->user()){
-            return $lesson->tasks()->where('display_order', 1)->sole()->id;
-        }
-        $user = auth('sanctum')->user();
-        $user_lesson = $user->lessons()->where('lesson_id', $lesson->id)->get();
-
-        if($user_lesson->count()){
-            if($request->current_task){
-                return $user_lesson[0]->pivot->task_id;
-            }
-            $lastTaskId = $user_lesson[0]->pivot->task_id;
-
-        }else{
-            return $lesson->tasks()->where('display_order', 1)->sole()->id;
-        }
-
-        $task = Task::find($lastTaskId);
-        $tasks = $lesson->tasks;
-        $maxDisplayOrder = $tasks->max('display_order');
-        $currentOrderNo = $task->display_order;
-        $next = $task->display_order + 1;
-        if($maxDisplayOrder == $currentOrderNo){
-           return $nextTask = 0;
-        }
-        $nextTask = $tasks->where('display_order', $next)->values()[0]->id;
-        return $nextTask;
-
-    }
 
     public function lessonEnd(Request $request, Lesson $lesson)
     {

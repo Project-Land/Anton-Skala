@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Task;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Lesson extends Model
 {
@@ -35,7 +36,8 @@ class Lesson extends Model
         $user_lesson = $user->lessons()->where('lesson_id', $this->id)->get();
 
         if(!$user_lesson->count()){
-            return $this->tasks()->where('display_order', 1)->sole()->id;
+            $t = $this->tasks()->where('display_order', 1)->get();
+            return $t->count() ? $t[0]->id : null;
         }
         $lastTaskId = $user_lesson[0]->pivot->task_id;
 
