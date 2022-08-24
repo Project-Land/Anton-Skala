@@ -9,7 +9,7 @@ class TaskResource extends JsonResource
 
     public function toArray($request)
     {
-        $totalTasks = $this->lesson->tasks()->count();
+       // $totalTasks = $this->lesson->tasks()->count();
 
         return [
             'id' => $this->id,

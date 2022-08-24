@@ -62,7 +62,7 @@ class MaterialController extends Controller
         if(!auth('sanctum')->user()){
             return $lesson->tasks()->where('display_order', 1)->sole()->id;
         }
-        $user = Auth::user();
+        $user = auth('sanctum')->user();
         $user_lesson = $user->lessons()->where('lesson_id', $lesson->id)->get();
 
         if($user_lesson->count()){
@@ -101,7 +101,7 @@ class MaterialController extends Controller
         return $lesson->tasks()->where('display_order', 1)->sole()->id;
         //$id = $lesson->tasks()->where('display_order', 1)->sole()->id;
         //$task = Task::find($id);
-        //return response()->json(new TaskResource($task));
+        // return response()->json(new TaskResource($task));
     }
 
 
