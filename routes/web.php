@@ -22,7 +22,6 @@ use App\Http\Controllers\API\MaterialController;
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('dashboard');
 
-
     Route::resource('subjects', SubjectController::class);
     Route::resource('fields', FieldController::class);
     Route::resource('lessons', LessonController::class);
@@ -37,8 +36,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('tasks/store-description', [TaskController::class, 'storeDescriptionType'])->name('tasks.store-description-type');
     Route::post('tasks/store-column-sorting', [TaskController::class, 'storeColumnSortingType'])->name('tasks.store-column-sorting-type');
     Route::post('tasks/store-column-sorting-multiple', [TaskController::class, 'storeColumnSortingMultipleType'])->name('tasks.store-column-sorting-multiple-type');
-
-
 });
 
 

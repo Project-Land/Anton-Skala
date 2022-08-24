@@ -33,9 +33,6 @@
                     @enderror
                 </div>
 
-
-
-
                 <!-- Ponuđeni odgovori -->
                 <div class="mb-6">
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ __('Ponuđeni odgovori') }}</label>
@@ -236,8 +233,13 @@
                 </button>
             </form>
         </div>
-        <img src="/images/drag_and_drop1.png" alt="prevlacenje">
-        <img src="/images/drag_and_drop2.png" alt="prevlacenje">
+        <div>
+            <p class="mb-4">{{ __('Primer') }}</p>
+            <div class="flex flex-col sm:flex-row space-x-10">
+                <img class="w-full sm:w-1/3" src="/images/drag_and_drop1.png" alt="prevlacenje">
+                <img class="w-full sm:w-1/3" src="/images/drag_and_drop2.png" alt="prevlacenje">
+            </div>
+        </div>
     </div>
 
     <script>
