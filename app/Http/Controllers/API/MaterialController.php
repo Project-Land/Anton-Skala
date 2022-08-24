@@ -100,7 +100,7 @@ class MaterialController extends Controller
         return $lesson->tasks()->where('display_order', 1)->sole()->id;
         //$id = $lesson->tasks()->where('display_order', 1)->sole()->id;
         //$task = Task::find($id);
-        //return response()->json(new TaskResource($task));
+        // return response()->json(new TaskResource($task));
     }
 
 
