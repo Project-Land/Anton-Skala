@@ -44,8 +44,11 @@ class MaterialController extends Controller
 
     public function task(Task $task)
     {
+        if(!auth('sanctum')->user()){
+            return response()->json(new TaskResource($task));
+        }
         $lesson = $task->lesson;
-        $user = Auth::user() ?? User::find(1);
+        $user = Auth::user();
         $user_lesson = $user->lessons()->where('lesson_id', $lesson->id)->get();
 
         $user_lesson->count() ?
@@ -56,6 +59,9 @@ class MaterialController extends Controller
 
     public function nextTask(Request $request, Lesson $lesson)
     {
+        if(!auth('sanctum')->user()){
+            return $lesson->tasks()->where('display_order', 1)->sole()->id;
+        }
         $user = Auth::user();
         $user_lesson = $user->lessons()->where('lesson_id', $lesson->id)->get();
 
@@ -75,11 +81,27 @@ class MaterialController extends Controller
         $currentOrderNo = $task->display_order;
         $next = $task->display_order + 1;
         if($maxDisplayOrder == $currentOrderNo){
-           return $nextTask = null;
+           return $nextTask = 0;
         }
         $nextTask = $tasks->where('display_order', $next)->values()[0]->id;
         return $nextTask;
 
+    }
+
+    public function lessonEnd(Request $request, Lesson $lesson)
+    {
+        if(auth('sanctum')->user()){
+            Auth::user()->lessons()->where('lesson_id', $lesson->id)->detach();
+        }
+        return true;
+    }
+
+    public function startOver(Request $request, Lesson $lesson)
+    {
+        return $lesson->tasks()->where('display_order', 1)->sole()->id;
+        //$id = $lesson->tasks()->where('display_order', 1)->sole()->id;
+        //$task = Task::find($id);
+        //return response()->json(new TaskResource($task));
     }
 
 

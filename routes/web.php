@@ -22,7 +22,6 @@ use App\Http\Controllers\API\MaterialController;
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('dashboard');
 
-
     Route::resource('subjects', SubjectController::class);
     Route::resource('fields', FieldController::class);
     Route::resource('lessons', LessonController::class);

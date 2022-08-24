@@ -33,3 +33,5 @@ Route::get('/task/{task}', [MaterialController::class, 'task'])->missing(functio
     return response(['message' => 'Task not found'], 404);
 });
 Route::get('/next-task/{lesson}', [MaterialController::class, 'nextTask']);
+Route::get('/lesson-end/{lesson}', [MaterialController::class, 'lessonEnd']);
+Route::get('/start-over/{lesson}', [MaterialController::class, 'startOver']);
