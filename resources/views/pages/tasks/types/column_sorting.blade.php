@@ -64,7 +64,7 @@
                                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Tekst') }}</label>
                                     <input type="text" name="column_text[]" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
                                 </div>
-                                <div class="inline-flex border-l-2 border-r-2 px-6 col-span-5">
+                                <div class="inline-flex border-l-2 border-r-2 px-6 col-span-4">
                                     <div>
                                         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Slika') }}</label>
                                         <label class="block">
@@ -204,9 +204,13 @@
                 </button>
             </form>
         </div>
-        <img src="/images/column_sorting1.png" alt="prevlacenje po kolonama">
-        <img src="/images/column_sorting2.png" alt="prevlacenje po kolonama">
-
+        <div>
+            <p class="mb-4">{{ __('Primer') }}</p>
+            <div class="flex flex-col sm:flex-row space-x-10">
+                <img class="w-full sm:w-1/3" src="/images/column_sorting1.png" alt="prevlacenje po kolonama">
+                <img class="w-full sm:w-1/3" src="/images/column_sorting2.png" alt="prevlacenje po kolonama">
+            </div>
+        </div>
     </div>
 
     <script>

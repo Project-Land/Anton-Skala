@@ -16,19 +16,20 @@ use App\Http\Controllers\API\MaterialController;
 */
 
 Route::middleware('auth:sanctum')->group(function () {
-
-    // Material
-    Route::get('/fields', [MaterialController::class, 'fields']);
-    Route::get('/lessons', [MaterialController::class, 'lessons']);
-    Route::get('/tasks', [MaterialController::class, 'lessonTasks']);
-    Route::get('/task/{task}', [MaterialController::class, 'task'])->missing(function () {
-        return response(['message' => 'Task not found'], 404);
-    });
-    Route::get('/next-task/{lesson}', [MaterialController::class, 'nextTask']);
     // Auth
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/auth', [AuthController::class, 'show']);
 });
 
+// Auth
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
+
+// Material
+Route::get('/fields', [MaterialController::class, 'fields']);
+Route::get('/lessons', [MaterialController::class, 'lessons']);
+Route::get('/tasks', [MaterialController::class, 'lessonTasks']);
+Route::get('/task/{task}', [MaterialController::class, 'task'])->missing(function () {
+    return response(['message' => 'Task not found'], 404);
+});
+Route::get('/next-task/{lesson}', [MaterialController::class, 'nextTask']);

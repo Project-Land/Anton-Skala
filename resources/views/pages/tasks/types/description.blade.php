@@ -24,13 +24,10 @@
                 <input type="hidden" name="lesson_id" value="{{ request()->lesson_id }}">
                 <input type="hidden" name="type" value="{{ request()->type }}">
 
-
-
                 <!-- Slika i opis -->
                 <div class="mb-6" x-data="imageViewer()">
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ __('Pitanje') }}</label>
                     <div class="border border-purple-600 rounded-lg p-4 grid grid-cols-2 gap-6">
-
 
                         <div class="inline-flex border-l-2 border-r-2 px-6">
                             <div>
@@ -59,22 +56,16 @@
                     </div>
                 </div>
 
-
-
-                <button type="submit" class="w-1/2 md:w-1/5 mt-4 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-lime">{{ __('Kreiraj') }}
-                </button>
+                <button type="submit" class="w-1/2 md:w-1/5 mt-4 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-lime">{{ __('Kreiraj') }}</button>
             </form>
         </div>
-        <img src="/images/description.png" alt="uvod">
+        <div>
+            <p class="mb-4">{{ __('Primer') }}</p>
+            <img class="w-full sm:w-1/3" src="/images/description.png" alt="uvod">
+        </div>
     </div>
 
     <script>
-        function addAnswer()
-        {
-            let content = document.getElementById('template').innerHTML;
-            document.getElementById('newAnswers').insertAdjacentHTML('beforeend', content);
-        }
-
         function imageViewer() {
             return {
                 imageUrl: '',

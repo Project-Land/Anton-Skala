@@ -247,8 +247,10 @@
                 </button>
             </form>
         </div>
-        <img src="/images/correct_answer.png" alt="tacan odgovor">
-
+        <div>
+            <p class="mb-4">{{ __('Primer') }}</p>
+            <img class="w-full sm:w-1/3" src="/images/correct_answer.png" alt="tacan odgovor">
+        </div>
     </div>
 
     <script>

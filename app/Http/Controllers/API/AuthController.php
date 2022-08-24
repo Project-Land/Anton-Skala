@@ -30,7 +30,7 @@ class AuthController extends Controller
             event(new Registered($user));
             $token = $user->createToken('auth')->plainTextToken;
         } catch (Throwable $e) {
-            throw new HttpResponseException(response()->json(['message' => __('Došlo je do greške. Pokušajte ponovo.'.$e->getMessage())], 400));
+            throw new HttpResponseException(response()->json(['message' => __('Došlo je do greške. Pokušajte ponovo.')], 400));
         }
         return response()->json(['message' => __('Korisnički nalog uspešno kreiran'), 'access_token' => $token], 200);
     }

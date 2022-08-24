@@ -17,7 +17,7 @@ class MaterialController extends Controller
 {
     public function fields(Request $request)
     {
-        $lang = in_array(Auth::user()->lang, ['sr_lat', 'sr_cir']) ? "sr" : Auth::user()->lang;
+        $lang = Auth::check() ? (in_array(Auth::user()->lang, ['sr_lat', 'sr_cir']) ? "sr" : Auth::user()->lang) : $request->lang;
 
         $fields = Field::where([
             'lang' => $lang,
@@ -28,8 +28,9 @@ class MaterialController extends Controller
 
     public function lessons(Request $request)
     {
+        $lang = Auth::check() ? Auth::user()->lang : $request->lang;
         $lessons = Lesson::where([
-            'lang' => Auth::user()->lang,
+            'lang' => $lang,
             'field_id' => $request->field_id
         ])->get();
         return response()->json(LessonResource::collection($lessons));
@@ -48,8 +49,8 @@ class MaterialController extends Controller
         $user_lesson = $user->lessons()->where('lesson_id', $lesson->id)->get();
 
         $user_lesson->count() ?
-        $user->lessons()->wherePivot('lesson_id' , $lesson->id)->update([ 'task_id' => $task->id]) :
-        $user->lessons()->attach($lesson,['task_id' => $task->id]);
+        $user->lessons()->wherePivot('lesson_id', $lesson->id)->update(['task_id' => $task->id]) :
+        $user->lessons()->attach($lesson, ['task_id' => $task->id]);
         return response()->json(new TaskResource($task));
     }
 
