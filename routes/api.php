@@ -15,7 +15,7 @@ use App\Http\Controllers\API\MaterialController;
 |
 */
 
-Route::middleware('auth:sanctum')->group(function () {
+//Route::middleware('auth:sanctum')->group(function () {
 
     // Material
     Route::get('/fields', [MaterialController::class, 'fields']);
@@ -25,10 +25,12 @@ Route::middleware('auth:sanctum')->group(function () {
         return response(['message' => 'Task not found'], 404);
     });
     Route::get('/next-task/{lesson}', [MaterialController::class, 'nextTask']);
+    Route::get('/lesson-end/{lesson}', [MaterialController::class, 'lessonEnd']);
+    Route::get('/start-over/{lesson}', [MaterialController::class, 'startOver']);
     // Auth
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/auth', [AuthController::class, 'show']);
-});
+//});
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);

@@ -18,7 +18,7 @@ class TaskResource extends JsonResource
             'description' => $this->description,
             'display_order' => $this->display_order,
             'content' => json_decode($this->content),
-            'next_task_id' =>  $totalTasks == $this->display_order ? null : $this->display_order + 1,
+            'next_task_id' =>  $this->next(),
             //'answers'=> json_decode($this->content, TRUE)['answers'],
             //'questions'=> json_decode($this->content, TRUE)['questions'],
             //'answers_shuffle' =>

@@ -17,4 +17,14 @@ class Task extends Model
     {
         return $this->belongsTo(Lesson::class);
     }
+
+    public function next()
+    {
+        $tasks = $this->lesson->tasks;
+        $last = $tasks->max('display_order');
+        if($this->display_order == $last){
+            return 0;
+        }
+        return $tasks->where('display_order', $this->display_order + 1)->values()[0]->id;
+    }
 }
