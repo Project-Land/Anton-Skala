@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Exception;
 use App\Models\Task;
 use App\Models\Lesson;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -359,6 +361,51 @@ class TaskController extends Controller
         }
 
         return redirect('tasks?lesson_id='.$request->lesson_id);
+    }
+
+    public function storeAddLettersType(Request $request){
+        try{
+            $str = $request->string;
+            $str= "ds(j)(Č)";
+            $clean_str = Str::replace( "(", "",  $str);
+            $clean_str = Str::replace( ")", "",  $clean_str);
+            $brackets_count = substr_count($str, '(') + substr_count($str, ')');
+
+            $pattern = '/(?<=\()(\p{L}+)(?=\))/u';
+            preg_match_all($pattern, $str, $matches,PREG_OFFSET_CAPTURE );
+
+            if(!count($matches[0])) return back()->with('message', 'Unesite slova za dopunu!');
+
+            foreach($matches[0] as $match){
+                $m[]= ['value' => $match[0], 'index' => $match[1] - $brackets_count ];
+            }
+
+            foreach(str_split($clean_str) as $key=>$letter){
+
+                $empty = Arr::exists(Arr::pluck($m, 'index'),$key);
+                $letters[] = ['index'=> $key, 'value' => $letter, 'empty' => !$empty];
+            }
+            $image = null;
+            if($request->image){
+                $image = $request->image;
+                $image_name = time().rand().'.'.$image->getClientOriginalExtension();
+                $image->move(public_path('material/images'), $image_name);
+                $image = 'material/images/'.$image_name;
+            }
+            $content = ['image'=> $image, 'string' => $letters, 'answers' => $m];
+            Task::create([
+                'lesson_id' => $request->lesson_id,
+                'type' => $request->type,
+                'description' => $request->description,
+                'display_order' => Task::where('lesson_id', $request->lesson_id)->count() + 1,
+                'content' => json_encode($content)
+            ]);
+
+            $request->session()->flash('message', __('Zadatak je uspešno kreiran'));
+
+        } catch(Exception $e){
+            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo'.$e->getMessage().' Linija '.$e->getLine()));
+        }
     }
 
 

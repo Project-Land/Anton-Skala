@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Field;
 use App\Models\Lesson;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
