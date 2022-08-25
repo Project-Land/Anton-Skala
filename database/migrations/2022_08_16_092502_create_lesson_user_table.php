@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('lesson_user', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('lesson_id')->constrained();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('lesson_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->unsignedBigInteger('task_id')->nullable();
 
         });

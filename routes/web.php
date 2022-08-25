@@ -7,6 +7,7 @@ use App\Http\Controllers\FieldController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\API\MaterialController;
 
 /*
@@ -27,6 +28,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('fields', FieldController::class);
     Route::resource('lessons', LessonController::class);
     Route::resource('students', StudentController::class);
+    Route::resource('teachers', TeacherController::class);
 
     // Tasks
     Route::resource('tasks', TaskController::class);

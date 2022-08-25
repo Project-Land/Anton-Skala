@@ -5,23 +5,28 @@ namespace App\Http\Controllers;
 use Exception;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\School;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 
-class StudentController extends Controller
+class TeacherController extends Controller
 {
     public function index()
     {
-        $students = User::with('school')->where('role_id', 2)->latest()->get();
-        return view('pages.students.index', ['students' => $students]);
+        if(Auth::user()->role_id == Role::TEACHER) return redirect('404');
+
+        $teachers = User::with('school')->where('role_id', 3)->latest()->get();
+        return view('pages.teachers.index', ['teachers' => $teachers]);
     }
 
     public function create()
     {
-        return view('pages.students.create');
+        if(Auth::user()->role_id == Role::TEACHER) return redirect('404');
+        $schools = School::all();
+        return view('pages.teachers.create', ['schools' => $schools]);
     }
 
     public function store(Request $request)
@@ -30,7 +35,9 @@ class StudentController extends Controller
             'name' => 'required|max:255',
             'username' => 'required|unique:users|min:3|max:100',
             'password' => Password::defaults(),
-            'lang' => 'required'
+            'lang' => 'required',
+            'email' => 'required|email',
+            'school' => 'required'
         ], [
             'name.required' =>  __('Unesite ime i prezime'),
             'name.max' => __('Ime i prezime ne sme biti duže od 255 karaktera'),
@@ -38,7 +45,10 @@ class StudentController extends Controller
             'username.unique' => __('Korisničko ime zauzeto'),
             'username.min' => __('Korisničko ime ne sme biti kraće od 3 karaktera'),
             'username.max' => __('Korisničko ime ne sme biti duže od 100 karaktera'),
-            'lang.required' => __('Izaberite jezik')
+            'lang.required' => __('Izaberite jezik'),
+            'school.required' => __('Izaberite školu'),
+            'email.required' => __('Unesite email adresu'),
+            'email.email' => __('Neispravan format email adrese')
         ]);
 
         try{
@@ -46,9 +56,10 @@ class StudentController extends Controller
                 'name' => $request->name,
                 'username' => $request->username,
                 'password' => Hash::make($request->password),
-                'role_id' => Role::STUDENT,
-                'school_id' => Auth::user()->school_id,
-                'school_name' => Auth::user()->school->name,
+                'email' => $request->email ?? null,
+                'role_id' => Role::TEACHER,
+                'school_id' => $request->school,
+                'school_name' => School::find($request->school)->name,
                 'lang' => $request->lang
             ]);
             $request->session()->flash('message', __('Učenički nalog uspešno kreiran'));
@@ -56,19 +67,24 @@ class StudentController extends Controller
             $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
 
-        return redirect('students');
+        return redirect('teachers');
     }
 
     public function show($id)
     {
-        $student = User::with(['tasks', 'lessons'])->find($id);
-        return view('pages.students.show', ['student' => $student]);
+        //
     }
 
     public function edit($id)
     {
-        $student = User::find($id);
-        return view('pages.students.edit', ['student' => $student]);
+        if(Auth::user()->role_id == Role::TEACHER) return redirect('404');
+
+        $teacher = User::find($id);
+        $schools = School::all();
+        return view('pages.teachers.edit', [
+            'teacher' => $teacher,
+            'schools' => $schools
+        ]);
     }
 
     public function update(Request $request, $id)
@@ -78,8 +94,9 @@ class StudentController extends Controller
         $request->validate([
             'name' => 'required|max:255',
             'username' => ['required', Rule::unique('users')->ignore($id), 'min:3', 'max:100'],
+            'email' => 'required|email',
+            'school' => 'required',
             'old_password' => [
-                'nullable',
                 'required_with:password',
                 function ($attribute, $value, $fail) use ($user) {
                     if (!Hash::check($value, $user->password)) {
@@ -101,10 +118,12 @@ class StudentController extends Controller
             'username.min' => __('Korisničko ime ne sme biti kraće od 3 karaktera'),
             'username.max' => __('Korisničko ime ne sme biti duže od 100 karaktera'),
             'lang.required' => __('Izaberite jezik'),
+            'school.required' => __('Izaberite školu'),
+            'email.required' => __('Unesite email adresu'),
+            'email.email' => __('Neispravan format email adrese'),
             'old_password.required_with' => __('Unesite trenutnu lozinku'),
             'password.required_with' => __('Unesite novu lozinku')
         ]);
-
 
         try{
             if($request->password && Hash::check($request->old_password, $user->password)){
@@ -114,26 +133,30 @@ class StudentController extends Controller
             $user->update([
                 'name' => $request->name,
                 'username' => $request->username,
-                'lang' => $request->lang
+                'email' => $request->email,
+                'lang' => $request->lang,
+                'school_id' => $request->school
             ]);
-            $request->session()->flash('message', __('Učenički nalog uspešno izmenjen'));
+            $request->session()->flash('message', __('Nastavnički nalog uspešno izmenjen'));
         } catch(Exception $e){
-            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'));
+            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'.$e->getMessage()));
         }
 
-        return redirect('students');
+        return redirect('teachers');
     }
 
     public function destroy(Request $request, $id)
     {
-        $student = User::findOrFail($id);
+        if(Auth::user()->role_id == Role::TEACHER) return redirect('404');
+
+        $teacher = User::findOrFail($id);
 
         try{
-            $student->delete();
-            $request->session()->flash('message', __('Učenički nalog uspešno obrisan'));
+            $teacher->delete();
+            $request->session()->flash('message', __('Nastavnički nalog uspešno obrisan'));
         } catch(Exception $e){
             $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
-        return redirect('students');
+        return redirect('teachers');
     }
 }
