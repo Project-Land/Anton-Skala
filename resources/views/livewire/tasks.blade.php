@@ -3,7 +3,7 @@
 
     <ul wire:sortable="updateOrder" class="grid grid-rows gap-4">
         @foreach ($tasks as $task)
-        <li wire:sortable.item="{{ $task->id }}" wire:key="task-{{ $task->id }}" wire:sortable.handle class="w-full cursor-move bg-white px-2 py-4 inline-flex justify-between rounded-lg border">
+        <li wire:sortable.item="{{ $task->id }}" wire:key="task-{{ $task->id }}" wire:sortable.handle class="w-full cursor-move bg-white dark:bg-gray-800 dark:text-gray-300 px-2 py-4 inline-flex justify-between rounded-lg border">
             <div>
                 <h4 class="pl-2">{{ $task->display_order }}. {{ $task->description ?? "Uvod" }}</h4>
             </div>

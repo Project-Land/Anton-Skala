@@ -14,7 +14,7 @@
             {{-- <h3 class="my-2 text-xl font-semibold p-2">{{ __('Lekcije') }}</h3> --}}
 
             <div class="grid grid-rows sm:grid-cols-4 gap-4">
-                @foreach($student->lessons as $lesson)
+                @forelse($student->lessons as $lesson)
                 <div class="rounded-lg bg-gray-200">
                     <h4 class="my-2 text-md font-semibold p-2 text-center uppercase">{{ $lesson->name }}</h4>
                     <table class="text-sm text-left text-gray-500 dark:text-gray-400">
@@ -38,7 +38,9 @@
                         </tbody>
                     </table>
                 </div>
-                @endforeach
+                @empty
+                <p class="col-span-4 p-8 text-center text-lg font-semibold">{{ __('Nema podataka') }}</p>
+                @endforelse
             </div>
 
         </div>

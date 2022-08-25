@@ -13,9 +13,20 @@ use Illuminate\Validation\Rules\Password;
 
 class StudentController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $students = User::with('school')->where('role_id', 2)->latest()->get();
+        $students = User::with('school')
+            ->where('role_id', 2)
+            ->when(Auth::user()->role_id == Role::TEACHER, function ($query) {
+                return $query->where([
+                    'school_id' => Auth::user()->school_id
+                ]);
+            })
+            ->when($request->has('search'), function ($query) use ($request) {
+                return $query->where('name', 'LIKE', '%'.$request->search.'%');
+            })
+            ->latest()
+            ->paginate(20);
         return view('pages.students.index', ['students' => $students]);
     }
 
