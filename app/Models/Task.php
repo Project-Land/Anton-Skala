@@ -27,4 +27,9 @@ class Task extends Model
         }
         return $tasks->where('display_order', $this->display_order + 1)->values()[0]->id;
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
+    }
 }

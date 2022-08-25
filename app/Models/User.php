@@ -47,4 +47,14 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Lesson::class)->withPivot('task_id');
     }
+
+    public function school()
+    {
+        return $this->belongsTo(School::class);
+    }
+
+    public function tasks()
+    {
+        return $this->belongsToMany(Task::class)->withPivot(['elapsed_time', 'no_of_attempts', 'created_at']);
+    }
 }
