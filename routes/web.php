@@ -28,6 +28,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('fields', FieldController::class);
     Route::resource('lessons', LessonController::class);
     Route::resource('students', StudentController::class);
+    Route::get('students/{id}/report/{lessonID}', [StudentController::class, 'showReport'])->name('students.report');
     Route::resource('teachers', TeacherController::class);
 
     // Tasks

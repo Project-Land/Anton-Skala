@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Exception;
 use App\Models\Role;
+use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -74,6 +75,13 @@ class StudentController extends Controller
     {
         $student = User::with(['tasks', 'lessons'])->find($id);
         return view('pages.students.show', ['student' => $student]);
+    }
+
+    public function showReport($id, $lessonID)
+    {
+        $student = User::with(['tasks', 'lessons'])->find($id);
+        $tasks = $student->tasks()->where('lesson_id', $lessonID)->paginate(30);
+        return view('pages.students.report', ['student' => $student, 'tasks' => $tasks]);
     }
 
     public function edit($id)
