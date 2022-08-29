@@ -201,7 +201,7 @@
             </form>
         </div>
         <div>
-            <p class="mb-4">{{ __('Primer') }}</p>
+            <p class="mb-4 dark:text-gray-300">{{ __('Primer') }}</p>
             <div class="flex flex-col sm:flex-row space-x-10">
                 <img class="w-full sm:w-1/3" src="/images/column_sorting1.png" alt="prevlacenje po kolonama">
                 <img class="w-full sm:w-1/3" src="/images/column_sorting2.png" alt="prevlacenje po kolonama">

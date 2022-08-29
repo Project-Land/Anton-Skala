@@ -229,9 +229,7 @@
                             </div>
                         </div>
 
-                        <div id="newAnswers" class="grid gap-8">
-
-                        </div>
+                        <div id="newAnswers" class="grid gap-8"></div>
 
                         <div class="flex justify-center">
                             <span class="inline-flex mt-2 items-center px-2 py-2 bg-gray-700 border border-transparent rounded-full font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-800 active:bg-gray-800 focus:outline-none focus:border-gray-800 focus:shadow-outline-gray cursor-pointer transition-all" onclick="addAnswer()">
@@ -248,7 +246,7 @@
             </form>
         </div>
         <div>
-            <p class="mb-4">{{ __('Primer') }}</p>
+            <p class="mb-4 dark:text-gray-300">{{ __('Primer') }}</p>
             <img class="w-full sm:w-1/3" src="/images/correct_answer.png" alt="tacan odgovor">
         </div>
     </div>

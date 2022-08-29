@@ -234,7 +234,7 @@
             </form>
         </div>
         <div>
-            <p class="mb-4">{{ __('Primer') }}</p>
+            <p class="mb-4 dark:text-gray-300">{{ __('Primer') }}</p>
             <div class="flex flex-col sm:flex-row space-x-10">
                 <img class="w-full sm:w-1/3" src="/images/drag_and_drop1.png" alt="prevlacenje">
                 <img class="w-full sm:w-1/3" src="/images/drag_and_drop2.png" alt="prevlacenje">

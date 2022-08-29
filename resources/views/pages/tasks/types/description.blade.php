@@ -60,7 +60,7 @@
             </form>
         </div>
         <div>
-            <p class="mb-4">{{ __('Primer') }}</p>
+            <p class="mb-4 dark:text-gray-300">{{ __('Primer') }}</p>
             <img class="w-full sm:w-1/3" src="/images/description.png" alt="uvod">
         </div>
     </div>

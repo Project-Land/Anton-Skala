@@ -320,8 +320,8 @@
             </form>
         </div>
         <div>
-            <p class="mb-4">{{ __('Primer') }}</p>
-            <div class="flex flex-col sm:flex-row space-x-10">
+            <p class="mb-4 dark:text-gray-300">{{ __('Primer') }}</p>
+            <div class="flex flex-col sm:flex-row space-x-10 bg-white dark:bg-gray-700 rounded-lg">
                 <img class="w-full sm:w-1/3" src="/images/column_sorting_multiple1.png" alt="prevlacenje po kolonama">
                 <img class="w-full sm:w-1/3" src="/images/column_sorting_multiple2.png" alt="prevlacenje po kolonama">
             </div>
@@ -357,27 +357,6 @@
             let content = document.getElementById('template').innerHTML
             document.getElementById('newAnswers').insertAdjacentHTML('beforeend', content)
         }
-
-        /*function showColumns()
-        {
-            let number_of_columns = document.getElementById('columns').value
-            if(number_of_columns > 2){
-                if(number_of_columns >= 3){
-                    document.getElementById('column3').classList.remove('hidden')
-                    document.getElementById('column3').classList.add('grid')
-                    if(number_of_columns < 4){
-                        document.getElementById('column4').classList.add('hidden')
-                    }
-                }
-                if(number_of_columns == 4){
-                    document.getElementById('column4').classList.remove('hidden')
-                    document.getElementById('column4').classList.add('grid')
-                }
-            }
-            else{
-                document.getElementById('column3').classList.add('hidden')
-            }
-        }*/
 
         function imageViewer() {
             return {
