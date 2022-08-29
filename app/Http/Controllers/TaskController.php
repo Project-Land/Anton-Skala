@@ -254,9 +254,7 @@ class TaskController extends Controller
             $numberOfColumns = count($request->column_text);
             $columns = [];
 
-
             for($i = 0; $i < $numberOfColumns; $i++) {
-
                 $columns += [
                     $i => [
                         'text' => $request->column_text[$i],
@@ -307,16 +305,29 @@ class TaskController extends Controller
 
     public function storeColumnSortingMultipleType(Request $request)
     {
+        //dd($request->all());
         try{
-            $numberOfAnswers = count($request->column_text);
+            $numberOfColumns = count($request->column_text);
+            $numberOfAnswers = count($request->answer_text);
             $answers = [];
-
+            $columns = [];
 
             for($i = 0; $i < $numberOfAnswers; $i++) {
-
                 $answers += [
                     $i => [
-                        'text' => $request->column_text[$i],
+                        'text' => $request->answer_text[$i] ?? null,
+                        'image' => $request->answer_image[$i] ?? null,
+                        'audio' => $request->answer_audio[$i] ?? null,
+                        'column' => $request->answer_column[$i],
+                        'id' => $i + 1
+                    ]
+                ];
+            }
+
+            for($i = 0; $i < $numberOfColumns; $i++) {
+                $columns += [
+                    $i => [
+                        'text' => $request->column_text[$i] ?? null,
                         'image' => $request->column_image[$i] ?? null,
                         'audio' => $request->column_audio[$i] ?? null,
                         'column' => $request->column_column[$i],
@@ -326,8 +337,8 @@ class TaskController extends Controller
             }
 
             $content = [
-
-                'answers' => $answers
+                'answers' => $answers,
+                'columns' => $columns
             ];
 
             foreach($content['answers'] as $key => $answer){
@@ -345,6 +356,24 @@ class TaskController extends Controller
                     $content['answers'][$key]['audio'] = 'material/audio/'.$audio_name;
                 }
             }
+
+            foreach($content['columns'] as $key => $column){
+                if($column['image']){
+                    $image = $column['image'];
+                    $image_name = time().rand().'.'.$image->getClientOriginalExtension();
+                    $image->move(public_path('material/images'), $image_name);
+                    $content['columns'][$key]['image'] = 'material/images/'.$image_name;
+                }
+
+                if($column['audio']){
+                    $audio = $column['audio'];
+                    $audio_name = time().rand().'.'.$audio->getClientOriginalExtension();
+                    $audio->move(public_path('material/audio'), $audio_name);
+                    $content['columns'][$key]['audio'] = 'material/audio/'.$audio_name;
+                }
+            }
+
+            //dd($content);
 
             Task::create([
                 'lesson_id' => $request->lesson_id,
