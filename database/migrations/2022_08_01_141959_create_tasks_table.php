@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('lesson_id')->constrained();
             $table->enum('type', ['correct_answer', 'drag_and_drop', 'column_sorting', 'description', 'column_sorting_multiple']);
             $table->smallInteger('distractor_level')->nullable();
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->json('content');
             $table->smallInteger('display_order');
             $table->timestamps();

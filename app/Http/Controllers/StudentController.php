@@ -80,7 +80,7 @@ class StudentController extends Controller
     public function showReport($id, $lessonID)
     {
         $student = User::with(['tasks', 'lessons'])->find($id);
-        $tasks = $student->tasks()->where('lesson_id', $lessonID)->paginate(30);
+        $tasks = $student->tasks()->where('lesson_id', $lessonID)->orderBy('display_order')->paginate(30);
         return view('pages.students.report', ['student' => $student, 'tasks' => $tasks]);
     }
 

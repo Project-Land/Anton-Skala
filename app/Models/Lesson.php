@@ -29,9 +29,9 @@ class Lesson extends Model
 
     public function nextTask()
     {
-        if(!auth('sanctum')->user()){
+        /*if(!auth('sanctum')->user()){
             return $this->tasks()->where('display_order', 1)->sole()->id;
-        }
+        }*/
         $user = auth('sanctum')->user();
         $user_lesson = $user->lessons()->where('lesson_id', $this->id)->get();
 
