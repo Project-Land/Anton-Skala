@@ -47,14 +47,18 @@ class MaterialController extends Controller
         if(!auth('sanctum')->user()){
             return response()->json(new TaskResource($task));
         }
+
         $lesson = $task->lesson;
         $user = auth('sanctum')->user();
+
         if($request->previous){
             $user_lesson = $user->lessons()->where('lesson_id', $lesson->id)->get();
             $user_lesson->count() ?
             $user->lessons()->wherePivot('lesson_id', $lesson->id)->update(['task_id' => $task->id]) :
             $user->lessons()->attach($lesson, ['task_id' => $task->id]);
         }
+
+        //$user->tasks()->wherePivot('task_id', $task->id)->update(['elapsed_time' => $request->elapsed_time, 'no_of_attempts' => $request->no_of_attempts]);
 
         return response()->json(new TaskResource($task));
     }
@@ -75,6 +79,4 @@ class MaterialController extends Controller
         //$task = Task::find($id);
         // return response()->json(new TaskResource($task));
     }
-
-
 }
