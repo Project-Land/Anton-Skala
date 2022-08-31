@@ -58,7 +58,8 @@ class MaterialController extends Controller
             $user->lessons()->attach($lesson, ['task_id' => $task->id]);
         }
 
-        //$user->tasks()->wherePivot('task_id', $task->id)->update(['elapsed_time' => $request->elapsed_time, 'no_of_attempts' => $request->no_of_attempts]);
+        //upis vremena i broja pokusaja
+        //$task->update(['elapsed_time' => $request->elapsed_time, 'no_of_attempts' => $request->no_of_attempts]);
 
         return response()->json(new TaskResource($task));
     }
