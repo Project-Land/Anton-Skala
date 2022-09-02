@@ -33,7 +33,7 @@
                     </a>
                 </div>
                 @empty
-                <p class="col-span-4 p-8 text-center text-lg font-semibold">{{ __('Nema podataka') }}</p>
+                <p class="col-span-4 p-8 mt-4 text-center text-md sm:text-lg font-semibold dark:text-gray-300">{{ __('Nema podataka') }}</p>
                 @endforelse
             </div>
 

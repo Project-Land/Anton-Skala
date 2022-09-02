@@ -36,7 +36,7 @@
                 <!-- Broj redova -->
                 <div class="mb-6" x-data="imageViewer()">
                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ __('Broj praznih redova') }}</label>
-                    <div class="border border-purple-600 rounded-lg p-4 grid grid-cols-3 gap-6">
+                    <div class="grid grid-cols-3 gap-6">
                         <div>
                             <select type="text" name="rows" id="" value="{{ old('rows') }}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
@@ -92,7 +92,7 @@
                                     </label>
                                 </div>
 
-                                <span onclick="this.parentElement.remove()" class="col-span-1 pt-6 pl-8 cursor-pointer hover:text-red-500">
+                                <span onclick="this.parentElement.remove(); removeColumn();" class="col-span-1 pt-6 pl-8 cursor-pointer hover:text-red-500 dark:text-gray-300 hover:dark:text-red-500">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
@@ -196,6 +196,11 @@
                     </div>
                 </div>
 
+                <div class="mb-6">
+                    <label for="color_border" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ __('Dodaj kolonama pojmovima okvir u boji') }}</label>
+                    <input id="color_border" name="color_border" type="checkbox" value="1" class="w-4 h-4 text-purple-600 bg-gray-100 rounded border-gray-300 focus:ring-purple-600 dark:focus:ring-purple-700 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                </div>
+
                 <button type="submit" class="w-1/2 md:w-1/5 mt-4 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-lime">{{ __('Kreiraj') }}
                 </button>
             </form>
@@ -210,10 +215,27 @@
     </div>
 
     <script>
+        sessionStorage.setItem('number_of_columns', 2);
+
         function addAnswer()
         {
-            let content = document.getElementById('template').innerHTML;
-            document.getElementById('newAnswers').insertAdjacentHTML('beforeend', content);
+            let number_of_columns = sessionStorage.getItem('number_of_columns')
+            if(number_of_columns < 4){
+                number_of_columns++
+                sessionStorage.setItem('number_of_columns', number_of_columns)
+                let content = document.getElementById('template').innerHTML;
+                document.getElementById('newAnswers').insertAdjacentHTML('beforeend', content);
+            } else {
+                alert("{{ __('Nije moguće dodati više kolona') }}")
+                return
+            }
+        }
+
+        function removeColumn()
+        {
+            let number_of_columns = sessionStorage.getItem('number_of_columns')
+            number_of_columns--
+            sessionStorage.setItem('number_of_columns', number_of_columns)
         }
 
         function imageViewer() {

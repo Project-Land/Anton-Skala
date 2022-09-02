@@ -9,7 +9,7 @@
             </svg>
         </button>
 
-        <p class="flex justify-center flex-1 lg:mr-32 text-md sm:text-2xl font-semibold text-gray-800 dark:text-white">School App</p>
+        <p class="flex justify-center flex-1 lg:mr-32 text-md sm:text-2xl font-semibold text-gray-800 dark:text-white">GA-TE</p>
 
         <ul class="flex items-center flex-shrink-0 space-x-6">
             <!-- Theme toggler -->
