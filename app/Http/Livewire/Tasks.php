@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use Exception;
 use App\Models\Task;
 use Livewire\Component;
 
@@ -25,15 +26,20 @@ class Tasks extends Component
     public function removeTask(Task $task)
     {
         $content = json_decode($task->content, true);
-        foreach($content['answers'] as $answer){
-            if($answer['image']){
-                unlink(public_path('/'.$answer['image']));
+
+        try{
+            foreach($content['answers'] as $answer){
+                if($answer['image']){
+                    unlink(public_path('/'.$answer['image']));
+                }
+                if($answer['audio']){
+                    unlink(public_path('/'.$answer['audio']));
+                }
             }
-            if($answer['audio']){
-                unlink(public_path('/'.$answer['audio']));
-            }
+            $task->delete();
+            session()->flash('message', __('Zadatak uspešno obrisan'));
+        } catch(Exception $e){
+            session()->flash('message', __('Došlo je do greške. Pokušajte ponovo.'));
         }
-        $task->delete();
-        session()->flash('message', __('Zadatak uspešno obrisan'));
     }
 }

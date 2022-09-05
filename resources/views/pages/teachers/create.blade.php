@@ -18,7 +18,7 @@
             </div>
         </div>
 
-        <div class="relative w-full sm:w-1/2 overflow-x-auto shadow-md sm:rounded-lg">
+        <div class="relative w-full sm:w-1/2 overflow-x-auto shadow-md sm:rounded-lg dark:bg-gray-800">
 
             <form class="p-4" method="POST" action="{{ route('teachers.store') }}">
                 @csrf
@@ -76,7 +76,7 @@
                     <select name="lang" id="lang" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500" required>
                         <option value="">{{ __('Izaberi') }}...</option>
                         <option value="sr_lat" {{ old('lang')=='sr_lat' ? "selected" :"" }}>{{ __('Srpski (Latinica)') }}</option>
-                        <option value="sr_cir" {{ old('lang')=='sr_cir' ? "selected" :"" }}>{{ __('Srpski (Ćirilica)') }}</option>
+                        {{-- <option value="sr_cir" {{ old('lang')=='sr_cir' ? "selected" :"" }}>{{ __('Srpski (Ćirilica)') }}</option> --}}
                         <option value="hr" {{ old('lang')=='hr' ? "selected" :"" }}>{{ __('Hrvatski') }}</option>
                         <option value="slo" {{ old('lang')=='slo' ? "selected" :"" }}>{{ __('Slovenački') }}</option>
                     </select>

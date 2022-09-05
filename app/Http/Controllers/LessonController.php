@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Field;
 use App\Models\Lesson;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,7 +17,7 @@ class LessonController extends Controller
      */
     public function index(Request $request)
     {
-        $lang = Auth::user()->lang == 'sr' ? ['sr_lat', 'sr_cir'] : [Auth::user()->lang];
+        $lang = in_array(Auth::user()->lang, ['sr', 'sr_lat', 'sr_cir']) ? ['sr_lat', 'sr_cir'] : [Auth::user()->lang];
 
         return view('pages.lessons.index', [
             'lessons' => Lesson::whereIn('lang', $lang)->where('field_id', $request->field_id)->get(),
@@ -70,7 +69,8 @@ class LessonController extends Controller
      */
     public function edit($id)
     {
-        //
+        $lesson = Lesson::findOrFail($id);
+        return view('pages.lessons.edit', ['lesson' => $lesson]);
     }
 
     /**
@@ -82,7 +82,9 @@ class LessonController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $lesson = Lesson::findOrFail($id);
+        $lesson->update(['name' => $request->name, 'lang' => $request->lang]);
+        return redirect()->route('lessons.index', ['field_id' => $request->field_id])->with('message', __('Lekcija izmenjena'));
     }
 
     /**
@@ -91,8 +93,14 @@ class LessonController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        $lesson = Lesson::findOrFail($id);
+        try {
+            $lesson->delete();
+            return redirect()->route('lessons.index', ['field_id' => $request->field_id])->with('message', __('Lekcija obrisana'));
+        } catch(Exception $e){
+            return redirect()->route('lessons.index', ['field_id' => $request->field_id])->with('error', __('Došlo je do greške. Pokušajte ponovo.'));
+        }
     }
 }

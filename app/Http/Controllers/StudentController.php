@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Exception;
 use App\Models\Role;
+use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -13,9 +14,20 @@ use Illuminate\Validation\Rules\Password;
 
 class StudentController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $students = User::with('school')->where('role_id', 2)->latest()->get();
+        $students = User::with('school')
+            ->where('role_id', 2)
+            ->when(Auth::user()->role_id == Role::TEACHER, function ($query) {
+                return $query->where([
+                    'school_id' => Auth::user()->school_id
+                ]);
+            })
+            ->when($request->has('search'), function ($query) use ($request) {
+                return $query->where('name', 'LIKE', '%'.$request->search.'%');
+            })
+            ->latest()
+            ->paginate(20);
         return view('pages.students.index', ['students' => $students]);
     }
 
@@ -63,6 +75,13 @@ class StudentController extends Controller
     {
         $student = User::with(['tasks', 'lessons'])->find($id);
         return view('pages.students.show', ['student' => $student]);
+    }
+
+    public function showReport($id, $lessonID)
+    {
+        $student = User::with(['tasks', 'lessons'])->find($id);
+        $tasks = $student->tasks()->where('lesson_id', $lessonID)->orderBy('display_order')->paginate(30);
+        return view('pages.students.report', ['student' => $student, 'tasks' => $tasks]);
     }
 
     public function edit($id)

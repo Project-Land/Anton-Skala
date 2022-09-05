@@ -18,7 +18,7 @@
             </div>
         </div>
 
-        <div class="relative w-full sm:w-1/2 overflow-x-auto shadow-md sm:rounded-lg">
+        <div class="relative w-full sm:w-1/2 overflow-x-auto shadow-md sm:rounded-lg dark:bg-gray-800">
 
             <form class="p-4" method="POST" action="{{ route('students.update', $student) }}">
                 @csrf
@@ -58,7 +58,7 @@
 
                 <hr class="mb-4">
 
-                <span class="text-md text-gray-700 font-medium">{{ __('Promena lozinke') }}</span>
+                <span class="text-md text-gray-700 dark:text-gray-300 font-medium">{{ __('Promena lozinke') }}</span>
 
                 <div class="my-6">
                     <label for="old_password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ __('Trenutna lozinka') }}</label>

@@ -9,7 +9,7 @@
             </svg>
         </button>
 
-        <p class="flex justify-center flex-1 lg:mr-32 text-md sm:text-2xl font-semibold text-gray-800 dark:text-white">School App</p>
+        <p class="flex justify-center flex-1 lg:mr-32 text-md sm:text-2xl font-semibold text-gray-800 dark:text-white">GA-TE</p>
 
         <ul class="flex items-center flex-shrink-0 space-x-6">
             <!-- Theme toggler -->
@@ -31,7 +31,7 @@
             </li>
 
             <!-- Notifications menu -->
-            <li class="relative">
+            {{-- <li class="relative">
                 <button class="relative align-middle rounded-md focus:outline-none focus:shadow-outline-purple" @click="toggleNotificationsMenu" @keydown.escape="closeNotificationsMenu" aria-label="Notifications" aria-haspopup="true">
                     <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z">
@@ -39,37 +39,20 @@
                     </svg>
 
                     <!-- Notification counter -->
-                    {{-- @if(auth()->user()->unreadNotifications->count())
+                    <!-- @if(auth()->user()->unreadNotifications->count())
                     <span aria-hidden="true" class="absolute top-0 right-0 inline-block w-3 h-3 transform translate-x-1 -translate-y-1 bg-red-600 border-2 border-white rounded-full dark:border-gray-800"></span>
-                    @endif --}}
+                    @endif -->
                 </button>
 
                 <template x-if="isNotificationsMenuOpen">
                     <ul x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" @keydown.escape="closeNotificationsMenu"
                         class="absolute right-0 w-56 p-2 mt-2 space-y-2 text-gray-600 bg-white border border-gray-100 rounded-md shadow-md dark:text-gray-300 dark:border-gray-700 dark:bg-gray-700 overflow-auto notifications">
-                        {{-- @forelse(auth()->user()->notifications()->latest()->take(100)->get() as $notification)
-                        <li class="flex flex-col nots">
-                            <a class="inline-flex items-center justify-between w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200" onclick=event.preventDefault();markAsRead('{{ $notification->id}}','{{$notification->data['url']}}')
-                                href="{{ $notification->data['url'] }}">
-                                <span>{{ $notification->data['message'] }}</span>
-                                <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none @if(!$notification->read_at) {{ 'text-red-600 dark:text-red-100'}} @else {{'text-green-600 dark:text-green-100'}} @endif  rounded-full">
-                                    @if(!$notification->read_at)
-                                    <i class="fas fa-envelope text-xl"></i>
-                                    @else
-                                    <i class="fas fa-envelope-open-text text-xl"></i>
-                                    @endif
-                                </span>
-                            </a>
-                            <span class="text-xs italic px-2 py-1">{{ date('d.m.Y H:i', strtotime($notification->created_at)) }}</span>
-                        </li>
-                        @empty --}}
                         <li class="flex nots">
                             <p class="text-sm p-2">{{ __('Nema novih obaveštenja') }}</p>
                         </li>
-                        {{-- @endforelse --}}
                     </ul>
                 </template>
-            </li>
+            </li> --}}
 
             <!-- Profile menu -->
             <li class="relative">

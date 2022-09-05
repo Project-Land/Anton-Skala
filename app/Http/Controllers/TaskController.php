@@ -30,7 +30,7 @@ class TaskController extends Controller
 
     public function createSpecificTask(Request $request)
     {
-        return view('pages.tasks.types.'.$request->type, [
+        return view('pages.tasks.types.' . $request->type, [
             'type' => $request->type,
             'lesson_id' => $request->lesson_id
         ]);
@@ -38,12 +38,12 @@ class TaskController extends Controller
 
     public function storeCorrectAnswerType(Request $request)
     {
-        try{
+        try {
             $numberOfAnswers = count($request->answer_text);
             $answers = [];
             $numberOfCorrectAnswers = 0;
 
-            for($i = 0; $i < $numberOfAnswers; $i++) {
+            for ($i = 0; $i < $numberOfAnswers; $i++) {
                 $request->answer_correct[$i] == 1 ? $numberOfCorrectAnswers++ : $numberOfCorrectAnswers;
                 $answers += [
                     $i => [
@@ -51,33 +51,30 @@ class TaskController extends Controller
                         'image' => $request->answer_image[$i] ?? null,
                         'audio' => $request->answer_audio[$i] ?? null,
                         'is_correct' => $request->answer_correct[$i] == 0 ? false : true,
-                        'id' => $i+1
+                        'id' => $i + 1
                     ]
                 ];
             }
 
-            // provera ako nije izabran nijedan tačan odgovor
-            if(!count(collect($answers)->where('is_correct', true))){
+            if (!count(collect($answers)->where('is_correct', true))) {
                 return redirect()->back()->withInput()->with(['error' => __('Izaberite bar jedan tačan odgovor')]);
             }
 
-            if($request->question_image){
+            if ($request->question_image) {
                 $image = $request->question_image;
-                $image_name = time().'.'.$image->getClientOriginalExtension();
+                $image_name = time() . uniqid() . '.' . $image->getClientOriginalExtension();
                 $image->move(public_path('material/images'), $image_name);
-                $question_image_path = 'material/images/'.$image_name;
-            }
-            else{
+                $question_image_path = 'material/images/' . $image_name;
+            } else {
                 $question_image_path = null;
             }
 
-            if($request->question_audio){
+            if ($request->question_audio) {
                 $audio = $request->question_audio;
-                $audio_name = time().'.'.$audio->getClientOriginalExtension();
+                $audio_name = time() . uniqid() . '.' . $audio->getClientOriginalExtension();
                 $audio->move(public_path('material/audio'), $audio_name);
-                $question_audio_path = 'material/audio/'.$audio_name;
-            }
-            else{
+                $question_audio_path = 'material/audio/' . $audio_name;
+            } else {
                 $question_audio_path = null;
             }
 
@@ -91,19 +88,19 @@ class TaskController extends Controller
                 'answers' => $answers
             ];
 
-            foreach($content['answers'] as $key => $answer){
-                if($answer['image']){
+            foreach ($content['answers'] as $key => $answer) {
+                if ($answer['image']) {
                     $image = $answer['image'];
-                    $image_name = time().rand().'.'.$image->getClientOriginalExtension();
+                    $image_name = time() . uniqid() . '.' . $image->getClientOriginalExtension();
                     $image->move(public_path('material/images'), $image_name);
-                    $content['answers'][$key]['image'] = 'material/images/'.$image_name;
+                    $content['answers'][$key]['image'] = 'material/images/' . $image_name;
                 }
 
-                if($answer['audio']){
+                if ($answer['audio']) {
                     $audio = $answer['audio'];
-                    $audio_name = time().rand().'.'.$audio->getClientOriginalExtension();
+                    $audio_name = time() . uniqid() . '.' . $audio->getClientOriginalExtension();
                     $audio->move(public_path('material/audio'), $audio_name);
-                    $content['answers'][$key]['audio'] = 'material/audio/'.$audio_name;
+                    $content['answers'][$key]['audio'] = 'material/audio/' . $audio_name;
                 }
             }
 
@@ -116,121 +113,124 @@ class TaskController extends Controller
             ]);
 
             $request->session()->flash('message', __('Zadatak je uspešno kreiran'));
-
-        } catch(Exception $e){
-            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo'.$e->getMessage()));
+        } catch (Exception $e) {
+            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.' . $e->getMessage()));
         }
 
-        return redirect('tasks?lesson_id='.$request->lesson_id);
+        return redirect('tasks?lesson_id=' . $request->lesson_id);
     }
 
-
-
     public function storeDragAndDropType(Request $request)
-    {   //dd($request->all());
-        try{
+    {
+        //dd($request->all());
+        try {
             $numberOfAnswers = count($request->answer_text);
             $answers = [];
             $numberOfQuestions = count($request->question_text);
             $questions = [];
 
-
-        for($i = 0; $i < $numberOfAnswers; $i++) {
-            $answers += [
-                $i => [
-                    'text' => $request->answer_text[$i],
-                    'image' => $request->answer_image[$i] ?? null,
-                    'audio' => $request->answer_audio[$i] ?? null,
-                    'id' => $i+1
-
-                ]
+            $colors = [
+                0 => 'red',
+                1 => 'green',
+                2 => 'blue',
+                3 => 'yellow',
+                4 => 'brown',
+                5 => 'purple'
             ];
-        }
 
-        for($i = 0; $i < $numberOfQuestions; $i++) {
-            $questions += [
-                $i => [
-                    'text' => $request->question_text[$i],
-                    'image' => $request->question_image[$i] ?? null,
-                    'audio' => $request->question_audio[$i] ?? null,
-                    'id' => $i+1
+            for ($i = 0; $i < $numberOfAnswers; $i++) {
+                $answers += [
+                    $i => [
+                        'text' => $request->answer_text[$i],
+                        'image' => $request->answer_image[$i] ?? null,
+                        'audio' => $request->answer_audio[$i] ?? null,
+                        'id' => $i + 1,
+                        'color' => $request->color_border ? $colors[$i] : null
+                    ]
+                ];
+            }
 
-                ]
+            for ($i = 0; $i < $numberOfQuestions; $i++) {
+                $questions += [
+                    $i => [
+                        'text' => $request->question_text[$i],
+                        'image' => $request->question_image[$i] ?? null,
+                        'audio' => $request->question_audio[$i] ?? null,
+                        'id' => $i + 1,
+                        'color' => $request->color_border ? $colors[$i] : null
+                    ]
+                ];
+            }
+
+            $content = [
+                'answers' => $answers,
+                'questions' => $questions,
+                'color_border' => $request->color_border ? true : false
             ];
+
+            //dd($content);
+            foreach ($content['answers'] as $key => $answer) {
+                if ($answer['image']) {
+                    $image = $answer['image'];
+                    $image_name = time() . uniqid() . '.' . $image->getClientOriginalExtension();
+                    $image->move(public_path('material/images'), $image_name);
+                    $content['answers'][$key]['image'] = 'material/images/' . $image_name;
+                }
+                // dump($image_name);
+                if ($content['answers'][$key]['audio']) {
+                    $audio = $content['answers'][$key]['audio'];
+                    $audio_name = time() . uniqid() . '.' . $audio->getClientOriginalExtension();
+                    $audio->move(public_path('material/audio'), $audio_name);
+                    $content['answers'][$key]['audio'] = 'material/audio/' . $audio_name;
+                }
+            }
+
+            foreach ($content['questions'] as $key => $question) {
+                if ($question['image']) {
+                    $image = $question['image'];
+                    $image_name = time() . uniqid() . '.' . $image->getClientOriginalExtension();
+                    $image->move(public_path('material/images'), $image_name);
+                    $content['questions'][$key]['image'] = 'material/images/' . $image_name;
+                }
+                // dump($image_name);
+                if ($content['questions'][$key]['audio']) {
+                    $audio = $content['question'][$key]['audio'];
+                    $audio_name = time() . uniqid() . '.' . $audio->getClientOriginalExtension();
+                    $audio->move(public_path('material/audio'), $audio_name);
+                    $content['questions'][$key]['audio'] = 'material/audio/' . $audio_name;
+                }
+            }
+
+            Task::create([
+                'lesson_id' => $request->lesson_id,
+                'type' => $request->type,
+                'description' => $request->description,
+                'display_order' => Task::where('lesson_id', $request->lesson_id)->count() + 1,
+                'content' => json_encode($content)
+            ]);
+
+            $request->session()->flash('message', __('Zadatak je uspešno kreiran'));
+        } catch (Exception $e) {
+            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.' . $e->getMessage()));
         }
 
-
-        $content = [
-            'answers' => $answers,
-            'questions' => $questions
-        ];
-        //dd($content);
-        foreach($content['answers'] as $key => $answer){
-            if($answer['image']){
-                $image = $answer['image'];
-                $image_name = time().'.'.$image->getClientOriginalExtension();
-                $image->move(public_path('material/images'), $image_name);
-                $content['answers'][$key]['image'] = 'material/images/'.$image_name;
-            }
-           // dump($image_name);
-            if($content['answers'][$key]['audio']){
-                $audio = $content['answers'][$key]['audio'];
-                $audio_name = time().'.'.$audio->getClientOriginalExtension();
-                $audio->move(public_path('material/audio'), $audio_name);
-                $content['answers'][$key]['audio'] = 'material/audio/'.$audio_name;
-            }
-        }
-
-        foreach($content['questions'] as $key => $question){
-            if($question['image']){
-                $image = $question['image'];
-                $image_name = time().'.'.$image->getClientOriginalExtension();
-                $image->move(public_path('material/images'), $image_name);
-                $content['questions'][$key]['image'] = 'material/images/'.$image_name;
-            }
-           // dump($image_name);
-            if($content['questions'][$key]['audio']){
-                $audio = $content['question'][$key]['audio'];
-                $audio_name = time().'.'.$audio->getClientOriginalExtension();
-                $audio->move(public_path('material/audio'), $audio_name);
-                $content['questions'][$key]['audio'] = 'material/audio/'.$audio_name;
-            }
-        }
-
-
-       $task = Task::create([
-            'lesson_id' => $request->lesson_id,
-            'type' => $request->type,
-            'description' => $request->description,
-            'display_order' => Task::where('lesson_id', $request->lesson_id)->count() + 1,
-            'content' => json_encode($content)
-        ]);
-
-        $request->session()->flash('message', __('Zadatak je uspešno kreiran'));
-
-    } catch(Exception $e){
-        $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo'.$e->getMessage()));
+        return redirect('tasks?lesson_id=' . $request->lesson_id);
     }
-
-    return redirect('tasks?lesson_id='.$request->lesson_id);
-
-    }
-
 
     public function storeDescriptionType(Request $request)
-    {   //dd($request->lesson_id,$request->type);
+    {
         $content = [];
         $content['image'] = null;
-        $content ['text'] = $request->text;
-        if($request->file('image')){
-            $image_name = time().'.'.$request->file('image')->getClientOriginalExtension();
+        $content['text'] = $request->text;
+
+        if ($request->file('image')) {
+            $image_name = time() . uniqid() . '.' . $request->file('image')->getClientOriginalExtension();
             $request->file('image')->move(public_path('material/images'), $image_name);
-            $content['image'] = 'material/images/'.$image_name;
+            $content['image'] = 'material/images/' . $image_name;
         }
 
-
-        try{
-            $task = Task::create([
+        try {
+            Task::create([
                 'lesson_id' => $request->lesson_id,
                 'type' => $request->type,
                 'display_order' => Task::where('lesson_id', $request->lesson_id)->count() + 1,
@@ -238,53 +238,88 @@ class TaskController extends Controller
             ]);
 
             $request->session()->flash('message', __('Zadatak je uspešno kreiran'));
-
-        } catch(Exception $e){
-            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo'.$e->getMessage()));
+        } catch (Exception $e) {
+            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.' . $e->getMessage()));
         }
 
-        return redirect('tasks?lesson_id='.$request->lesson_id);
-
+        return redirect('tasks?lesson_id=' . $request->lesson_id);
     }
 
 
     public function storeColumnSortingType(Request $request)
     {
-        try{
+        try {
             $numberOfColumns = count($request->column_text);
             $columns = [];
+            $answers = [];
+            $colors = [
+                0 => 'red',
+                1 => 'green',
+                2 => 'blue',
+                3 => 'yellow',
+                4 => 'brown',
+                5 => 'purple'
+            ];
 
-
-            for($i = 0; $i < $numberOfColumns; $i++) {
-
+            for ($i = 0; $i < $numberOfColumns; $i++) {
                 $columns += [
                     $i => [
-                        'text' => $request->column_text[$i],
+                        'text' => $request->column_text[$i] ?? null,
                         'image' => $request->column_image[$i] ?? null,
                         'audio' => $request->column_audio[$i] ?? null,
+                        'column' => $i + 1,
+                        'color' => $request->color_border ? $colors[$i] : null
+                    ]
+                ];
+
+                $answers += [
+                    $i => [
+                        'text' => $request->column_text[$i] ?? null,
+                        'image' => $request->column_image[$i] ?? null,
+                        'audio' => $request->column_audio[$i] ?? null,
+                        'column' => $i + 1,
+                        'color' => $request->color_border ? $colors[$i] : null
                     ]
                 ];
             }
 
             $content = [
                 'rows' => $request->rows,
-                'columns' => $columns
+                'columns' => $columns,
+                'answers' => $answers
             ];
 
-            foreach($content['columns'] as $key => $column){
-                if($column['image']){
+            foreach ($content['columns'] as $key => $column) {
+                if ($column['image']) {
                     $image = $column['image'];
-                    $image_name = time().rand().'.'.$image->getClientOriginalExtension();
+                    $image_name = time() . uniqid() . '.' . $image->getClientOriginalExtension();
                     $image->move(public_path('material/images'), $image_name);
-                    $content['columns'][$key]['image'] = 'material/images/'.$image_name;
+                    $content['columns'][$key]['image'] = 'material/images/' . $image_name;
+                    $content['answers'][$key]['image'] = 'material/images/' . $image_name;
                 }
 
-                if($column['audio']){
+                if ($column['audio']) {
                     $audio = $column['audio'];
-                    $audio_name = time().rand().'.'.$audio->getClientOriginalExtension();
+                    $audio_name = time() . uniqid() . '.' . $audio->getClientOriginalExtension();
                     $audio->move(public_path('material/audio'), $audio_name);
-                    $content['columns'][$key]['audio'] = 'material/audio/'.$audio_name;
+                    $content['columns'][$key]['audio'] = 'material/audio/' . $audio_name;
+                    $content['answers'][$key]['audio'] = 'material/audio/' . $audio_name;
                 }
+            }
+
+            // dupliranje sadrzaja (kloniranje niza answers) onoliko puta koliko ima praznih redova
+            $clonedArray = [];
+            foreach ($content['answers'] as $key => $answer) {
+                for ($i = 0; $i < $request->rows - 1; $i++) {
+                    $clonedArray[] = $answer;
+                }
+            }
+
+            $content['answers'] = array_merge($content['answers'], $clonedArray);
+
+            // dodavanje ID-a svakom elementu niza
+            foreach ($content['answers'] as $index => $answer) {
+                $content['answers'][$index] += ['id' => $index + 1];
             }
 
             Task::create([
@@ -296,27 +331,38 @@ class TaskController extends Controller
             ]);
 
             $request->session()->flash('message', __('Zadatak je uspešno kreiran'));
-
-        } catch(Exception $e){
-            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo'.$e->getMessage()));
+        } catch (Exception $e) {
+            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
 
-        return redirect('tasks?lesson_id='.$request->lesson_id);
+        return redirect('tasks?lesson_id=' . $request->lesson_id);
     }
-
 
     public function storeColumnSortingMultipleType(Request $request)
     {
-        try{
-            $numberOfAnswers = count($request->column_text);
+        //dd($request->all());
+        try {
+            $numberOfColumns = count($request->column_text);
+            $numberOfAnswers = count($request->answer_text);
             $answers = [];
+            $columns = [];
 
-
-            for($i = 0; $i < $numberOfAnswers; $i++) {
-
+            for ($i = 0; $i < $numberOfAnswers; $i++) {
                 $answers += [
                     $i => [
-                        'text' => $request->column_text[$i],
+                        'text' => $request->answer_text[$i] ?? null,
+                        'image' => $request->answer_image[$i] ?? null,
+                        'audio' => $request->answer_audio[$i] ?? null,
+                        'column' => $request->answer_column[$i],
+                        'id' => $i + 1
+                    ]
+                ];
+            }
+
+            for ($i = 0; $i < $numberOfColumns; $i++) {
+                $columns += [
+                    $i => [
+                        'text' => $request->column_text[$i] ?? null,
                         'image' => $request->column_image[$i] ?? null,
                         'audio' => $request->column_audio[$i] ?? null,
                         'column' => $request->column_column[$i],
@@ -326,23 +372,39 @@ class TaskController extends Controller
             }
 
             $content = [
-
-                'answers' => $answers
+                'answers' => $answers,
+                'columns' => $columns
             ];
 
-            foreach($content['answers'] as $key => $answer){
-                if($answer['image']){
+            foreach ($content['answers'] as $key => $answer) {
+                if ($answer['image']) {
                     $image = $answer['image'];
-                    $image_name = time().rand().'.'.$image->getClientOriginalExtension();
+                    $image_name = time() . uniqid() . '.' . $image->getClientOriginalExtension();
                     $image->move(public_path('material/images'), $image_name);
-                    $content['answers'][$key]['image'] = 'material/images/'.$image_name;
+                    $content['answers'][$key]['image'] = 'material/images/' . $image_name;
                 }
 
-                if($answer['audio']){
+                if ($answer['audio']) {
                     $audio = $answer['audio'];
-                    $audio_name = time().rand().'.'.$audio->getClientOriginalExtension();
+                    $audio_name = time() . uniqid() . '.' . $audio->getClientOriginalExtension();
                     $audio->move(public_path('material/audio'), $audio_name);
-                    $content['answers'][$key]['audio'] = 'material/audio/'.$audio_name;
+                    $content['answers'][$key]['audio'] = 'material/audio/' . $audio_name;
+                }
+            }
+
+            foreach ($content['columns'] as $key => $column) {
+                if ($column['image']) {
+                    $image = $column['image'];
+                    $image_name = time() . uniqid() . '.' . $image->getClientOriginalExtension();
+                    $image->move(public_path('material/images'), $image_name);
+                    $content['columns'][$key]['image'] = 'material/images/' . $image_name;
+                }
+
+                if ($column['audio']) {
+                    $audio = $column['audio'];
+                    $audio_name = time() . uniqid() . '.' . $audio->getClientOriginalExtension();
+                    $audio->move(public_path('material/audio'), $audio_name);
+                    $content['columns'][$key]['audio'] = 'material/audio/' . $audio_name;
                 }
             }
 
@@ -355,13 +417,13 @@ class TaskController extends Controller
             ]);
 
             $request->session()->flash('message', __('Zadatak je uspešno kreiran'));
-
-        } catch(Exception $e){
-            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo'.$e->getMessage().' Linija '.$e->getLine()));
+        } catch (Exception $e) {
+            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
 
-        return redirect('tasks?lesson_id='.$request->lesson_id);
+        return redirect('tasks?lesson_id=' . $request->lesson_id);
     }
+
 
     public function storeAddLetterType(Request $request){
         try{
@@ -371,27 +433,27 @@ class TaskController extends Controller
             $pattern = '/(?<=\()(\p{L}+)(?=\))/u';
             preg_match_all($pattern, $str, $matches, PREG_OFFSET_CAPTURE );
 
-            if(!count($matches[0])) return back()->with('message', 'Unesite slova za dopunu!');
+            if (!count($matches[0])) return back()->with('message', __('Unesite slova za dopunu!'));
+
 
             foreach($matches[0] as $match){
                 $br_count = substr_count(substr($str,0,$match[1]),'(') + substr_count(substr($str,0,$match[1]),')');
                 $m[]= ['value' => $match[0], 'index' => $match[1] - $br_count ];
             }
 
-            foreach(str_split($clean_str) as $key=>$letter){
-
+            foreach (str_split($clean_str) as $key => $letter) {
                 $empty = collect(Arr::pluck($m, 'index'))->contains($key);
                 $letters[] = ['index'=> $key, 'value' => $letter, 'empty' => $empty];
             }
 
             $image = null;
-            if($request->image){
+            if ($request->image) {
                 $image = $request->image;
-                $image_name = time().rand().'.'.$image->getClientOriginalExtension();
+                $image_name = time() . rand() . '.' . $image->getClientOriginalExtension();
                 $image->move(public_path('material/images'), $image_name);
-                $image = 'material/images/'.$image_name;
+                $image = 'material/images/' . $image_name;
             }
-            $content = ['image'=> $image, 'string' => $letters, 'answers' => $m];
+            $content = ['image' => $image, 'string' => $letters, 'answers' => $m];
             Task::create([
                 'lesson_id' => $request->lesson_id,
                 'type' => $request->type,
@@ -401,6 +463,7 @@ class TaskController extends Controller
             ]);
 
             $request->session()->flash('message', __('Zadatak je uspešno kreiran'));
+
 
 
         } catch(Exception $e){
@@ -422,17 +485,17 @@ class TaskController extends Controller
         //
     }
 
-    // public function editSpecificTask(Task $task)
-    // {
-    //     $object = (array)json_decode($task->content);
+    /* public function editSpecificTask(Task $task)
+    {
+         $object = (array)json_decode($task->content);
 
-    //     return view('pages.tasks.types.edit.edit_'.$task->type, [
-    //         'type' => $task->type,
-    //         'lesson_id' => $task->lesson_id,
-    //         'task' => $task,
-    //         'content' => Task::hydrate($object)
-    //     ]);
-    // }
+         return view('pages.tasks.types.edit.edit_'.$task->type, [
+             'type' => $task->type,
+             'lesson_id' => $task->lesson_id,
+             'task' => $task,
+             'content' => Task::hydrate($object)
+         ]);
+    } */
 
     public function edit(Task $task)
     {
@@ -445,7 +508,7 @@ class TaskController extends Controller
         //
     }
 
-    public function destroy(Task $task)
+    public function destroy(Request $request, Task $task)
     {
         //
     }

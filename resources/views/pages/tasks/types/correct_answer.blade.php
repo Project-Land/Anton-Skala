@@ -2,7 +2,7 @@
 
     <x-slot name="title">| {{ __('Zadatak') }}</x-slot>
 
-    <div class="container px-6 lg:px-32 mx-auto grid">
+    <div class="container px-6 lg:px-32 mb-8 mx-auto grid">
 
         @include('components.alert')
 
@@ -127,7 +127,7 @@
                                         <option value="1">{{ __('Da') }}</option>
                                     </select>
                                 </div>
-                                <span onclick="this.parentElement.remove()" class="col-span-1 pt-6 pl-8 cursor-pointer hover:text-red-500">
+                                <span onclick="this.parentElement.remove()" class="col-span-1 pt-6 pl-8 cursor-pointer hover:text-red-500 dark:text-gray-300 hover:dark:text-red-500">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
@@ -229,9 +229,7 @@
                             </div>
                         </div>
 
-                        <div id="newAnswers" class="grid gap-8">
-
-                        </div>
+                        <div id="newAnswers" class="grid gap-8"></div>
 
                         <div class="flex justify-center">
                             <span class="inline-flex mt-2 items-center px-2 py-2 bg-gray-700 border border-transparent rounded-full font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-800 active:bg-gray-800 focus:outline-none focus:border-gray-800 focus:shadow-outline-gray cursor-pointer transition-all" onclick="addAnswer()">
@@ -248,7 +246,7 @@
             </form>
         </div>
         <div>
-            <p class="mb-4">{{ __('Primer') }}</p>
+            <p class="mb-4 dark:text-gray-300">{{ __('Primer') }}</p>
             <img class="w-full sm:w-1/3" src="/images/correct_answer.png" alt="tacan odgovor">
         </div>
     </div>

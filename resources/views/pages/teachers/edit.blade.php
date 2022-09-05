@@ -18,7 +18,7 @@
             </div>
         </div>
 
-        <div class="relative w-full sm:w-1/2 overflow-x-auto shadow-md sm:rounded-lg">
+        <div class="relative w-full sm:w-1/2 overflow-x-auto shadow-md sm:rounded-lg dark:bg-gray-800">
 
             <form class="p-4" method="POST" action="{{ route('teachers.update', $teacher) }}">
                 @csrf
@@ -69,7 +69,7 @@
                     <select name="lang" id="lang" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500" required>
                         <option value="">{{ __('Izaberi') }}...</option>
                         <option value="sr_lat" {{ $teacher->lang == 'sr_lat' ? "selected" :"" }}>{{ __('Srpski (Latinica)') }}</option>
-                        <option value="sr_cir" {{ $teacher->lang == 'sr_cir' ? "selected" :"" }}>{{ __('Srpski (Ćirilica)') }}</option>
+                        {{-- <option value="sr_cir" {{ $teacher->lang == 'sr_cir' ? "selected" :"" }}>{{ __('Srpski (Ćirilica)') }}</option> --}}
                         <option value="hr" {{ $teacher->lang == 'hr' ? "selected" :"" }}>{{ __('Hrvatski') }}</option>
                         <option value="slo" {{ $teacher->lang == 'slo' ? "selected" :"" }}>{{ __('Slovenački') }}</option>
                     </select>
@@ -80,7 +80,7 @@
 
                 <hr class="mb-4">
 
-                <span class="text-md text-gray-700 font-medium">{{ __('Promena lozinke') }}</span>
+                <span class="text-md text-gray-700 dark:text-gray-300 font-medium">{{ __('Promena lozinke') }}</span>
 
                 <div class="my-6">
                     <label for="old_password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ __('Trenutna lozinka') }}</label>

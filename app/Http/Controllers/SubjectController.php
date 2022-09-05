@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Subject;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SubjectController extends Controller
 {
@@ -14,8 +15,10 @@ class SubjectController extends Controller
      */
     public function index()
     {
+        $lang = in_array(Auth::user()->lang, ['sr', 'sr_lat', 'sr_cir']) ? ['sr', 'sr_lat', 'sr_cir'] : [Auth::user()->lang];
+
         return view('pages.subjects.index', [
-            'subjects' => Subject::all()
+            'subjects' => Subject::whereIn('lang', $lang)->get()
         ]);
     }
 
@@ -37,7 +40,8 @@ class SubjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Subject::create($request->all());
+        return redirect()->route('subjects.index')->with('message', __('Predmet uspešno kreiran'));
     }
 
     /**
@@ -73,7 +77,8 @@ class SubjectController extends Controller
      */
     public function update(Request $request, Subject $subject)
     {
-        //
+        $subject->update(['name' => $request->name]);
+        return redirect()->route('subjects.index')->with('message', __('Predmet izmenjen'));
     }
 
     /**

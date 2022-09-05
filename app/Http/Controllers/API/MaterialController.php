@@ -38,31 +38,69 @@ class MaterialController extends Controller
 
     public function lessonTasks(Request $request)
     {
-        $tasks = Task::where('lesson_id', $request->lesson_id)->orderBy('display_order')->get()->first();
-        return response()->json(TaskResource::collection($tasks));
+        $tasks = Task::where('lesson_id', $request->lesson_id)->orderBy('display_order')->get();
+
+        //return response()->json(TaskResource::collection($tasks));
+        return response()->json(new TaskResource($tasks->first()));
     }
 
     public function task(Request $request, Task $task)
     {
-        if(!auth('sanctum')->user()){
+        if (!auth('sanctum')->user()) {
+            //$lesson = Lesson::find($request->lesson_id);
+            //$task = $lesson->tasks->first();
             return response()->json(new TaskResource($task));
         }
+
         $lesson = $task->lesson;
         $user = auth('sanctum')->user();
-        if($request->previous){
+
+        if ($request->previous) {
             $user_lesson = $user->lessons()->where('lesson_id', $lesson->id)->get();
             $user_lesson->count() ?
-            $user->lessons()->wherePivot('lesson_id', $lesson->id)->update(['task_id' => $task->id]) :
-            $user->lessons()->attach($lesson, ['task_id' => $task->id]);
+                $user->lessons()->wherePivot('lesson_id', $lesson->id)->update(['task_id' => $task->id]) :
+                $user->lessons()->attach($lesson, ['task_id' => $task->id]);
         }
+
+        //upis vremena i broja pokusaja
+        //$task->update(['elapsed_time' => $request->elapsed_time, 'no_of_attempts' => $request->no_of_attempts]);
 
         return response()->json(new TaskResource($task));
     }
 
+    public function nextTask(Request $request, Lesson $lesson)
+    {
+        if (!auth('sanctum')->user()) {
+            return $lesson->tasks()->where('display_order', 1)->sole()->id;
+        }
+        $user = auth('sanctum')->user();
+        $user_lesson = $user->lessons()->where('lesson_id', $lesson->id)->get();
+
+        if ($user_lesson->count()) {
+            if ($request->current_task) {
+                return $user_lesson[0]->pivot->task_id;
+            }
+            $lastTaskId = $user_lesson[0]->pivot->task_id;
+        } else {
+            return $lesson->tasks()->where('display_order', 1)->sole()->id;
+        }
+
+        $task = Task::find($lastTaskId);
+        $tasks = $lesson->tasks;
+        $maxDisplayOrder = $tasks->max('display_order');
+        $currentOrderNo = $task->display_order;
+        $next = $task->display_order + 1;
+        if ($maxDisplayOrder == $currentOrderNo) {
+            return $nextTask = 0;
+        }
+        $nextTask = $tasks->where('display_order', $next)->values()[0]->id;
+        return $nextTask;
+    }
 
     public function lessonEnd(Request $request, Lesson $lesson)
     {
-        if(auth('sanctum')->user()){
+        // proveriti da li treba detach zbog statistike ucenika ??
+        if (auth('sanctum')->user()) {
             Auth::user()->lessons()->where('lesson_id', $lesson->id)->detach();
         }
         return true;
@@ -75,6 +113,4 @@ class MaterialController extends Controller
         //$task = Task::find($id);
         // return response()->json(new TaskResource($task));
     }
-
-
 }

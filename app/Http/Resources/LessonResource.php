@@ -15,7 +15,7 @@ class LessonResource extends JsonResource
             'lang' => $this->lang,
             'field_name' => $this->field->name,
             'field_id' => $this->field_id,
-            'in_progress' => $this->nextTask()//users()->where('user_id', auth('sanctum')->user()->id)->count()
+            'in_progress' => auth('sanctum')->user() ? $this->nextTask() : $this->tasks()->where('display_order', 1)->get('id')->pluck('id')->first()
         ];
     }
 }

@@ -16,20 +16,29 @@
             </div>
         </div>
 
+        <div class="flex flex-col md:flex-row justify-between sm:items-center mb-6 bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow">
+            <form class="" method="GET">
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="search">{{ __('Pretraga') }}</label>
+                <div class="inline-flex">
+                    <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-l-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500" type="text" name="search" id="search"
+                        placeholder="{{ __('Unesite pojam....') }}" value="{{ request()->search }}">
+                    <button type="submit" class="text-white bg-purple-600 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-r-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800">{{ __('Traži') }}</button>
+                </div>
+            </form>
+        </div>
+
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <table id="students" class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400 rounded-t-lg">
                     <tr>
-                        <th scope="col" class="px-6 py-3">
-                            {{ __('Ime i prezime') }}
-                        </th>
+                        <th scope="col" class="px-6 py-3">{{ __('Ime i prezime') }}</th>
                         <th scope="col" class="px-6 py-3">{{ __('Škola') }}</th>
                         <th scope="col" class="px-6 py-3">{{ __('Izveštaj') }}</th>
                         <th scope="col" class="px-6 py-3"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($students as $student)
+                    @forelse($students as $student)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">{{ $student->name }}</th>
                         <td class="px-6 py-4">{{ $student->school->name ?? "/" }}</td>
@@ -50,9 +59,17 @@
                             </form>
                         </td>
                     </tr>
-                    @endforeach
+                    @empty
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <th colspan="4" scope="row" class="px-6 py-4 text-center font-medium text-gray-900 dark:text-white whitespace-nowrap">{{ __('Nema podataka') }}</th>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
+
+            <div class="p-5">
+                {{ $students->withQueryString()->links() }}
+            </div>
         </div>
 
     </div>

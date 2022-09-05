@@ -18,7 +18,7 @@
             </div>
         </div>
 
-        <div class="relative w-full sm:w-1/2 overflow-x-auto shadow-md sm:rounded-lg">
+        <div class="relative w-full sm:w-1/2 overflow-x-auto shadow-md sm:rounded-lg dark:bg-gray-800">
 
             <form class="p-4" method="POST" action="{{ route('students.store') }}">
                 @csrf

@@ -25,11 +25,12 @@
                     <label for="type" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ __('Odaberi tip zadatka') }}</label>
                     <select name="type" id="type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
                         <option value="description" selected>{{ __('Uvod') }}</option>
-                        <option value="drag_and_drop" >{{ __('Prevlačenje') }}</option>
+                        <option value="drag_and_drop">{{ __('Prevlačenje') }}</option>
                         <option value="correct_answer">{{ __('Jedan ili više tačnih odgovora') }}</option>
                         <option value="column_sorting">{{ __('Prevlačenje po kolonama(isti pojmovi)') }}</option>
                         <option value="column_sorting_multiple">{{ __('Prevlačenje po kolonama(različiti pojmovi)') }}</option>
                         <option value="add_letter">{{ __('Dodavanje slova u reči') }}</option>
+
                     </select>
                     @error('type')
                     <span class="text-xs text-red-600 dark:text-red-400">{{ $message }}</span>
