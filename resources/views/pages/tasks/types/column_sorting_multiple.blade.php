@@ -2,7 +2,7 @@
 
     <x-slot name="title">| {{ __('Zadatak') }}</x-slot>
 
-    <div class="container px-6 lg:px-32 mx-auto grid">
+    <div class="container px-6 lg:px-32 mb-8 mx-auto grid">
 
         @include('components.alert')
 
