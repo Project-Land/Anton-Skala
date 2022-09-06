@@ -12,6 +12,7 @@ class FieldResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'image' => $this->image,
             'lang' => $this->lang,
             'subject_name' => $this->subject->name,
             'subject_id' => $this->subject_id,

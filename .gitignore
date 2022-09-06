@@ -3,6 +3,7 @@
 /public/hot
 /public/storage
 /public/material
+/public/images/covers
 /storage/*.key
 /vendor
 .env

@@ -12,6 +12,7 @@ class LessonResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'image' => $this->image,
             'lang' => $this->lang,
             'field_name' => $this->field->name,
             'field_id' => $this->field_id,

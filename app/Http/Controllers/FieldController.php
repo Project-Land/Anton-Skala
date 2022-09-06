@@ -10,16 +10,11 @@ use Illuminate\Support\Facades\Auth;
 
 class FieldController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         $lang = in_array(Auth::user()->lang, ['sr', 'sr_lat', 'sr_cir']) ? ['sr', 'sr_lat', 'sr_cir'] : [Auth::user()->lang];
 
-        if(!in_array(Subject::findOrFail($request->subject_id)->lang, $lang)){
+        if (!in_array(Subject::findOrFail($request->subject_id)->lang, $lang)) {
             return abort('404');
         }
 
@@ -29,75 +24,59 @@ class FieldController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('pages.fields.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         Field::create($request->all());
         return redirect()->route('fields.index', ['subject_id' => $request->subject_id])->with('message', __('Oblast kreirana'));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Field  $field
-     * @return \Illuminate\Http\Response
-     */
     public function show(Field $field)
     {
-        //
+        abort(404);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Field  $field
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Field $field)
     {
         return view('pages.fields.edit', ['field' => $field]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Field  $field
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Field $field)
     {
-        $field->update(['name' => $request->name]);
-        return redirect()->route('fields.index', ['subject_id' => $request->subject_id])->with('message', __('Oblast izmenjena'));
+        if ($request->image) {
+            $request->validate([
+                'image' => 'max:500|mimes:jpg,png,webp,gif'
+            ], [
+                'image.max' => __('Slika ne sme biti veća od 500kb'),
+                'image.mimes' => __('Neispravan format. Dozvoljeni formati: .jpg, .png, .webp, .gif')
+            ]);
+
+            if ($field->image) {
+                unlink($field->image);
+            }
+
+            $image = $request->image;
+            $image_name = time() . uniqid() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images/covers'), $image_name);
+            $cover_image = "images/covers/" . $image_name;
+        } else {
+            $cover_image = $field->image;
+        }
+
+        $field->update(['name' => $request->name, 'image' => $cover_image]);
+        return redirect()->route('lessons.index', ['field_id' => $field->id])->with('message', __('Oblast izmenjena'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Field  $field
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Request $request, Field $field)
     {
-        try{
+        try {
             $field->delete();
-        return redirect()->route('fields.index', ['subject_id' => $request->subject_id])->with('message', __('Oblast obrisana'));
-        } catch(Exception $e){
+            return redirect()->route('fields.index', ['subject_id' => $request->subject_id])->with('message', __('Oblast obrisana'));
+        } catch (Exception $e) {
             return redirect()->route('fields.index', ['subject_id' => $request->subject_id])->with('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
     }
