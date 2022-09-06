@@ -424,28 +424,26 @@ class TaskController extends Controller
         return redirect('tasks?lesson_id=' . $request->lesson_id);
     }
 
-    public function storeAddLettersType(Request $request)
-    {
-        try {
-            $str = $request->string;
-            $str = "ds(j)(Č)";
-            $clean_str = Str::replace("(", "",  $str);
-            $clean_str = Str::replace(")", "",  $clean_str);
-            $brackets_count = substr_count($str, '(') + substr_count($str, ')');
 
+    public function storeAddLetterType(Request $request){
+        try{
+            $str = $request->string;
+            $clean_str = Str::replace( "(", "",  $str);
+            $clean_str = Str::replace( ")", "",  $clean_str);
             $pattern = '/(?<=\()(\p{L}+)(?=\))/u';
-            preg_match_all($pattern, $str, $matches, PREG_OFFSET_CAPTURE);
+            preg_match_all($pattern, $str, $matches, PREG_OFFSET_CAPTURE );
 
             if (!count($matches[0])) return back()->with('message', __('Unesite slova za dopunu!'));
 
-            foreach ($matches[0] as $match) {
-                $m[] = ['value' => $match[0], 'index' => $match[1] - $brackets_count];
+
+            foreach($matches[0] as $match){
+                $br_count = substr_count(substr($str,0,$match[1]),'(') + substr_count(substr($str,0,$match[1]),')');
+                $m[]= ['value' => $match[0], 'index' => $match[1] - $br_count ];
             }
 
             foreach (str_split($clean_str) as $key => $letter) {
-
-                $empty = Arr::exists(Arr::pluck($m, 'index'), $key);
-                $letters[] = ['index' => $key, 'value' => $letter, 'empty' => !$empty];
+                $empty = collect(Arr::pluck($m, 'index'))->contains($key);
+                $letters[] = ['index'=> $key, 'value' => $letter, 'empty' => $empty];
             }
 
             $image = null;
@@ -465,9 +463,14 @@ class TaskController extends Controller
             ]);
 
             $request->session()->flash('message', __('Zadatak je uspešno kreiran'));
-        } catch (Exception $e) {
-            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo' . $e->getMessage() . ' Linija ' . $e->getLine()));
+
+
+
+        } catch(Exception $e){
+            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo'.$e->getMessage().' Linija '.$e->getLine()));
         }
+
+        return redirect('tasks?lesson_id='.$request->lesson_id);
     }
 
 
