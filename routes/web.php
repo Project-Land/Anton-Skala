@@ -42,7 +42,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('tasks/store-column-sorting', [TaskController::class, 'storeColumnSortingType'])->name('tasks.store-column-sorting-type');
     Route::post('tasks/store-column-sorting-multiple', [TaskController::class, 'storeColumnSortingMultipleType'])->name('tasks.store-column-sorting-multiple-type');
     Route::post('tasks/store-add-letter', [TaskController::class, 'storeAddLetterType'])->name('tasks.store-add-letter-type');
+    Route::post('tasks/store-sentence', [TaskController::class, 'storeSentenceType'])->name('tasks.store-sentence-type');
+    Route::post('tasks/store-complete-the-sentence', [TaskController::class, 'storeCompleteTheSentenceType'])->name('tasks.store-complete-the-sentence-type');
+    Route::post('tasks/store-story', [TaskController::class, 'storeStoryType'])->name('tasks.store-story-type');
 });
 
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
