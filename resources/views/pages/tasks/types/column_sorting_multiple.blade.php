@@ -1,14 +1,14 @@
 <x-app-layout>
 
-    <x-slot name="title">| {{ __('Zadatak') }}</x-slot>
+    <x-slot name="title">| {{ __('Kreiranje zadatka') }}</x-slot>
 
     <div class="container px-6 lg:px-32 mb-8 mx-auto grid">
 
         @include('components.alert')
 
         <div class="flex items-center justify-between">
-            <h2 class="my-6 text-lg md:text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                {{ __('Zadatak') }}
+            <h2 class="my-6 text-lg md:text-xl font-semibold text-gray-700 dark:text-gray-200">
+                {{ __('Prevlačenje po kolonama (različiti pojmovi)') }} - {{ __('Kreiranje') }}
             </h2>
             <a href="{{ route('tasks.create', ['lesson_id' => request()->lesson_id]) }}" class="inline-flex items-center p-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-lime">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -40,12 +40,12 @@
                     <div class="grid grid-rows-1 gap-8 border rounded-lg p-4">
 
                         <template id="column_template">
-                            <div class="border border-violet-300 rounded-lg p-4 grid grid-cols-12 gap-6" x-data="imageViewer()">
+                            <div class="border border-violet-300 rounded-lg p-4 grid grid-rows sm:grid-cols-12 gap-6" x-data="imageViewer()">
                                 <div class="col-span-4">
                                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Tekst') }}</label>
                                     <input type="text" name="column_text[]" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
                                 </div>
-                                <div class="inline-flex border-l-2 border-r-2 px-6 col-span-3">
+                                <div class="inline-flex sm:border-l-2 sm:border-r-2 sm:px-6 col-span-3">
                                     <div>
                                         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Slika') }}</label>
                                         <label class="block">
@@ -64,7 +64,7 @@
                                         </div>
                                     </template>
                                 </div>
-                                <div class="border-r-2 col-span-3">
+                                <div class="sm:border-r-2 col-span-3">
                                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Audio zapis') }}</label>
                                     <label class="block">
                                         <input type="file" name="column_audio[]" accept="audio/*" class="block w-full text-sm text-slate-500
@@ -76,7 +76,7 @@
                                         " />
                                     </label>
                                 </div>
-                                <div class="col-span-1">
+                                <div class="col-span-2 sm:col-span-1">
                                     <label class="block mb-2 text-xs font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Kolona') }}</label>
                                     <select name="column_column[]" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
                                         <option value="3" selected>{{ __('3') }}</option>
@@ -93,12 +93,12 @@
                         </template>
 
                         <!-- One block -->
-                        <div class="border border-violet-300 rounded-lg p-4 grid grid-cols-12 gap-6" x-data="imageViewer()">
+                        <div class="border border-violet-300 rounded-lg p-4 grid grid-rows sm:grid-cols-12 gap-6" x-data="imageViewer()">
                             <div class="col-span-4">
                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Tekst') }}</label>
                                 <input type="text" name="column_text[]" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
                             </div>
-                            <div class="inline-flex border-l-2 border-r-2 px-6 col-span-4">
+                            <div class="inline-flex sm:border-l-2 sm:border-r-2 sm:px-6 col-span-4">
                                 <div>
                                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Slika') }}</label>
                                     <label class="block">
@@ -117,7 +117,7 @@
                                     </div>
                                 </template>
                             </div>
-                            <div class="border-r-2 col-span-3">
+                            <div class="sm:border-r-2 col-span-3">
                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Audio zapis') }}</label>
                                 <label class="block">
                                     <input type="file" name="column_audio[]" accept="audio/*" class="block w-full text-sm text-slate-500
@@ -129,7 +129,7 @@
                                     " />
                                 </label>
                             </div>
-                            <div class="col-span-1">
+                            <div class="col-span-3 sm:col-span-1">
                                 <label class="block mb-2 text-xs font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Kolona') }}</label>
                                 <select name="column_column[]" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
                                     <option value="1" selected>{{ __('1') }}</option>
@@ -138,12 +138,12 @@
 
                         </div>
 
-                        <div class="border border-violet-300 rounded-lg p-4 grid grid-cols-12 gap-6" x-data="imageViewer()">
+                        <div class="border border-violet-300 rounded-lg p-4 grid grid-rows sm:grid-cols-12 gap-6" x-data="imageViewer()">
                             <div class="col-span-4">
                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Tekst') }}</label>
                                 <input type="text" name="column_text[]" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
                             </div>
-                            <div class="inline-flex border-l-2 border-r-2 px-6 col-span-4">
+                            <div class="inline-flex sm:border-l-2 sm:border-r-2 sm:px-6 col-span-4">
                                 <div>
                                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Slika') }}</label>
                                     <label class="block">
@@ -162,7 +162,7 @@
                                     </div>
                                 </template>
                             </div>
-                            <div class="border-r-2 col-span-3">
+                            <div class="sm:border-r-2 col-span-3">
                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Audio zapis') }}</label>
                                 <label class="block">
                                     <input type="file" name="column_audio[]" accept="audio/*" class="block w-full text-sm text-slate-500
@@ -174,7 +174,7 @@
                                     " />
                                 </label>
                             </div>
-                            <div class="col-span-1">
+                            <div class="col-span-3 sm:col-span-1">
                                 <label class="block mb-2 text-xs font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Kolona') }}</label>
                                 <select name="column_column[]" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
                                     <option value="2" selected>{{ __('2') }}</option>
@@ -202,12 +202,12 @@
                     <div class="grid grid-rows-1 gap-8 border rounded-lg p-4">
 
                         <template id="template">
-                            <div class="border border-violet-300 rounded-lg p-4 grid grid-cols-12 gap-6" x-data="imageViewer()">
+                            <div class="border border-violet-300 rounded-lg p-4 grid grid-rows sm:grid-cols-12 gap-6" x-data="imageViewer()">
                                 <div class="col-span-4">
                                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Tekst') }}</label>
                                     <input type="text" name="answer_text[]" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
                                 </div>
-                                <div class="inline-flex border-l-2 border-r-2 px-6 col-span-3">
+                                <div class="inline-flex sm:border-l-2 sm:border-r-2 sm:px-6 col-span-3">
                                     <div>
                                         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Slika') }}</label>
                                         <label class="block">
@@ -226,7 +226,7 @@
                                         </div>
                                     </template>
                                 </div>
-                                <div class="border-r-2 col-span-3">
+                                <div class="sm:border-r-2 col-span-3">
                                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Audio zapis') }}</label>
                                     <label class="block">
                                         <input type="file" name="answer_audio[]" accept="audio/*" class="block w-full text-sm text-slate-500
@@ -238,7 +238,7 @@
                                         " />
                                     </label>
                                 </div>
-                                <div class="col-span-1">
+                                <div class="col-span-2 sm:col-span-1">
                                     <label class="block mb-2 text-xs font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Kolona') }}</label>
                                     <select name="answer_column[]" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
                                         <option value="1" selected>{{ __('1') }}</option>
@@ -256,12 +256,12 @@
                             </div>
                         </template>
 
-                        <div class="border border-violet-300 rounded-lg p-4 grid grid-cols-12 gap-6" x-data="imageViewer()">
+                        <div class="border border-violet-300 rounded-lg p-4 grid grid-rows sm:grid-cols-12 gap-6" x-data="imageViewer()">
                             <div class="col-span-4">
                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Tekst') }}</label>
                                 <input type="text" name="answer_text[]" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
                             </div>
-                            <div class="inline-flex border-l-2 border-r-2 px-6 col-span-4">
+                            <div class="inline-flex sm:border-l-2 sm:border-r-2 sm:px-6 col-span-4">
                                 <div>
                                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Slika') }}</label>
                                     <label class="block">
@@ -280,7 +280,7 @@
                                     </div>
                                 </template>
                             </div>
-                            <div class="border-r-2 col-span-3">
+                            <div class="sm:border-r-2 col-span-3">
                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Audio zapis') }}</label>
                                 <label class="block">
                                     <input type="file" name="answer_audio[]" accept="audio/*" class="block w-full text-sm text-slate-500
@@ -292,7 +292,7 @@
                                     " />
                                 </label>
                             </div>
-                            <div class="col-span-1">
+                            <div class="col-span-3 sm:col-span-1">
                                 <label class="block mb-2 text-xs font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Kolona') }}</label>
                                 <select name="answer_column[]" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
                                     <option value="1" selected>{{ __('1') }}</option>
@@ -302,12 +302,12 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="border border-violet-300 rounded-lg p-4 grid grid-cols-12 gap-6" x-data="imageViewer()">
+                        <div class="border border-violet-300 rounded-lg p-4 grid grid-rows sm:grid-cols-12 gap-6" x-data="imageViewer()">
                             <div class="col-span-4">
                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Tekst') }}</label>
                                 <input type="text" name="answer_text[]" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
                             </div>
-                            <div class="inline-flex border-l-2 border-r-2 px-6 col-span-4">
+                            <div class="inline-flex sm:border-l-2 sm:border-r-2 sm:px-6 col-span-4">
                                 <div>
                                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Slika') }}</label>
                                     <label class="block">
@@ -326,7 +326,7 @@
                                     </div>
                                 </template>
                             </div>
-                            <div class="border-r-2 col-span-3">
+                            <div class="sm:border-r-2 col-span-3">
                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Audio zapis') }}</label>
                                 <label class="block">
                                     <input type="file" name="answer_audio[]" accept="audio/*" class="block w-full text-sm text-slate-500
@@ -338,7 +338,7 @@
                                     " />
                                 </label>
                             </div>
-                            <div class="col-span-1">
+                            <div class="col-span-3 sm:col-span-1">
                                 <label class="block mb-2 text-xs font-medium text-gray-900 dark:text-gray-300" for="file_input">{{ __('Kolona') }}</label>
                                 <select name="answer_column[]" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
                                     <option value="1" selected>{{ __('1') }}</option>

@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->foreignId('lesson_id')->constrained();
-            $table->enum('type', ['correct_answer', 'drag_and_drop', 'column_sorting', 'description', 'column_sorting_multiple']);
+            $table->enum('type', ['correct_answer', 'drag_and_drop', 'column_sorting', 'description', 'column_sorting_multiple', 'add_letter', 'sentence', 'complete_the_sentence', 'story']);
             $table->smallInteger('distractor_level')->nullable();
             $table->string('description')->nullable();
             $table->json('content');

@@ -122,7 +122,6 @@ class TaskController extends Controller
 
     public function storeDragAndDropType(Request $request)
     {
-        //dd($request->all());
         try {
             $numberOfAnswers = count($request->answer_text);
             $answers = [];
@@ -425,13 +424,14 @@ class TaskController extends Controller
     }
 
 
-    public function storeAddLetterType(Request $request){
-        try{
+    public function storeAddLetterType(Request $request)
+    {
+        try {
             $str = $request->string;
-            $clean_str = Str::replace( "(", "",  $str);
-            $clean_str = Str::replace( ")", "",  $clean_str);
+            $clean_str = Str::replace("(", "",  $str);
+            $clean_str = Str::replace(")", "",  $clean_str);
             $pattern = '/(?<=\()(\p{L}+)(?=\))/u';
-            preg_match_all($pattern, $str, $matches, PREG_OFFSET_CAPTURE );
+            preg_match_all($pattern, $str, $matches, PREG_OFFSET_CAPTURE);
 
             if (!count($matches[0])) return back()->with('message', __('Unesite slova za dopunu!'));
             $TwoLettersCount = 0;
@@ -453,7 +453,7 @@ class TaskController extends Controller
 
             foreach (array_values($splitedCleanStr) as $key => $letter) {
                 $empty = collect(Arr::pluck($m, 'index'))->contains($key);
-                $letters[] = ['index'=> $key, 'value' => $letter, 'empty' => $empty];
+                $letters[] = ['index' => $key, 'value' => $letter, 'empty' => $empty];
             }
 
             $image = null;
@@ -465,6 +465,45 @@ class TaskController extends Controller
             }
 
             $content = ['image' => $image, 'string' => $letters, 'answers' => $m];
+
+            Task::create([
+                'lesson_id' => $request->lesson_id,
+                'type' => $request->type,
+                'description' => $request->description,
+                'display_order' => Task::where('lesson_id', $request->lesson_id)->count() + 1,
+                'content' => json_encode($content)
+            ]);
+            $request->session()->flash('message', __('Zadatak je uspešno kreiran'));
+        } catch (Exception $e) {
+            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo' . $e->getMessage() . ' Linija ' . $e->getLine()));
+        }
+
+        return redirect('tasks?lesson_id=' . $request->lesson_id);
+    }
+
+    public function storeSentenceType(Request $request)
+    {
+        try {
+            $words = [];
+            $image = $request->image;
+            $image_name = time() . uniqid() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('material/images'), $image_name);
+
+            foreach ($request->words as $key => $word) {
+                $words += [
+                    $key => [
+                        'id' => $key + 1,
+                        'word' => $word
+                    ]
+                ];
+            }
+
+            $content = [
+                'image' => 'material/images/' . $image_name,
+                'words' => $words,
+                'fields' => $words,
+            ];
+
             Task::create([
                 'lesson_id' => $request->lesson_id,
                 'type' => $request->type,
@@ -474,26 +513,107 @@ class TaskController extends Controller
             ]);
 
             $request->session()->flash('message', __('Zadatak je uspešno kreiran'));
-
-
-
-        } catch(Exception $e){
-            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo'.$e->getMessage().' Linija '.$e->getLine()));
+        } catch (Exception $e) {
+            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
 
-        return redirect('tasks?lesson_id='.$request->lesson_id);
+        return redirect('tasks?lesson_id=' . $request->lesson_id);
     }
 
+    public function storeCompleteTheSentenceType(Request $request)
+    {
+        try {
+            $sentences = [];
+            $missingWords = [];
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Task  $task
-     * @return \Illuminate\Http\Response
-     */
+            foreach ($request->sentences as $key => $sentence) {
+
+                $words = explode(" ", $sentence);
+
+                foreach ($words as $k => $word) {
+                    if (str_starts_with($word, "(")) {
+                        $arrayKey = $k;
+                    }
+                }
+
+                $missingWord = $words[$arrayKey];
+                $words[$arrayKey] = "";
+
+
+                $missingWords += [
+                    $key => [
+                        'sentence_id' => $key + 1,
+                        'word' => trim($missingWord, "()."),
+                        'missing_word_index' => $arrayKey
+                    ]
+                ];
+
+                $sentences += [
+                    $key => [
+                        'id' => $key + 1,
+                        'sentence' => str_replace(['(', ')'], '', $sentence),
+                        'words' => $words,
+                        'missing_word' => trim($missingWord, "().")
+                    ]
+                ];
+            }
+
+            $content = [
+                'sentences' => $sentences,
+                'missing_words' => $missingWords
+            ];
+
+            Task::create([
+                'lesson_id' => $request->lesson_id,
+                'type' => $request->type,
+                'description' => $request->description,
+                'display_order' => Task::where('lesson_id', $request->lesson_id)->count() + 1,
+                'content' => json_encode($content)
+            ]);
+            $request->session()->flash('message', __('Zadatak je uspešno kreiran'));
+        } catch (Exception $e) {
+            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo' . $e->getMessage() . ' Linija ' . $e->getLine()));
+        }
+
+        return redirect('tasks?lesson_id=' . $request->lesson_id);
+    }
+
+    public function storeStoryType(Request $request)
+    {
+        $content = [];
+        $content['text'] = $request->text;
+
+        if ($request->file('image')) {
+            $image_name = time() . uniqid() . '.' . $request->file('image')->getClientOriginalExtension();
+            $request->file('image')->move(public_path('material/images'), $image_name);
+            $content['image'] = 'material/images/' . $image_name;
+        }
+
+        if ($request->file('audio')) {
+            $audio_name = time() . uniqid() . '.' . $request->file('audio')->getClientOriginalExtension();
+            $request->file('audio')->move(public_path('material/audio'), $audio_name);
+            $content['audio'] = 'material/audio/' . $audio_name;
+        }
+
+        try {
+            Task::create([
+                'lesson_id' => $request->lesson_id,
+                'type' => $request->type,
+                'display_order' => Task::where('lesson_id', $request->lesson_id)->count() + 1,
+                'content' => json_encode($content)
+            ]);
+
+            $request->session()->flash('message', __('Zadatak je uspešno kreiran'));
+        } catch (Exception $e) {
+            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'));
+        }
+
+        return redirect('tasks?lesson_id=' . $request->lesson_id);
+    }
+
     public function show(Task $task)
     {
-        //
+        abort(404);
     }
 
     /* public function editSpecificTask(Task $task)
