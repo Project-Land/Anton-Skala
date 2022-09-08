@@ -434,14 +434,24 @@ class TaskController extends Controller
             preg_match_all($pattern, $str, $matches, PREG_OFFSET_CAPTURE );
 
             if (!count($matches[0])) return back()->with('message', __('Unesite slova za dopunu!'));
+            $TwoLettersCount = 0;
+
+            $indexOfTwoLetters = $this->substr_index_array($clean_str);
 
 
             foreach($matches[0] as $match){
                 $br_count = substr_count(substr($str,0,$match[1]),'(') + substr_count(substr($str,0,$match[1]),')');
-                $m[]= ['value' => $match[0], 'index' => $match[1] - $br_count ];
+                $TwoLettersCount = $this->substr_count_array(substr($str,0,$match[1]));
+                $m[]= ['value' => $match[0], 'index' => ($match[1] - $br_count - $TwoLettersCount)  ];
             }
 
-            foreach (str_split($clean_str) as $key => $letter) {
+            $splitedCleanStr = str_split($clean_str);
+            foreach($indexOfTwoLetters as $letterRemove){
+                $splitedCleanStr[$letterRemove-1] = $splitedCleanStr[$letterRemove-1].$splitedCleanStr[$letterRemove];
+                unset($splitedCleanStr[$letterRemove]  );
+            }
+
+            foreach (array_values($splitedCleanStr) as $key => $letter) {
                 $empty = collect(Arr::pluck($m, 'index'))->contains($key);
                 $letters[] = ['index'=> $key, 'value' => $letter, 'empty' => $empty];
             }
@@ -453,6 +463,7 @@ class TaskController extends Controller
                 $image->move(public_path('material/images'), $image_name);
                 $image = 'material/images/' . $image_name;
             }
+
             $content = ['image' => $image, 'string' => $letters, 'answers' => $m];
             Task::create([
                 'lesson_id' => $request->lesson_id,
@@ -511,5 +522,29 @@ class TaskController extends Controller
     public function destroy(Request $request, Task $task)
     {
         //
+    }
+
+    public function substr_count_array($haystack)
+    {
+        $needle = ['NJ','Nj','nj','LJ','lj','Lj','DŽ','Dž','dž'];
+        $count = 0;
+        foreach ($needle as $substring) {
+            $count += substr_count( $haystack, $substring);
+        }
+        return $count;
+    }
+
+    public function substr_index_array($haystack)
+    {
+        $positions = array();
+        $needle = ['NJ','Nj','nj','Lj','LJ','lj','DŽ','Dž','dž',];
+        foreach ($needle as $substring) {
+            $lastPos = 0;
+            while (($lastPos = strpos($haystack, $substring, $lastPos))!== false) {
+                $positions[] = $lastPos +1;
+                $lastPos = $lastPos + strlen($substring);
+            }
+        }
+        return  $positions;
     }
 }
