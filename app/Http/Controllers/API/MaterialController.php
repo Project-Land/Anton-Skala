@@ -93,8 +93,8 @@ class MaterialController extends Controller
         if ($maxDisplayOrder == $currentOrderNo) {
             return $nextTask = 0;
         }
-        $nextTask = $tasks->where('display_order', $next)->values()[0]->id;
-        return $nextTask;
+
+        return $tasks->where('display_order', $next)->values()[0]->id;
     }
 
     public function lessonEnd(Request $request, Lesson $lesson)
