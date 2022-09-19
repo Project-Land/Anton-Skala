@@ -31,7 +31,24 @@ class FieldController extends Controller
 
     public function store(Request $request)
     {
-        Field::create($request->all());
+        if ($request->image) {
+            $request->validate([
+                'image' => 'max:500|mimes:jpg,png,webp,gif'
+            ], [
+                'image.max' => __('Slika ne sme biti veća od 500kb'),
+                'image.mimes' => __('Neispravan format. Dozvoljeni formati: .jpg, .png, .webp, .gif')
+            ]);
+
+            $image = $request->image;
+            $image_name = time() . uniqid() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images/covers'), $image_name);
+            $cover_image = "images/covers/" . $image_name;
+        } else {
+            $cover_image = null;
+        }
+
+        Field::create($request->except('image') + ['image' => $cover_image]);
+
         return redirect()->route('fields.index', ['subject_id' => $request->subject_id])->with('message', __('Oblast kreirana'));
     }
 

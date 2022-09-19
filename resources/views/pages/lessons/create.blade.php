@@ -18,7 +18,7 @@
         </div>
 
         <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-            <form action="{{ route('lessons.store') }}" method="POST">
+            <form action="{{ route('lessons.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="field_id" value="{{ request()->field_id }}">
 
@@ -28,6 +28,42 @@
                     @error('name')
                     <span class="text-xs text-red-600 dark:text-red-400">{{ $message }}</span>
                     @enderror
+                </div>
+
+                <div x-data="imageViewer()">
+                    <div class="mb-6 inline-flex items-end space-x-6">
+                        <div>
+                            <label for="image" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ __('Naslovna slika') }}</label>
+
+                            <label class="block">
+                                <input type="file" name="image" id="image" class="block w-full text-sm text-slate-500
+                                file:mr-4 file:py-2 file:px-4
+                                file:rounded-full file:border-0
+                                file:text-sm file:font-semibold
+                                file:bg-violet-50 file:text-violet-700
+                                hover:file:bg-violet-100 cursor-pointer mb-4
+                                " accept="image/*" @change="fileChosen" />
+                            </label>
+
+                            @error('image')
+                            <span class="text-xs text-red-600 dark:text-red-400">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <template x-if="imageUrl">
+                            <div class="shrink-0">
+                                <img class="h-32 w-32 object-cover rounded-sm border" :src="imageUrl" alt="Current profile photo" />
+                            </div>
+                        </template>
+
+                        <template x-if="imageUrl">
+                            <button type="button" @click="clearImage" class="text-white dark:text-gray-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mt-2 text-red-500 dark:text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </button>
+                        </template>
+                    </div>
                 </div>
 
                 @if(Auth::user()->lang == 'sr')
@@ -47,5 +83,32 @@
             </form>
         </div>
     </div>
+
+    <script>
+        function imageViewer() {
+            return {
+                imageUrl: '',
+
+                fileChosen(event) {
+                    this.fileToDataUrl(event, src => this.imageUrl = src)
+                },
+
+                clearImage(event) {
+                    this.imageUrl = ''
+                    document.getElementById('image').value = ''
+                },
+
+                fileToDataUrl(event, callback) {
+                    if (! event.target.files.length) return
+
+                    let file = event.target.files[0],
+                        reader = new FileReader()
+
+                    reader.readAsDataURL(file)
+                    reader.onload = e => callback(e.target.result)
+                },
+            }
+        }
+    </script>
 
 </x-app-layout>

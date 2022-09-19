@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\API;
 
 use App\Models\Task;
-use App\Models\User;
 use App\Models\Field;
 use App\Models\Lesson;
 use Illuminate\Http\Request;
@@ -91,7 +90,7 @@ class MaterialController extends Controller
         $currentOrderNo = $task->display_order;
         $next = $task->display_order + 1;
         if ($maxDisplayOrder == $currentOrderNo) {
-            return $nextTask = 0;
+            return 0;
         }
 
         return $tasks->where('display_order', $next)->values()[0]->id;

@@ -439,16 +439,16 @@ class TaskController extends Controller
             $indexOfTwoLetters = $this->substr_index_array($clean_str);
 
 
-            foreach($matches[0] as $match){
-                $br_count = substr_count(substr($str,0,$match[1]),'(') + substr_count(substr($str,0,$match[1]),')');
-                $TwoLettersCount = $this->substr_count_array(substr($str,0,$match[1]));
-                $m[]= ['value' => $match[0], 'index' => ($match[1] - $br_count - $TwoLettersCount)  ];
+            foreach ($matches[0] as $match) {
+                $br_count = substr_count(substr($str, 0, $match[1]), '(') + substr_count(substr($str, 0, $match[1]), ')');
+                $TwoLettersCount = $this->substr_count_array(substr($str, 0, $match[1]));
+                $m[] = ['value' => $match[0], 'index' => ($match[1] - $br_count - $TwoLettersCount)];
             }
 
             $splitedCleanStr = str_split($clean_str);
-            foreach($indexOfTwoLetters as $letterRemove){
-                $splitedCleanStr[$letterRemove-1] = $splitedCleanStr[$letterRemove-1].$splitedCleanStr[$letterRemove];
-                unset($splitedCleanStr[$letterRemove]  );
+            foreach ($indexOfTwoLetters as $letterRemove) {
+                $splitedCleanStr[$letterRemove - 1] = $splitedCleanStr[$letterRemove - 1] . $splitedCleanStr[$letterRemove];
+                unset($splitedCleanStr[$letterRemove]);
             }
 
             foreach (array_values($splitedCleanStr) as $key => $letter) {
@@ -493,14 +493,14 @@ class TaskController extends Controller
                 $words += [
                     $key => [
                         'id' => $key + 1,
-                        'word' => $word
+                        'word' => strtoupper($word)
                     ]
                 ];
             }
 
             $content = [
                 'image' => 'material/images/' . $image_name,
-                'words' => $words,
+                'words' => shuffle($words),
                 'fields' => $words,
             ];
 
@@ -646,10 +646,10 @@ class TaskController extends Controller
 
     public function substr_count_array($haystack)
     {
-        $needle = ['NJ','Nj','nj','LJ','lj','Lj','DŽ','Dž','dž'];
+        $needle = ['NJ', 'Nj', 'nj', 'LJ', 'lj', 'Lj', 'DŽ', 'Dž', 'dž'];
         $count = 0;
         foreach ($needle as $substring) {
-            $count += substr_count( $haystack, $substring);
+            $count += substr_count($haystack, $substring);
         }
         return $count;
     }
@@ -657,11 +657,11 @@ class TaskController extends Controller
     public function substr_index_array($haystack)
     {
         $positions = array();
-        $needle = ['NJ','Nj','nj','Lj','LJ','lj','DŽ','Dž','dž',];
+        $needle = ['NJ', 'Nj', 'nj', 'Lj', 'LJ', 'lj', 'DŽ', 'Dž', 'dž',];
         foreach ($needle as $substring) {
             $lastPos = 0;
-            while (($lastPos = strpos($haystack, $substring, $lastPos))!== false) {
-                $positions[] = $lastPos +1;
+            while (($lastPos = strpos($haystack, $substring, $lastPos)) !== false) {
+                $positions[] = $lastPos + 1;
                 $lastPos = $lastPos + strlen($substring);
             }
         }
