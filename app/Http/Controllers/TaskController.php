@@ -578,6 +578,72 @@ class TaskController extends Controller
         return redirect('tasks?lesson_id=' . $request->lesson_id);
     }
 
+    /* new variant - not used */
+    /*public function storeCompleteTheSentenceType(Request $request)
+    {
+        try {
+            $sentences = [];
+            $missingWords = [];
+
+            foreach ($request->sentences as $key => $sentence) {
+
+                $words = [];
+                $allWords = collect(explode(" ", $sentence));
+
+                foreach ($allWords as $k => $word) {
+                    $words += [
+                        $k => [
+                            'word' => trim($word, "()."),
+                            'missing' => str_starts_with($word, "(") ? true : false
+                        ]
+                    ];
+                    if (str_starts_with($word, "(")) {
+                        $arrayKey = $k;
+                    }
+                }
+
+                $missingWord = $allWords[$arrayKey];
+                //$allWords[$arrayKey] = "";
+
+                $missingWords += [
+                    $key => [
+                        'sentence_id' => $key + 1,
+                        'word' => trim($missingWord, "()."),
+                        'missing_word_index' => $arrayKey
+                    ]
+                ];
+
+                $sentences += [
+                    $key => [
+                        'id' => $key + 1,
+                        'sentence' => str_replace(['(', ')'], '', $sentence),
+                        'words' => $words,
+                        'missing_word' => trim($missingWord, "().")
+                    ]
+                ];
+            }
+
+            $content = [
+                'sentences' => $sentences,
+                'missing_words' => $missingWords
+            ];
+
+            Task::create([
+                'lesson_id' => $request->lesson_id,
+                'type' => $request->type,
+                'description' => $request->description,
+                'display_order' => Task::where('lesson_id', $request->lesson_id)->count() + 1,
+                'content' => json_encode($content)
+            ]);
+
+            $request->session()->flash('message', __('Zadatak je uspešno kreiran'));
+        } catch (Exception $e) {
+            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo' . $e->getMessage() . ' Linija ' . $e->getLine()));
+        }
+
+        return redirect('tasks?lesson_id=' . $request->lesson_id);
+    }*/
+
     public function storeStoryType(Request $request)
     {
         $content = [];
