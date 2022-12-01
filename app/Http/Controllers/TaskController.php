@@ -493,16 +493,19 @@ class TaskController extends Controller
                 $words += [
                     $key => [
                         'id' => $key + 1,
-                        'word' => strtoupper($word)
+                        'word' => $word
                     ]
                 ];
             }
 
             $content = [
                 'image' => 'material/images/' . $image_name,
-                'words' => shuffle($words),
-                'fields' => $words,
+                'fields' => $words
             ];
+
+            shuffle($words);
+
+            $content['words'] = $words;
 
             Task::create([
                 'lesson_id' => $request->lesson_id,
