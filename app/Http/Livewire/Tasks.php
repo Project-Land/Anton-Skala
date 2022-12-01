@@ -26,9 +26,10 @@ class Tasks extends Component
     public function removeTask(Task $task)
     {
         $content = json_decode($task->content, true);
+        $answers = isset($content['answers']) ? $content['answers'] : [];
 
         try{
-            foreach($content['answers'] as $answer){
+            foreach($answers as $answer){
                 if($answer['image']){
                     unlink(public_path('/'.$answer['image']));
                 }
