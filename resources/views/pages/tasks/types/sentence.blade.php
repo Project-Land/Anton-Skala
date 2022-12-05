@@ -55,7 +55,7 @@
                     <div class="grid grid-rows-1 gap-8 border rounded-lg p-4">
 
                         <template id="template">
-                            <div class="grid grid-cols-4 p-4 border border-violet-300 rounded-lg items-center">
+                            <div class="grid grid-cols-4 p-4 border border-violet-300 rounded-lg items-center word">
                                 <div class="col-span-3">
                                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="words">{{ __('Reč') }}</label>
                                     <input type="text" name="words[]" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
@@ -71,19 +71,19 @@
 
                         <div class="grid grid-rows sm:grid-cols-4 gap-4" id="newWords">
                             <!-- One block -->
-                            <div class="border border-violet-300 rounded-lg p-4">
+                            <div class="border border-violet-300 rounded-lg p-4 word">
                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="words">{{ __('Reč') }}</label>
                                 <input type="text" name="words[]" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500" required>
                             </div>
 
                             <!-- One block -->
-                            <div class="border border-violet-300 rounded-lg p-4">
+                            <div class="border border-violet-300 rounded-lg p-4 word">
                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="words">{{ __('Reč') }}</label>
                                 <input type="text" name="words[]" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500" required>
                             </div>
 
                             <!-- One block -->
-                            <div class="border border-violet-300 rounded-lg p-4">
+                            <div class="border border-violet-300 rounded-lg p-4 word">
                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="words">{{ __('Reč') }}</label>
                                 <input type="text" name="words[]" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500" required>
                             </div>
@@ -113,6 +113,12 @@
     <script>
         function addAnswer()
         {
+            let totalWords = document.getElementsByClassName('word').length;
+            if(totalWords > 5) {
+                alert('{{ __("Nije moguće dodati više od 6 reči u zadatku") }}.');
+                return;
+            }
+
             let content = document.getElementById('template').innerHTML;
             document.getElementById('newWords').insertAdjacentHTML('beforeend', content);
         }

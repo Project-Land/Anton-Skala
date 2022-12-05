@@ -222,6 +222,10 @@ class TaskController extends Controller
         $content['image'] = null;
         $content['text'] = $request->text;
 
+        if($request->text == "" && $request->file('image') == null){
+            return back()->with('error', __('Morate popuniti bar jedno polje.'));
+        }
+
         if ($request->file('image')) {
             $image_name = time() . uniqid() . '.' . $request->file('image')->getClientOriginalExtension();
             $request->file('image')->move(public_path('material/images'), $image_name);
@@ -433,7 +437,7 @@ class TaskController extends Controller
             $pattern = '/(?<=\()(\p{L}+)(?=\))/u';
             preg_match_all($pattern, $str, $matches, PREG_OFFSET_CAPTURE);
 
-            if (!count($matches[0])) return back()->with('message', __('Unesite slova za dopunu!'));
+            if (!count($matches[0])) return back()->with('error', __('Unesite slova za dopunu'));
             $TwoLettersCount = 0;
 
             $indexOfTwoLetters = $this->substr_index_array($clean_str);
@@ -465,6 +469,8 @@ class TaskController extends Controller
             }
 
             $content = ['image' => $image, 'string' => $letters, 'answers' => $m];
+
+            dd($content);
 
             Task::create([
                 'lesson_id' => $request->lesson_id,

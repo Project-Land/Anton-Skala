@@ -35,9 +35,9 @@
                             </div>
 
                             <template id="template">
-                                <div class="border border-violet-300 rounded-lg p-4 grid grid-cols-6 items-center">
+                                <div class="border border-violet-300 rounded-lg p-4 grid grid-cols-6 items-center sentence">
                                     <div class="col-span-5">
-                                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="string">{{ __('Rečenica') }}</label>
+                                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="string">{{ __('Rečenica') }} ({{ __('U zagradu staviti traženu reč') }})</label>
                                         <input type="text" name="sentences[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500"
                                             required placeholder="{{ __('Duva (vruć) vetar.') }}">
                                     </div>
@@ -50,7 +50,7 @@
                             </template>
 
                             <div class="grid grid-rows sm:grid-cols-2 gap-4" id="newSentence">
-                                <div class="border border-violet-300 rounded-lg p-4">
+                                <div class="border border-violet-300 rounded-lg p-4 sentence">
                                     <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="string">{{ __('Rečenica') }} ({{ __('U zagradu staviti traženu reč') }})</label>
                                     <input type="text" name="sentences[]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500" required
                                         placeholder="{{ __('Duva (vruć) vetar.') }}">
@@ -83,6 +83,12 @@
     <script>
         function addSentence()
         {
+            let totalSentences = document.getElementsByClassName('sentence').length;
+            if(totalSentences > 3) {
+                alert('{{ __("Nije moguće dodati više od 4 rečenica po zadatku") }}.');
+                return;
+            }
+
             let content = document.getElementById('template').innerHTML;
             document.getElementById('newSentence').insertAdjacentHTML('beforeend', content);
         }

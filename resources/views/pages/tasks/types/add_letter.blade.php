@@ -31,12 +31,12 @@
                         <div class="space-y-6">
                             <div>
                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="description">{{ __('Tekstualni opis zadatka') }}</label>
-                                <input type="text" name="description" id="" value="{{ old('description') }}"
+                                <input type="text" name="description" id="" value="{{ old('description') }}" required
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
                             </div>
                             <div>
-                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="string">{{ __('Tekst - u zagradama staviti slova koja treba da se dodaju ( TR(A)VA )') }}</label>
-                                <input type="text" name="string" id="" value="{{ old('string') }}"
+                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="string">{{ __('Tekst - u zagradama staviti slova koja treba da se dodaju. Primer: TR(A)VA') }}</label>
+                                <input type="text" name="string" id="" value="{{ old('string') }}" required
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
                             </div>
                         </div>

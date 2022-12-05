@@ -26,7 +26,7 @@ class StudentController extends Controller
             ->when($request->has('search'), function ($query) use ($request) {
                 return $query->where('name', 'LIKE', '%'.$request->search.'%');
             })
-            ->latest()
+            ->latest('id')
             ->paginate(20);
         return view('pages.students.index', ['students' => $students]);
     }

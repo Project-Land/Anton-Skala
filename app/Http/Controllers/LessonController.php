@@ -84,7 +84,7 @@ class LessonController extends Controller
             $cover_image = $lesson->image;
         }
 
-        $lesson->update(['name' => $request->name, 'lang' => $request->lang, 'image' => $cover_image]);
+        $lesson->update(['name' => $request->name, 'lang' => $request->lang ?? $lesson->lang, 'image' => $cover_image]);
         return redirect()->route('tasks.index', ['lesson_id' => $lesson->id])->with('message', __('Lekcija izmenjena'));
     }
 
