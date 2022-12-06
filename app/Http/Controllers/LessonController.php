@@ -46,7 +46,7 @@ class LessonController extends Controller
             $cover_image = null;
         }
 
-        Lesson::create($request->except('image') + ['image' => $cover_image]);
+        Lesson::create($request->except('image') + ['image' => $cover_image, 'lang' => Auth::user()->lang]);
         return redirect()->route('lessons.index', ['field_id' => $request->field_id])->with('message', __('Lekcija kreirana'));
     }
 
