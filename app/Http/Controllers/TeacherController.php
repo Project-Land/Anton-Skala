@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\School;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
@@ -64,6 +65,7 @@ class TeacherController extends Controller
             ]);
             $request->session()->flash('message', __('Učenički nalog uspešno kreiran'));
         } catch(Exception $e){
+            Log::error('Greška prilikom kreiranja nastavničkog naloga: '.$e->getMessage());
             $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
 
@@ -139,7 +141,8 @@ class TeacherController extends Controller
             ]);
             $request->session()->flash('message', __('Nastavnički nalog uspešno izmenjen'));
         } catch(Exception $e){
-            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'.$e->getMessage()));
+            Log::error('Greška prilikom izmene nastavničkog naloga: '.$e->getMessage());
+            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
 
         return redirect('teachers');
@@ -155,6 +158,7 @@ class TeacherController extends Controller
             $teacher->delete();
             $request->session()->flash('message', __('Nastavnički nalog uspešno obrisan'));
         } catch(Exception $e){
+            Log::error('Greška prilikom uklanjanja nastavničkog naloga: '.$e->getMessage());
             $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
         return redirect('teachers');

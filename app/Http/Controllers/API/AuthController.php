@@ -42,10 +42,6 @@ class AuthController extends Controller
             return response()->json(['message' => __('Neispravni podaci')], 400);
         }
 
-        /*if ($user->tokens->count()) {
-            $user->tokens()->delete();
-        }*/
-
         $token = $user->createToken('auth')->plainTextToken;
 
         return response()->json([

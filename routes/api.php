@@ -19,6 +19,8 @@ Route::middleware('auth:sanctum')->group(function () {
     // Auth
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/auth', [AuthController::class, 'show']);
+
+    Route::post('/task-user-update-stats', [MaterialController::class, 'updateTaskUserStats']);
 });
 
 // Auth

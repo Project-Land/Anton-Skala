@@ -48,7 +48,7 @@
                         <option value="">{{ __('Izaberi') }}...</option>
                         <option value="sr_lat" {{ $student->lang == 'sr_lat' ? "selected" :"" }}>{{ __('Srpski (Latinica)') }}</option>
                         <option value="sr_cir" {{ $student->lang == 'sr_cir' ? "selected" :"" }}>{{ __('Srpski (Ćirilica)') }}</option>
-                        <option value="hr" {{ $student->lang == 'hr' ? "selected" :"" }}>{{ __('Hrvatski') }}</option>
+                        <option value="cro" {{ $student->lang == 'cro' ? "selected" :"" }}>{{ __('Hrvatski') }}</option>
                         <option value="slo" {{ $student->lang == 'slo' ? "selected" :"" }}>{{ __('Slovenački') }}</option>
                     </select>
                     @error('lang')

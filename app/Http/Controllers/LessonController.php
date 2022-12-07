@@ -6,6 +6,7 @@ use Exception;
 use App\Models\Field;
 use App\Models\Lesson;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 class LessonController extends Controller
@@ -30,24 +31,29 @@ class LessonController extends Controller
 
     public function store(Request $request)
     {
-        if ($request->image) {
-            $request->validate([
-                'image' => 'max:500|mimes:jpg,png,webp,gif'
-            ], [
-                'image.max' => __('Slika ne sme biti veća od 500kb'),
-                'image.mimes' => __('Neispravan format. Dozvoljeni formati: .jpg, .png, .webp, .gif')
-            ]);
-
-            $image = $request->image;
-            $image_name = time() . uniqid() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('images/covers'), $image_name);
-            $cover_image = "images/covers/" . $image_name;
-        } else {
+        try {
             $cover_image = null;
-        }
 
-        Lesson::create($request->except('image') + ['image' => $cover_image, 'lang' => Auth::user()->lang]);
-        return redirect()->route('lessons.index', ['field_id' => $request->field_id])->with('message', __('Lekcija kreirana'));
+            if ($request->image) {
+                $request->validate([
+                    'image' => 'max:500|mimes:jpg,png,webp,gif'
+                ], [
+                    'image.max' => __('Slika ne sme biti veća od 500kb'),
+                    'image.mimes' => __('Neispravan format. Dozvoljeni formati: .jpg, .png, .webp, .gif')
+                ]);
+
+                $image = $request->image;
+                $image_name = time() . uniqid() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('images/covers'), $image_name);
+                $cover_image = "images/covers/" . $image_name;
+            }
+
+            Lesson::create($request->except('image') + ['image' => $cover_image, 'lang' => Auth::user()->lang]);
+            return redirect()->route('lessons.index', ['field_id' => $request->field_id])->with('message', __('Lekcija kreirana'));
+        } catch (Exception $e) {
+            Log::error('Greška prilikom kreiranja lekcije: '.$e->getMessage());
+            return redirect()->route('lessons.index', ['field_id' => $request->field_id])->with('error', __('Došlo je do greške. Pokušajte ponovo.'));
+        }
     }
 
     public function show($id)
@@ -63,29 +69,39 @@ class LessonController extends Controller
 
     public function update(Request $request, $id)
     {
-        $lesson = Lesson::findOrFail($id);
-        if ($request->image) {
-            $request->validate([
-                'image' => 'max:500|mimes:jpg,png,webp,gif'
-            ], [
-                'image.max' => __('Slika ne sme biti veća od 500kb'),
-                'image.mimes' => __('Neispravan format. Dozvoljeni formati: .jpg, .png, .webp, .gif')
-            ]);
+        try {
+            $lesson = Lesson::findOrFail($id);
+            $cover_image = $lesson->image;
 
-            if ($lesson->image) {
-                unlink($lesson->image);
+            if ($request->image) {
+                $request->validate([
+                    'image' => 'max:500|mimes:jpg,png,webp,gif'
+                ], [
+                    'image.max' => __('Slika ne sme biti veća od 500kb'),
+                    'image.mimes' => __('Neispravan format. Dozvoljeni formati: .jpg, .png, .webp, .gif')
+                ]);
+
+                if ($lesson->image) {
+                    unlink($lesson->image);
+                }
+
+                $image = $request->image;
+                $image_name = time() . uniqid() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('images/covers'), $image_name);
+                $cover_image = "images/covers/" . $image_name;
             }
 
-            $image = $request->image;
-            $image_name = time() . uniqid() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('images/covers'), $image_name);
-            $cover_image = "images/covers/" . $image_name;
-        } else {
-            $cover_image = $lesson->image;
-        }
+            $lesson->update([
+                'name' => $request->name,
+                'lang' => $request->lang ?? $lesson->lang,
+                'image' => $cover_image
+            ]);
 
-        $lesson->update(['name' => $request->name, 'lang' => $request->lang ?? $lesson->lang, 'image' => $cover_image]);
-        return redirect()->route('tasks.index', ['lesson_id' => $lesson->id])->with('message', __('Lekcija izmenjena'));
+            return redirect()->route('tasks.index', ['lesson_id' => $lesson->id])->with('message', __('Lekcija izmenjena'));
+        } catch (Exception $e) {
+            Log::error('Greška prilikom izmene lekcije: '.$e->getMessage());
+            return redirect()->route('tasks.index', ['lesson_id' => $lesson->id])->with('error', __('Došlo je do greške. Pokušajte ponovo.'));
+        }
     }
 
     public function destroy(Request $request, $id)
@@ -95,6 +111,7 @@ class LessonController extends Controller
             $lesson->delete();
             return redirect()->route('lessons.index', ['field_id' => $request->field_id])->with('message', __('Lekcija obrisana'));
         } catch (Exception $e) {
+            Log::error('Greška prilikom brisanja lekcije: '.$e->getMessage());
             return redirect()->route('lessons.index', ['field_id' => $request->field_id])->with('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
     }

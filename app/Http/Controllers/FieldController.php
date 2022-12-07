@@ -6,6 +6,7 @@ use Exception;
 use App\Models\Field;
 use App\Models\Subject;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 class FieldController extends Controller
@@ -31,25 +32,30 @@ class FieldController extends Controller
 
     public function store(Request $request)
     {
-        if ($request->image) {
-            $request->validate([
-                'image' => 'max:500|mimes:jpg,png,webp,gif'
-            ], [
-                'image.max' => __('Slika ne sme biti veća od 500kb'),
-                'image.mimes' => __('Neispravan format. Dozvoljeni formati: .jpg, .png, .webp, .gif')
-            ]);
-
-            $image = $request->image;
-            $image_name = time() . uniqid() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('images/covers'), $image_name);
-            $cover_image = "images/covers/" . $image_name;
-        } else {
+        try{
             $cover_image = null;
+
+            if ($request->image) {
+                $request->validate([
+                    'image' => 'max:500|mimes:jpg,png,webp,gif'
+                ], [
+                    'image.max' => __('Slika ne sme biti veća od 500KB'),
+                    'image.mimes' => __('Neispravan format. Dozvoljeni formati: .jpg, .png, .webp, .gif')
+                ]);
+
+                $image = $request->image;
+                $image_name = time() . uniqid() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('images/covers'), $image_name);
+                $cover_image = "images/covers/" . $image_name;
+            }
+
+            Field::create($request->except('image') + ['image' => $cover_image]);
+
+            return redirect()->route('fields.index', ['subject_id' => $request->subject_id])->with('message', __('Oblast kreirana'));
+        } catch (Exception $e){
+            Log::error('Greška prilikom kreiranja oblasti: '.$e->getMessage());
+            return redirect()->route('fields.index', ['subject_id' => $request->subject_id])->with('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
-
-        Field::create($request->except('image') + ['image' => $cover_image]);
-
-        return redirect()->route('fields.index', ['subject_id' => $request->subject_id])->with('message', __('Oblast kreirana'));
     }
 
     public function show(Field $field)
@@ -64,28 +70,33 @@ class FieldController extends Controller
 
     public function update(Request $request, Field $field)
     {
-        if ($request->image) {
-            $request->validate([
-                'image' => 'max:500|mimes:jpg,png,webp,gif'
-            ], [
-                'image.max' => __('Slika ne sme biti veća od 500kb'),
-                'image.mimes' => __('Neispravan format. Dozvoljeni formati: .jpg, .png, .webp, .gif')
-            ]);
+        try{
+            $cover_image = $field->image;
 
-            if ($field->image) {
-                unlink($field->image);
+            if ($request->image) {
+                $request->validate([
+                    'image' => 'max:500|mimes:jpg,png,webp,gif'
+                ], [
+                    'image.max' => __('Slika ne sme biti veća od 500kb'),
+                    'image.mimes' => __('Neispravan format. Dozvoljeni formati: .jpg, .png, .webp, .gif')
+                ]);
+
+                if ($field->image) {
+                    unlink($field->image);
+                }
+
+                $image = $request->image;
+                $image_name = time() . uniqid() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('images/covers'), $image_name);
+                $cover_image = "images/covers/" . $image_name;
             }
 
-            $image = $request->image;
-            $image_name = time() . uniqid() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('images/covers'), $image_name);
-            $cover_image = "images/covers/" . $image_name;
-        } else {
-            $cover_image = $field->image;
+            $field->update(['name' => $request->name, 'image' => $cover_image]);
+            return redirect()->route('lessons.index', ['field_id' => $field->id])->with('message', __('Oblast izmenjena'));
+        } catch (Exception $e){
+            Log::error('Greška prilikom izmene oblasti: '.$e->getMessage());
+            return redirect()->route('lessons.index', ['field_id' => $field->id])->with('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
-
-        $field->update(['name' => $request->name, 'image' => $cover_image]);
-        return redirect()->route('lessons.index', ['field_id' => $field->id])->with('message', __('Oblast izmenjena'));
     }
 
     public function destroy(Request $request, Field $field)
@@ -94,6 +105,7 @@ class FieldController extends Controller
             $field->delete();
             return redirect()->route('fields.index', ['subject_id' => $request->subject_id])->with('message', __('Oblast obrisana'));
         } catch (Exception $e) {
+            Log::error('Greška prilikom brisanja oblasti: '.$e->getMessage());
             return redirect()->route('fields.index', ['subject_id' => $request->subject_id])->with('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
     }

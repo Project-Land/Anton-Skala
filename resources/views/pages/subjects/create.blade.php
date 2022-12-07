@@ -20,7 +20,6 @@
         <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
             <form action="{{ route('subjects.store') }}" method="POST">
                 @csrf
-                <input type="hidden" name="lang" value="{{ Auth::user()->lang }}">
                 <div class="mb-6">
                     <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ __('Naslov') }}</label>
                     <input type="text" name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500" required>
@@ -29,9 +28,23 @@
                     @enderror
                 </div>
 
+                @if(in_array(Auth::user()->lang, ['sr', 'sr_cir', 'sr_lat']))
+                <div class="mb-6">
+                    <label for="lang" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ __('Pismo') }}</label>
+                    <select name="lang" id="lang" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500">
+                        <option value="sr_lat">{{ __('Latinica') }}</option>
+                        <option value="sr_cir">{{ __('Ćirilica') }}</option>
+                    </select>
+                    @error('lang')
+                    <span class="text-xs text-red-600 dark:text-red-400">{{ $message }}</span>
+                    @enderror
+                </div>
+                @else
+                <input type="hidden" name="lang" value="{{ Auth::user()->lang }}">
+                @endif
+
                 <button type="submit" class="w-1/2 md:w-1/5 mt-4 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-lime">{{ __('Kreiraj') }}</button>
             </form>
         </div>
-    </div>
 
 </x-app-layout>

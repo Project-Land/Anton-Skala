@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('task_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->time('elapsed_time');
-            $table->smallInteger('no_of_attempts');
+            $table->time('elapsed_time')->nullable();
+            $table->smallInteger('no_of_attempts')->nullable();
             $table->timestamps();
         });
     }

@@ -167,7 +167,6 @@ class TaskController extends Controller
                 'color_border' => $request->color_border ? true : false
             ];
 
-            //dd($content);
             foreach ($content['answers'] as $key => $answer) {
                 if ($answer['image']) {
                     $image = $answer['image'];
@@ -175,7 +174,7 @@ class TaskController extends Controller
                     $image->move(public_path('material/images'), $image_name);
                     $content['answers'][$key]['image'] = 'material/images/' . $image_name;
                 }
-                // dump($image_name);
+
                 if ($content['answers'][$key]['audio']) {
                     $audio = $content['answers'][$key]['audio'];
                     $audio_name = time() . uniqid() . '.' . $audio->getClientOriginalExtension();
@@ -191,7 +190,7 @@ class TaskController extends Controller
                     $image->move(public_path('material/images'), $image_name);
                     $content['questions'][$key]['image'] = 'material/images/' . $image_name;
                 }
-                // dump($image_name);
+
                 if ($content['questions'][$key]['audio']) {
                     $audio = $content['question'][$key]['audio'];
                     $audio_name = time() . uniqid() . '.' . $audio->getClientOriginalExtension();
@@ -226,13 +225,13 @@ class TaskController extends Controller
             return back()->with('error', __('Morate popuniti bar jedno polje.'));
         }
 
-        if ($request->file('image')) {
-            $image_name = time() . uniqid() . '.' . $request->file('image')->getClientOriginalExtension();
-            $request->file('image')->move(public_path('material/images'), $image_name);
-            $content['image'] = 'material/images/' . $image_name;
-        }
-
         try {
+            if ($request->file('image')) {
+                $image_name = time() . uniqid() . '.' . $request->file('image')->getClientOriginalExtension();
+                $request->file('image')->move(public_path('material/images'), $image_name);
+                $content['image'] = 'material/images/' . $image_name;
+            }
+
             Task::create([
                 'lesson_id' => $request->lesson_id,
                 'type' => $request->type,
@@ -343,7 +342,6 @@ class TaskController extends Controller
 
     public function storeColumnSortingMultipleType(Request $request)
     {
-        //dd($request->all());
         try {
             $numberOfColumns = count($request->column_text);
             $numberOfAnswers = count($request->answer_text);
@@ -469,8 +467,6 @@ class TaskController extends Controller
             }
 
             $content = ['image' => $image, 'string' => $letters, 'answers' => $m];
-
-            dd($content);
 
             Task::create([
                 'lesson_id' => $request->lesson_id,

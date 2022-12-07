@@ -18,7 +18,6 @@ return new class extends Migration
             $table->foreignId('lesson_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->unsignedBigInteger('task_id')->nullable();
-
         });
     }
 

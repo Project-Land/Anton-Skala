@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use Exception;
 use App\Models\Task;
 use App\Models\Field;
 use App\Models\Lesson;
@@ -38,16 +39,12 @@ class MaterialController extends Controller
     public function lessonTasks(Request $request)
     {
         $tasks = Task::where('lesson_id', $request->lesson_id)->orderBy('display_order')->get();
-
-        //return response()->json(TaskResource::collection($tasks));
         return response()->json(new TaskResource($tasks->first()));
     }
 
     public function task(Request $request, Task $task)
     {
         if (!auth('sanctum')->user()) {
-            //$lesson = Lesson::find($request->lesson_id);
-            //$task = $lesson->tasks->first();
             return response()->json(new TaskResource($task));
         }
 
@@ -60,9 +57,6 @@ class MaterialController extends Controller
                 $user->lessons()->wherePivot('lesson_id', $lesson->id)->update(['task_id' => $task->id]) :
                 $user->lessons()->attach($lesson, ['task_id' => $task->id]);
         }
-
-        //upis vremena i broja pokusaja
-        //$task->update(['elapsed_time' => $request->elapsed_time, 'no_of_attempts' => $request->no_of_attempts]);
 
         return response()->json(new TaskResource($task));
     }
@@ -108,8 +102,22 @@ class MaterialController extends Controller
     public function startOver(Request $request, Lesson $lesson)
     {
         return $lesson->tasks()->where('display_order', 1)->sole()->id;
-        //$id = $lesson->tasks()->where('display_order', 1)->sole()->id;
-        //$task = Task::find($id);
-        // return response()->json(new TaskResource($task));
+    }
+
+    public function updateTaskUserStats(Request $request)
+    {
+        $user = auth('sanctum')->user();
+
+        $task = Task::findOrFail($request->task_id);
+
+        try{
+            $user->tasks()->syncWithPivotValues($task, [
+                'elapsed_time' => $request->elapsed_time,
+                //'no_of_attempts' => $request->no_of_attempts
+            ]);
+            return response()->json(['message' => 'User statistic successfully updated'], 201);
+        } catch (Exception $e){
+            return response()->json(['message' => 'There has been an error: '.$e->getMessage()], 400);
+        }
     }
 }

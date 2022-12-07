@@ -69,8 +69,8 @@
                     <select name="lang" id="lang" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500" required>
                         <option value="">{{ __('Izaberi') }}...</option>
                         <option value="sr_lat" {{ $teacher->lang == 'sr_lat' ? "selected" :"" }}>{{ __('Srpski (Latinica)') }}</option>
-                        {{-- <option value="sr_cir" {{ $teacher->lang == 'sr_cir' ? "selected" :"" }}>{{ __('Srpski (Ćirilica)') }}</option> --}}
-                        <option value="hr" {{ $teacher->lang == 'hr' ? "selected" :"" }}>{{ __('Hrvatski') }}</option>
+                        <option value="sr_cir" {{ $teacher->lang == 'sr_cir' ? "selected" :"" }}>{{ __('Srpski (Ćirilica)') }}</option>
+                        <option value="cro" {{ $teacher->lang == 'cro' ? "selected" :"" }}>{{ __('Hrvatski') }}</option>
                         <option value="slo" {{ $teacher->lang == 'slo' ? "selected" :"" }}>{{ __('Slovenački') }}</option>
                     </select>
                     @error('lang')

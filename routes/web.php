@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\FieldController;
 use App\Http\Controllers\LessonController;
+use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherController;
@@ -29,6 +30,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('students', StudentController::class);
     Route::get('students/{id}/report/{lessonID}', [StudentController::class, 'showReport'])->name('students.report');
     Route::resource('teachers', TeacherController::class);
+    Route::resource('schools', SchoolController::class);
 
     // Tasks
     Route::resource('tasks', TaskController::class);

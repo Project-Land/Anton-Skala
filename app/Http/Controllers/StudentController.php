@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use Exception;
 use App\Models\Role;
-use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
@@ -24,7 +24,7 @@ class StudentController extends Controller
                 ]);
             })
             ->when($request->has('search'), function ($query) use ($request) {
-                return $query->where('name', 'LIKE', '%'.$request->search.'%');
+                return $query->where('name', 'LIKE', '%'.$request->search.'%')->orWhere('school_name', 'LIKE', '%'.$request->search.'%');
             })
             ->latest('id')
             ->paginate(20);
@@ -65,6 +65,7 @@ class StudentController extends Controller
             ]);
             $request->session()->flash('message', __('Učenički nalog uspešno kreiran'));
         } catch(Exception $e){
+            Log::error('Greška prilikom kreiranja učeničkog naloga: '.$e->getMessage());
             $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
 
@@ -137,6 +138,7 @@ class StudentController extends Controller
             ]);
             $request->session()->flash('message', __('Učenički nalog uspešno izmenjen'));
         } catch(Exception $e){
+            Log::error('Greška prilikom izmene učeničkog naloga: '.$e->getMessage());
             $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
 
@@ -151,6 +153,7 @@ class StudentController extends Controller
             $student->delete();
             $request->session()->flash('message', __('Učenički nalog uspešno obrisan'));
         } catch(Exception $e){
+            Log::error('Greška prilikom uklanjanja učeničkog naloga: '.$e->getMessage());
             $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
         return redirect('students');
