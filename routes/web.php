@@ -48,5 +48,4 @@ Route::middleware(['auth'])->group(function () {
     Route::post('tasks/store-story', [TaskController::class, 'storeStoryType'])->name('tasks.store-story-type');
 });
 
-
 require __DIR__ . '/auth.php';

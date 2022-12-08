@@ -38,7 +38,7 @@
                             <td class="px-6 py-4">{{ $task->display_order }}</td>
                             <td class="px-6 py-4">{{ $task->description }}</td>
                             <td class="px-6 py-4">{{ $task->pivot->elapsed_time }}</td>
-                            <td class="px-6 py-4">{{ $task->pivot->no_of_attempts }}</td>
+                            <td class="px-6 py-4">{{ $task->pivot->no_of_attempts ?? "/" }}</td>
                             <td class="px-6 py-4">{{ $task->pivot->created_at->format('d.m.Y.') }}</td>
                         </tr>
                         @endforeach

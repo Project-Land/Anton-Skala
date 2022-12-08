@@ -74,20 +74,23 @@ class StudentController extends Controller
 
     public function show($id)
     {
-        $student = User::with(['tasks', 'lessons'])->find($id);
+        $student = User::with(['tasks', 'lessons'])->findOrFail($id);
         return view('pages.students.show', ['student' => $student]);
     }
 
     public function showReport($id, $lessonID)
     {
-        $student = User::with(['tasks', 'lessons'])->find($id);
+        $student = User::with(['tasks', 'lessons'])->findOrFail($id);
         $tasks = $student->tasks()->where('lesson_id', $lessonID)->orderBy('display_order')->paginate(30);
+        if(!count($tasks)){
+            abort('404');
+        }
         return view('pages.students.report', ['student' => $student, 'tasks' => $tasks]);
     }
 
     public function edit($id)
     {
-        $student = User::find($id);
+        $student = User::findOrFail($id);
         return view('pages.students.edit', ['student' => $student]);
     }
 

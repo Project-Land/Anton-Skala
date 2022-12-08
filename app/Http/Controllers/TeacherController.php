@@ -81,8 +81,9 @@ class TeacherController extends Controller
     {
         if(Auth::user()->role_id == Role::TEACHER) return redirect('404');
 
-        $teacher = User::find($id);
+        $teacher = User::findOrFail($id);
         $schools = School::all();
+
         return view('pages.teachers.edit', [
             'teacher' => $teacher,
             'schools' => $schools
