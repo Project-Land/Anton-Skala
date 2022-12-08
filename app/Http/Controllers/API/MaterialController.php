@@ -108,13 +108,18 @@ class MaterialController extends Controller
     {
         $user = auth('sanctum')->user();
 
-        $task = Task::findOrFail($request->task_id);
+        $task = Task::find($request->task_id);
+        if(!$task){
+            return response()->json(['message' => 'Task not found'], 404);
+        }
 
         try{
-            $user->tasks()->syncWithPivotValues($task, [
-                'elapsed_time' => $request->elapsed_time,
-                //'no_of_attempts' => $request->no_of_attempts
-            ]);
+            if (!$user->tasks()->updateExistingPivot($task, ['elapsed_time' => $request->elapsed_time])) {
+                $user->tasks()->attach($task, [
+                    'elapsed_time' => $request->elapsed_time,
+                    //'no_of_attempts' => $request->no_of_attempts
+                ]);
+            }
             return response()->json(['message' => 'User statistic successfully updated'], 201);
         } catch (Exception $e){
             return response()->json(['message' => 'There has been an error: '.$e->getMessage()], 400);
