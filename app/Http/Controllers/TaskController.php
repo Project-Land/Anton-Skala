@@ -13,13 +13,15 @@ class TaskController extends Controller
 {
     public function index(Request $request)
     {
+        $lesson = Lesson::findOrFail($request->lesson_id);
+
         return view('pages.tasks.index', [
-            'subject_name' => Lesson::findOrFail($request->lesson_id)->field->subject->name,
-            'subject_id' => Lesson::findOrFail($request->lesson_id)->field->subject_id,
-            'field_name' => Lesson::findOrFail($request->lesson_id)->field->name,
-            'field_id' => Lesson::findOrFail($request->lesson_id)->field_id,
+            'subject_name' => $lesson->field->subject->name,
+            'subject_id' => $lesson->field->subject_id,
+            'field_name' => $lesson->field->name,
+            'field_id' => $lesson->field_id,
             'lesson_id' => $request->lesson_id,
-            'lesson_name' => Lesson::findOrFail($request->lesson_id)->name
+            'lesson_name' => $lesson->name
         ]);
     }
 
@@ -114,7 +116,7 @@ class TaskController extends Controller
 
             $request->session()->flash('message', __('Zadatak je uspešno kreiran'));
         } catch (Exception $e) {
-            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.' . $e->getMessage()));
+            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
 
         return redirect('tasks?lesson_id=' . $request->lesson_id);
@@ -209,7 +211,7 @@ class TaskController extends Controller
 
             $request->session()->flash('message', __('Zadatak je uspešno kreiran'));
         } catch (Exception $e) {
-            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.' . $e->getMessage()));
+            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
 
         return redirect('tasks?lesson_id=' . $request->lesson_id);
@@ -221,7 +223,7 @@ class TaskController extends Controller
         $content['image'] = null;
         $content['text'] = $request->text;
 
-        if($request->text == "" && $request->file('image') == null){
+        if ($request->text == "" && $request->file('image') == null) {
             return back()->with('error', __('Morate popuniti bar jedno polje.'));
         }
 
@@ -241,12 +243,11 @@ class TaskController extends Controller
 
             $request->session()->flash('message', __('Zadatak je uspešno kreiran'));
         } catch (Exception $e) {
-            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.' . $e->getMessage()));
+            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
 
         return redirect('tasks?lesson_id=' . $request->lesson_id);
     }
-
 
     public function storeColumnSortingType(Request $request)
     {
@@ -425,7 +426,6 @@ class TaskController extends Controller
         return redirect('tasks?lesson_id=' . $request->lesson_id);
     }
 
-
     public function storeAddLetterType(Request $request)
     {
         try {
@@ -477,7 +477,7 @@ class TaskController extends Controller
             ]);
             $request->session()->flash('message', __('Zadatak je uspešno kreiran'));
         } catch (Exception $e) {
-            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo' . $e->getMessage() . ' Linija ' . $e->getLine()));
+            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
 
         return redirect('tasks?lesson_id=' . $request->lesson_id);
@@ -577,7 +577,7 @@ class TaskController extends Controller
             ]);
             $request->session()->flash('message', __('Zadatak je uspešno kreiran'));
         } catch (Exception $e) {
-            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo' . $e->getMessage() . ' Linija ' . $e->getLine()));
+            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
 
         return redirect('tasks?lesson_id=' . $request->lesson_id);
