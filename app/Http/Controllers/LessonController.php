@@ -51,7 +51,7 @@ class LessonController extends Controller
             Lesson::create($request->except('image') + ['image' => $cover_image, 'lang' => Auth::user()->lang]);
             return redirect()->route('lessons.index', ['field_id' => $request->field_id])->with('message', __('Lekcija kreirana'));
         } catch (Exception $e) {
-            Log::error('Greška prilikom kreiranja lekcije: '.$e->getMessage());
+            Log::channel('errors')->error('Greška prilikom kreiranja lekcije: ' . $e->getMessage());
             return redirect()->route('lessons.index', ['field_id' => $request->field_id])->with('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
     }
@@ -99,7 +99,7 @@ class LessonController extends Controller
 
             return redirect()->route('tasks.index', ['lesson_id' => $lesson->id])->with('message', __('Lekcija izmenjena'));
         } catch (Exception $e) {
-            Log::error('Greška prilikom izmene lekcije: '.$e->getMessage());
+            Log::channel('errors')->error('Greška prilikom izmene lekcije: ' . $e->getMessage());
             return redirect()->route('tasks.index', ['lesson_id' => $lesson->id])->with('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
     }
@@ -111,7 +111,7 @@ class LessonController extends Controller
             $lesson->delete();
             return redirect()->route('lessons.index', ['field_id' => $request->field_id])->with('message', __('Lekcija obrisana'));
         } catch (Exception $e) {
-            Log::error('Greška prilikom brisanja lekcije: '.$e->getMessage());
+            Log::channel('errors')->error('Greška prilikom brisanja lekcije: ' . $e->getMessage());
             return redirect()->route('lessons.index', ['field_id' => $request->field_id])->with('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
     }

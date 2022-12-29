@@ -21,8 +21,6 @@
 
     @livewireStyles
 
-
-
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/f94836499c.js" crossorigin="anonymous"></script>
 

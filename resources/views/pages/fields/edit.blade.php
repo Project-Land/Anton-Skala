@@ -78,11 +78,14 @@
                     </div>
                 </div>
 
-                <button type="submit" class="w-1/2 md:w-1/5 mt-4 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-lime">{{ __('Izmeni') }}</button>
+                <div class="flex justify-end">
+                    <button type="submit" class="w-1/2 md:w-1/5 mt-4 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-lime">{{ __('Izmeni') }}</button>
+                </div>
             </form>
         </div>
     </div>
 
+    @push('scripts')
     <script>
         function imageViewer() {
             return {
@@ -109,5 +112,6 @@
             }
         }
     </script>
+    @endpush
 
 </x-app-layout>

@@ -34,6 +34,7 @@
                         <option value="add_letter">{{ __('Dodavanje slova u reči') }}</option>
                         <option value="sentence">{{ __('Slaganje rečenice') }}</option>
                         <option value="complete_the_sentence">{{ __('Dopuna rečenice') }}</option>
+                        <option value="connect_lines">{{ __('Poveži linijama') }}</option>
                     </select>
                     @error('type')
                     <span class="text-xs text-red-600 dark:text-red-400">{{ $message }}</span>

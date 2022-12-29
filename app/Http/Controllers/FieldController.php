@@ -32,7 +32,7 @@ class FieldController extends Controller
 
     public function store(Request $request)
     {
-        try{
+        try {
             $cover_image = null;
 
             if ($request->image) {
@@ -52,8 +52,8 @@ class FieldController extends Controller
             Field::create($request->except('image') + ['image' => $cover_image]);
 
             return redirect()->route('fields.index', ['subject_id' => $request->subject_id])->with('message', __('Oblast kreirana'));
-        } catch (Exception $e){
-            Log::error('Greška prilikom kreiranja oblasti: '.$e->getMessage());
+        } catch (Exception $e) {
+            Log::channel('errors')->error('Greška prilikom kreiranja oblasti: ' . $e->getMessage());
             return redirect()->route('fields.index', ['subject_id' => $request->subject_id])->with('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
     }
@@ -70,7 +70,7 @@ class FieldController extends Controller
 
     public function update(Request $request, Field $field)
     {
-        try{
+        try {
             $cover_image = $field->image;
 
             if ($request->image) {
@@ -93,8 +93,8 @@ class FieldController extends Controller
 
             $field->update(['name' => $request->name, 'image' => $cover_image]);
             return redirect()->route('lessons.index', ['field_id' => $field->id])->with('message', __('Oblast izmenjena'));
-        } catch (Exception $e){
-            Log::error('Greška prilikom izmene oblasti: '.$e->getMessage());
+        } catch (Exception $e) {
+            Log::channel('errors')->error('Greška prilikom izmene oblasti: ' . $e->getMessage());
             return redirect()->route('lessons.index', ['field_id' => $field->id])->with('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
     }
@@ -105,7 +105,7 @@ class FieldController extends Controller
             $field->delete();
             return redirect()->route('fields.index', ['subject_id' => $request->subject_id])->with('message', __('Oblast obrisana'));
         } catch (Exception $e) {
-            Log::error('Greška prilikom brisanja oblasti: '.$e->getMessage());
+            Log::channel('errors')->error('Greška prilikom brisanja oblasti: ' . $e->getMessage());
             return redirect()->route('fields.index', ['subject_id' => $request->subject_id])->with('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
     }

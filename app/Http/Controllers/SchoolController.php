@@ -32,15 +32,15 @@ class SchoolController extends Controller
             'country.required' => __('Unesite državu')
         ]);
 
-        try{
+        try {
             School::create([
                 'name' => $request->name,
                 'country' => $request->country,
             ]);
 
             return redirect()->route('schools.index')->with('message', __('Škola uspešno kreirana'));
-        } catch (Exception $e){
-            Log::error('Greška prilikom kreiranja škole: '.$e->getMessage());
+        } catch (Exception $e) {
+            Log::channel('errors')->error('Greška prilikom kreiranja škole: ' . $e->getMessage());
             return redirect()->route('schools.index')->with('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
     }
@@ -68,15 +68,15 @@ class SchoolController extends Controller
             'country.required' => __('Unesite državu')
         ]);
 
-        try{
+        try {
             $school->update([
                 'name' => $request->name,
                 'country' => $request->country,
             ]);
 
             return redirect()->route('schools.index')->with('message', __('Škola uspešno izmenjena'));
-        } catch (Exception $e){
-            Log::error('Greška prilikom izmene škole: '.$e->getMessage());
+        } catch (Exception $e) {
+            Log::channel('errors')->error('Greška prilikom izmene škole: ' . $e->getMessage());
             return redirect()->route('schools.index')->with('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
     }

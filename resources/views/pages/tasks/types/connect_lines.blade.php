@@ -8,7 +8,7 @@
 
         <div class="flex items-center justify-between">
             <h2 class="my-6 text-lg md:text-xl font-semibold text-gray-700 dark:text-gray-200">
-                {{ __('Prevlačenje') }} - {{ __('Kreiranje') }}
+                {{ __('Poveži linijama') }} - {{ __('Kreiranje') }}
             </h2>
             <a href="{{ route('tasks.create', ['lesson_id' => request()->lesson_id]) }}" class="inline-flex items-center p-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-lime">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -19,7 +19,7 @@
         </div>
 
         <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800" x-data="{ show: false }">
-            <form action="{{ route('tasks.store-drag-and-drop-type') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('tasks.store-connect-lines-type') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="lesson_id" value="{{ request()->lesson_id }}">
                 <input type="hidden" name="type" value="{{ request()->type }}">
@@ -228,12 +228,6 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="mb-6">
-                    <label for="color_border" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ __('Dodaj pojmovima okvir u boji') }}</label>
-                    <input id="color_border" name="color_border" type="checkbox" value="1" class="w-4 h-4 text-purple-600 bg-gray-100 rounded border-gray-300 focus:ring-purple-600 dark:focus:ring-purple-700 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                </div>
-
                 <div class="flex justify-between items-center">
                     <div class="mt-4">
                         <button type="button" class="text-gray-900 cursor-pointer bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 rounded-lg text-sm px-2 py-2 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
@@ -245,9 +239,8 @@
                     </div>
                     <button type="submit" class="w-1/2 sm:w-1/5 mt-4 px-8 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-lime">{{ __('Kreiraj') }}</button>
                 </div>
-                <div class="flex space-x-8" x-show="show">
-                    <img class="w-full sm:w-1/3 p-4 border border-gray-500 rounded-lg mt-2" src="/images/drag_and_drop1.png" alt="prevlacenje">
-                    <img class="w-full sm:w-1/3 p-4 border border-gray-500 rounded-lg mt-2" src="/images/drag_and_drop2.png" alt="prevlacenje">
+                <div class="flex" x-show="show">
+                    <img class="w-full sm:w-1/3 p-4 border border-gray-500 rounded-lg mt-2" src="/images/connect_lines.png" alt="poveži_linijama">
                 </div>
             </form>
         </div>
@@ -260,8 +253,7 @@
         function addAnswer()
         {
             let number_of_answers = sessionStorage.getItem('number_of_answers')
-
-            if(number_of_answers < 4) {
+            if(number_of_answers < 3) {
                 number_of_answers++
                 sessionStorage.setItem('number_of_answers', number_of_answers)
                 let content = document.getElementById('template').innerHTML;

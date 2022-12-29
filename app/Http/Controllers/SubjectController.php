@@ -29,8 +29,8 @@ class SubjectController extends Controller
         try {
             Subject::create($request->all());
             return redirect()->route('subjects.index')->with('message', __('Predmet uspešno kreiran'));
-        } catch (Exception $e){
-            Log::error('Greška prilikom kreiranja predmeta: '.$e->getMessage());
+        } catch (Exception $e) {
+            Log::channel('errors')->error('Greška prilikom kreiranja predmeta: ' . $e->getMessage());
             return redirect()->route('subjects.index')->with('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
     }
@@ -52,8 +52,8 @@ class SubjectController extends Controller
         try {
             $subject->update(['name' => $request->name]);
             return redirect()->route('subjects.index')->with('message', __('Predmet izmenjen'));
-        } catch (Exception $e){
-            Log::error('Greška prilikom izmene predmeta: '.$e->getMessage());
+        } catch (Exception $e) {
+            Log::channel('errors')->error('Greška prilikom izmene predmeta: ' . $e->getMessage());
             return redirect()->route('subjects.index')->with('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
     }

@@ -17,7 +17,7 @@ class TeacherController extends Controller
 {
     public function index()
     {
-        if(Auth::user()->role_id == Role::TEACHER) return redirect('404');
+        if (Auth::user()->role_id == Role::TEACHER) return redirect('404');
 
         $teachers = User::with('school')->where('role_id', 3)->latest()->get();
         return view('pages.teachers.index', ['teachers' => $teachers]);
@@ -25,7 +25,7 @@ class TeacherController extends Controller
 
     public function create()
     {
-        if(Auth::user()->role_id == Role::TEACHER) return redirect('404');
+        if (Auth::user()->role_id == Role::TEACHER) return redirect('404');
         $schools = School::all();
         return view('pages.teachers.create', ['schools' => $schools]);
     }
@@ -52,7 +52,7 @@ class TeacherController extends Controller
             'email.email' => __('Neispravan format email adrese')
         ]);
 
-        try{
+        try {
             User::create([
                 'name' => $request->name,
                 'username' => $request->username,
@@ -64,8 +64,8 @@ class TeacherController extends Controller
                 'lang' => $request->lang
             ]);
             $request->session()->flash('message', __('Učenički nalog uspešno kreiran'));
-        } catch(Exception $e){
-            Log::error('Greška prilikom kreiranja nastavničkog naloga: '.$e->getMessage());
+        } catch (Exception $e) {
+            Log::channel('errors')->error('Greška prilikom kreiranja nastavničkog naloga: ' . $e->getMessage());
             $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
 
@@ -79,7 +79,7 @@ class TeacherController extends Controller
 
     public function edit($id)
     {
-        if(Auth::user()->role_id == Role::TEACHER) return redirect('404');
+        if (Auth::user()->role_id == Role::TEACHER) return redirect('404');
 
         $teacher = User::findOrFail($id);
         $schools = School::all();
@@ -128,8 +128,8 @@ class TeacherController extends Controller
             'password.required_with' => __('Unesite novu lozinku')
         ]);
 
-        try{
-            if($request->password && Hash::check($request->old_password, $user->password)){
+        try {
+            if ($request->password && Hash::check($request->old_password, $user->password)) {
                 $user->update(['password' => Hash::make($request->password)]);
             }
 
@@ -141,8 +141,8 @@ class TeacherController extends Controller
                 'school_id' => $request->school
             ]);
             $request->session()->flash('message', __('Nastavnički nalog uspešno izmenjen'));
-        } catch(Exception $e){
-            Log::error('Greška prilikom izmene nastavničkog naloga: '.$e->getMessage());
+        } catch (Exception $e) {
+            Log::channel('errors')->error('Greška prilikom izmene nastavničkog naloga: ' . $e->getMessage());
             $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
 
@@ -151,15 +151,15 @@ class TeacherController extends Controller
 
     public function destroy(Request $request, $id)
     {
-        if(Auth::user()->role_id == Role::TEACHER) return redirect('404');
+        if (Auth::user()->role_id == Role::TEACHER) return redirect('404');
 
         $teacher = User::findOrFail($id);
 
-        try{
+        try {
             $teacher->delete();
             $request->session()->flash('message', __('Nastavnički nalog uspešno obrisan'));
-        } catch(Exception $e){
-            Log::error('Greška prilikom uklanjanja nastavničkog naloga: '.$e->getMessage());
+        } catch (Exception $e) {
+            Log::channel('errors')->error('Greška prilikom uklanjanja nastavničkog naloga: ' . $e->getMessage());
             $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
         return redirect('teachers');

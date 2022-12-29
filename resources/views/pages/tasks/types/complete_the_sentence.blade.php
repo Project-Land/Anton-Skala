@@ -18,7 +18,7 @@
             </a>
         </div>
 
-        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800" x-data="{ show: false }">
             <form action="{{ route('tasks.store-complete-the-sentence-type') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="lesson_id" value="{{ request()->lesson_id }}">
@@ -67,19 +67,26 @@
                         </div>
                     </div>
                 </div>
-
-                <button type="submit" class="w-1/2 md:w-1/5 mt-4 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-lime">{{ __('Kreiraj') }}</button>
+                <div class="flex justify-between items-center">
+                    <div class="mt-4">
+                        <button type="button" class="text-gray-900 cursor-pointer bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 rounded-lg text-sm px-2 py-2 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+                            @click="show = !show">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
+                            </svg>
+                        </button>
+                    </div>
+                    <button type="submit" class="w-1/2 sm:w-1/5 mt-4 px-8 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-lime">{{ __('Kreiraj') }}</button>
+                </div>
+                <div class="flex space-x-8" x-show="show">
+                    <img class="w-full sm:w-1/3 p-4 border border-gray-500 rounded-lg mt-2" src="/images/form_a_sentence1.jpg" alt="formiranje_rečenice">
+                    <img class="w-full sm:w-1/3 p-4 border border-gray-500 rounded-lg mt-2" src="/images/form_a_sentence2.jpg" alt="formiranje_rečenice">
+                </div>
             </form>
-        </div>
-        <div>
-            <p class="mb-4">{{ __('Primer') }}</p>
-            <div class="flex flex-col sm:flex-row space-x-10">
-                <img class="w-full sm:w-1/3" src="/images/form_a_sentence1.jpg" alt="formiranje_rečenice">
-                <img class="w-full sm:w-1/3" src="/images/form_a_sentence2.jpg" alt="formiranje_rečenice">
-            </div>
         </div>
     </div>
 
+    @push('scripts')
     <script>
         function addSentence()
         {
@@ -93,5 +100,6 @@
             document.getElementById('newSentence').insertAdjacentHTML('beforeend', content);
         }
     </script>
+    @endpush
 
 </x-app-layout>

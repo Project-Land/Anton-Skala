@@ -8,6 +8,7 @@ use App\Models\Lesson;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class TaskController extends Controller
 {
@@ -32,6 +33,11 @@ class TaskController extends Controller
 
     public function createSpecificTask(Request $request)
     {
+        if (!view()->exists('pages.tasks.types.' . $request->type)) {
+            Log::channel('errors')->error('Pokušaj pristupa stranici za kreiranje zadatka koja ne postoji.');
+            return redirect('tasks/create?lesson_id=' . $request->lesson_id)->with('error', __('Izabrani tip zadatka ne postoji.'));
+        }
+
         return view('pages.tasks.types.' . $request->type, [
             'type' => $request->type,
             'lesson_id' => $request->lesson_id
@@ -40,6 +46,10 @@ class TaskController extends Controller
 
     public function storeCorrectAnswerType(Request $request)
     {
+        if ($request->question_image == null && $request->question_audio == null && $request->question_text == null) {
+            return redirect()->back()->withInput()->with(['error' => __('Unesite pitanje')]);
+        }
+
         try {
             $numberOfAnswers = count($request->answer_text);
             $answers = [];
@@ -116,6 +126,7 @@ class TaskController extends Controller
 
             $request->session()->flash('message', __('Zadatak je uspešno kreiran'));
         } catch (Exception $e) {
+            Log::channel('errors')->error('Greška prilikom kreiranja zadatka: ' . $e->getMessage());
             $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
 
@@ -124,6 +135,14 @@ class TaskController extends Controller
 
     public function storeDragAndDropType(Request $request)
     {
+        if ($request->question_text[0] == "" && $request->question_image == null && $request->question_audio == null) {
+            return back()->with('error', __('Morate popuniti bar jedno polje.'));
+        }
+
+        if ($request->answer_text[0] == "" && $request->answer_image == null && $request->answer_audio == null) {
+            return back()->withInput()->with('error', __('Morate popuniti bar jedno polje.'));
+        }
+
         try {
             $numberOfAnswers = count($request->answer_text);
             $answers = [];
@@ -211,6 +230,7 @@ class TaskController extends Controller
 
             $request->session()->flash('message', __('Zadatak je uspešno kreiran'));
         } catch (Exception $e) {
+            Log::channel('errors')->error('Greška prilikom kreiranja zadatka: ' . $e->getMessage());
             $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
 
@@ -251,6 +271,10 @@ class TaskController extends Controller
 
     public function storeColumnSortingType(Request $request)
     {
+        if (($request->column_text[0] == null && $request->column_image == null && $request->column_audio == null) || ($request->column_text[1] == null && $request->column_image == null && $request->column_audio == null)) {
+            return redirect()->back()->withInput()->with(['error' => __('Morate uneti sadržaj za minimum dve kolone')]);
+        }
+
         try {
             $numberOfColumns = count($request->column_text);
             $columns = [];
@@ -335,6 +359,7 @@ class TaskController extends Controller
 
             $request->session()->flash('message', __('Zadatak je uspešno kreiran'));
         } catch (Exception $e) {
+            Log::channel('errors')->error('Greška prilikom kreiranja zadatka: ' . $e->getMessage());
             $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
 
@@ -343,6 +368,14 @@ class TaskController extends Controller
 
     public function storeColumnSortingMultipleType(Request $request)
     {
+        if (($request->column_text[0] == null && $request->column_image == null && $request->column_audio == null) || ($request->column_text[1] == null && $request->column_image == null && $request->column_audio == null)) {
+            return redirect()->back()->withInput()->with(['error' => __('Morate uneti sadržaj za minimum dve kolone')]);
+        }
+
+        if (($request->answer_text[0] == null && $request->answer_image == null && $request->answer_audio == null) || ($request->answer_text[1] == null && $request->answer_image == null && $request->answer_audio == null)) {
+            return redirect()->back()->withInput()->with(['error' => __('Morate uneti minimum dva ponuđena odgovora')]);
+        }
+
         try {
             $numberOfColumns = count($request->column_text);
             $numberOfAnswers = count($request->answer_text);
@@ -420,6 +453,7 @@ class TaskController extends Controller
 
             $request->session()->flash('message', __('Zadatak je uspešno kreiran'));
         } catch (Exception $e) {
+            Log::channel('errors')->error('Greška prilikom kreiranja zadatka: ' . $e->getMessage());
             $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
 
@@ -477,6 +511,7 @@ class TaskController extends Controller
             ]);
             $request->session()->flash('message', __('Zadatak je uspešno kreiran'));
         } catch (Exception $e) {
+            Log::channel('errors')->error('Greška prilikom kreiranja zadatka: ' . $e->getMessage());
             $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
 
@@ -519,6 +554,7 @@ class TaskController extends Controller
 
             $request->session()->flash('message', __('Zadatak je uspešno kreiran'));
         } catch (Exception $e) {
+            Log::channel('errors')->error('Greška prilikom kreiranja zadatka: ' . $e->getMessage());
             $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
 
@@ -577,6 +613,7 @@ class TaskController extends Controller
             ]);
             $request->session()->flash('message', __('Zadatak je uspešno kreiran'));
         } catch (Exception $e) {
+            Log::channel('errors')->error('Greška prilikom kreiranja zadatka: ' . $e->getMessage());
             $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
 
@@ -676,6 +713,90 @@ class TaskController extends Controller
 
             $request->session()->flash('message', __('Zadatak je uspešno kreiran'));
         } catch (Exception $e) {
+            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'));
+        }
+
+        return redirect('tasks?lesson_id=' . $request->lesson_id);
+    }
+
+    public function storeConnectLinesType(Request $request)
+    {
+        try {
+            $numberOfAnswers = count($request->answer_text);
+            $answers = [];
+            $numberOfQuestions = count($request->question_text);
+            $questions = [];
+
+            for ($i = 0; $i < $numberOfAnswers; $i++) {
+                $answers += [
+                    $i => [
+                        'text' => $request->answer_text[$i],
+                        'image' => $request->answer_image[$i] ?? null,
+                        'audio' => $request->answer_audio[$i] ?? null,
+                        'id' => $i + 1
+                    ]
+                ];
+            }
+
+            for ($i = 0; $i < $numberOfQuestions; $i++) {
+                $questions += [
+                    $i => [
+                        'text' => $request->question_text[$i],
+                        'image' => $request->question_image[$i] ?? null,
+                        'audio' => $request->question_audio[$i] ?? null,
+                        'id' => $i + 1
+                    ]
+                ];
+            }
+
+            $content = [
+                'answers' => $answers,
+                'questions' => $questions,
+            ];
+
+            foreach ($content['answers'] as $key => $answer) {
+                if ($answer['image']) {
+                    $image = $answer['image'];
+                    $image_name = time() . uniqid() . '.' . $image->getClientOriginalExtension();
+                    $image->move(public_path('material/images'), $image_name);
+                    $content['answers'][$key]['image'] = 'material/images/' . $image_name;
+                }
+
+                if ($content['answers'][$key]['audio']) {
+                    $audio = $content['answers'][$key]['audio'];
+                    $audio_name = time() . uniqid() . '.' . $audio->getClientOriginalExtension();
+                    $audio->move(public_path('material/audio'), $audio_name);
+                    $content['answers'][$key]['audio'] = 'material/audio/' . $audio_name;
+                }
+            }
+
+            foreach ($content['questions'] as $key => $question) {
+                if ($question['image']) {
+                    $image = $question['image'];
+                    $image_name = time() . uniqid() . '.' . $image->getClientOriginalExtension();
+                    $image->move(public_path('material/images'), $image_name);
+                    $content['questions'][$key]['image'] = 'material/images/' . $image_name;
+                }
+
+                if ($content['questions'][$key]['audio']) {
+                    $audio = $content['question'][$key]['audio'];
+                    $audio_name = time() . uniqid() . '.' . $audio->getClientOriginalExtension();
+                    $audio->move(public_path('material/audio'), $audio_name);
+                    $content['questions'][$key]['audio'] = 'material/audio/' . $audio_name;
+                }
+            }
+
+            Task::create([
+                'lesson_id' => $request->lesson_id,
+                'type' => $request->type,
+                'description' => $request->description,
+                'display_order' => Task::where('lesson_id', $request->lesson_id)->count() + 1,
+                'content' => json_encode($content)
+            ]);
+
+            $request->session()->flash('message', __('Zadatak je uspešno kreiran'));
+        } catch (Exception $e) {
+            Log::channel('errors')->error('Greška prilikom kreiranja zadatka: ' . $e->getMessage());
             $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
 

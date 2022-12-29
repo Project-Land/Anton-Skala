@@ -18,7 +18,7 @@
             </div>
         </div>
 
-        <div class="relative w-full sm:w-1/2 overflow-x-auto shadow-md sm:rounded-lg dark:bg-gray-800">
+        <div class="relative w-full sm:w-1/2 overflow-x-auto shadow-md sm:rounded-lg bg-white dark:bg-gray-800">
 
             <form class="p-4" method="POST" action="{{ route('teachers.store') }}">
                 @csrf
@@ -84,7 +84,9 @@
                     <span class="mt-2 text-xs italic text-red-600 dark:text-red-400">{{ $message }}</span>
                     @enderror
                 </div>
-                <button type="submit" class="text-white bg-purple-600 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800">{{ __('Kreiraj') }}</button>
+                <div class="flex justify-end">
+                    <button type="submit" class="text-white bg-purple-600 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800">{{ __('Kreiraj') }}</button>
+                </div>
             </form>
 
         </div>

@@ -24,7 +24,7 @@ class StudentController extends Controller
                 ]);
             })
             ->when($request->has('search'), function ($query) use ($request) {
-                return $query->where('name', 'LIKE', '%'.$request->search.'%')->orWhere('school_name', 'LIKE', '%'.$request->search.'%');
+                return $query->where('name', 'LIKE', '%' . $request->search . '%')->orWhere('school_name', 'LIKE', '%' . $request->search . '%');
             })
             ->latest('id')
             ->paginate(20);
@@ -53,7 +53,7 @@ class StudentController extends Controller
             'lang.required' => __('Izaberite jezik')
         ]);
 
-        try{
+        try {
             User::create([
                 'name' => $request->name,
                 'username' => $request->username,
@@ -64,8 +64,8 @@ class StudentController extends Controller
                 'lang' => $request->lang
             ]);
             $request->session()->flash('message', __('Učenički nalog uspešno kreiran'));
-        } catch(Exception $e){
-            Log::error('Greška prilikom kreiranja učeničkog naloga: '.$e->getMessage());
+        } catch (Exception $e) {
+            Log::channel('errors')->error('Greška prilikom kreiranja učeničkog naloga: ' . $e->getMessage());
             $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
 
@@ -82,7 +82,7 @@ class StudentController extends Controller
     {
         $student = User::with(['tasks', 'lessons'])->findOrFail($id);
         $tasks = $student->tasks()->where('lesson_id', $lessonID)->orderBy('display_order')->paginate(30);
-        if(!count($tasks)){
+        if (!count($tasks)) {
             abort('404');
         }
         return view('pages.students.report', ['student' => $student, 'tasks' => $tasks]);
@@ -129,8 +129,8 @@ class StudentController extends Controller
         ]);
 
 
-        try{
-            if($request->password && Hash::check($request->old_password, $user->password)){
+        try {
+            if ($request->password && Hash::check($request->old_password, $user->password)) {
                 $user->update(['password' => Hash::make($request->password)]);
             }
 
@@ -140,8 +140,8 @@ class StudentController extends Controller
                 'lang' => $request->lang
             ]);
             $request->session()->flash('message', __('Učenički nalog uspešno izmenjen'));
-        } catch(Exception $e){
-            Log::error('Greška prilikom izmene učeničkog naloga: '.$e->getMessage());
+        } catch (Exception $e) {
+            Log::channel('errors')->error('Greška prilikom izmene učeničkog naloga: ' . $e->getMessage());
             $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
 
@@ -152,11 +152,11 @@ class StudentController extends Controller
     {
         $student = User::findOrFail($id);
 
-        try{
+        try {
             $student->delete();
             $request->session()->flash('message', __('Učenički nalog uspešno obrisan'));
-        } catch(Exception $e){
-            Log::error('Greška prilikom uklanjanja učeničkog naloga: '.$e->getMessage());
+        } catch (Exception $e) {
+            Log::channel('errors')->error('Greška prilikom uklanjanja učeničkog naloga: ' . $e->getMessage());
             $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'));
         }
         return redirect('students');
