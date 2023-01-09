@@ -803,6 +803,82 @@ class TaskController extends Controller
         return redirect('tasks?lesson_id=' . $request->lesson_id);
     }
 
+    public function storeEquationsType(Request $request)
+    {
+        if ($request->description == "" && $request->file('image') == null) {
+            return back()->with('error', __('Morate popuniti tekstualni opis zadatka ili dodati sliku.'));
+        }
+
+        try {
+            $elements = [];
+            $result = (int)$request->result;
+
+            if ($request->file('image')) {
+                $image_name = time() . uniqid() . '.' . $request->file('image')->getClientOriginalExtension();
+                $request->file('image')->move(public_path('material/images'), $image_name);
+                $content['image'] = 'material/images/' . $image_name;
+            }
+
+            foreach ($request->elements as $key => $element) {
+                $elements += [
+                    $key => [
+                        'id' => $key + 1,
+                        'element' => $element
+                    ]
+                ];
+            }
+
+            $elements += [
+                3 => [
+                    'id' => 4,
+                    'element' => '='
+                ]
+            ];
+
+            while (in_array(($random1 = mt_rand(0, 10)), array($result)));
+            while (in_array(($random2 = mt_rand(0, 10)), array($result, $random1)));
+
+            $answers = [
+                0 => [
+                    'answer' => $result,
+                    'correct' => true
+                ],
+                1 => [
+                    'answer' => $random1,
+                    'correct' => false
+                ],
+                2 => [
+                    'answer' => $random2,
+                    'correct' => false
+                ]
+            ];
+
+            shuffle($answers);
+
+            $content += [
+                'elements' => $elements,
+                'answers' => $answers
+            ];
+
+            dd($content);
+
+            Task::create([
+                'lesson_id' => $request->lesson_id,
+                'type' => $request->type,
+                'description' => $request->description,
+                'display_order' => Task::where('lesson_id', $request->lesson_id)->count() + 1,
+                'content' => json_encode($content)
+            ]);
+
+            $request->session()->flash('message', __('Zadatak je uspešno kreiran'));
+        } catch (Exception $e) {
+            Log::channel('errors')->error('Greška prilikom kreiranja zadatka: ' . $e->getMessage());
+            $request->session()->flash('error', __('Došlo je do greške. Pokušajte ponovo.'));
+        }
+
+        return redirect('tasks?lesson_id=' . $request->lesson_id);
+    }
+
     public function show(Task $task)
     {
         abort(404);

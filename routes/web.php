@@ -47,6 +47,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('tasks/store-complete-the-sentence', [TaskController::class, 'storeCompleteTheSentenceType'])->name('tasks.store-complete-the-sentence-type');
     Route::post('tasks/store-story', [TaskController::class, 'storeStoryType'])->name('tasks.store-story-type');
     Route::post('tasks/store-connect-lines', [TaskController::class, 'storeConnectLinesType'])->name('tasks.store-connect-lines-type');
+    Route::post('tasks/store-equations', [TaskController::class, 'storeEquationsType'])->name('tasks.store-equations-type');
 });
 
 require __DIR__ . '/auth.php';

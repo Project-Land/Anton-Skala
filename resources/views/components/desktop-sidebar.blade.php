@@ -15,7 +15,7 @@
                         <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
                         </path>
                     </svg>
-                    <span class="ml-4 mt-1">{{ __('Dashboard') }}</span>
+                    <span class="ml-4 mt-1">{{ __('Početna') }}</span>
                 </a>
             </li>
         </ul>
@@ -25,7 +25,7 @@
                 @if(request()->is(['subjects', 'lessons', 'fields', 'tasks*', 'create-task']))
                 <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>
                 @endif
-                <a class="{{ request()->is(['subjects', 'lessons', 'fields', 'tasks*', 'create-task'])? "text-purple-800 dark:text-purple-400":"" }} inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-purple-800 dark:hover:text-gray-200" href="{{ route('subjects.index') }}">
+                <a class="{{ request()->is(['subjects', 'lessons', 'fields', 'tasks*', 'create-task'])? " text-purple-800 dark:text-purple-400":"" }} inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-purple-800 dark:hover:text-gray-200" href="{{ route('subjects.index') }}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600 dark:text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path d="M12 14l9-5-9-5-9 5 9 5z" />
                         <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
@@ -71,7 +71,7 @@
                 <a class="{{ request()->is('schools*')? " text-purple-800 dark:text-purple-400":"" }} inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-purple-800 dark:hover:text-gray-200" href="{{ route('schools.index') }}">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6 text-purple-600 dark:text-purple-400">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" />
-                      </svg>
+                    </svg>
                     <span class="ml-4 mt-1">{{ __('Škole') }}</span>
                 </a>
             </li>

@@ -16,7 +16,6 @@
             </div> --}}
         </div>
 
-        <!-- Breadcrumb -->
         <nav class="flex px-5 py-3 mb-8 text-gray-700 border border-gray-200 rounded-lg bg-white dark:bg-gray-800 dark:border-gray-700" aria-label="Breadcrumb">
             <ol class="inline-flex items-center space-x-1 md:space-x-3">
                 <li class="inline-flex items-center">
@@ -41,7 +40,7 @@
         <div class="overflow-x-auto relative grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-8 text-center justify-center">
             @foreach($subjects as $subject)
             <a href="{{ route('fields.index', ['subject_id' => $subject]) }}" class="block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-                <h5 class="text-center mb-2 text-lg sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ __($subject->name) }}</h5>
+                <h5 class="text-center text-lg sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ __($subject->name) }}</h5>
             </a>
             @endforeach
         </div>

@@ -22,6 +22,7 @@ class Tasks extends Component
         foreach ($list as $item) {
             Task::find($item['value'])->update(['display_order' => $item['order']]);
         }
+        session()->flash('message', __('Redosled zadataka uspešno izmenjen'));
     }
 
     public function removeTask(Task $task)
@@ -32,6 +33,16 @@ class Tasks extends Component
         try {
             if ($task->type == 'column_sorting') {
                 $columns = isset($content['columns']) ? $content['columns'] : [];
+                foreach ($columns as $column) {
+                    if ($column['image']) {
+                        unlink(public_path('/' . $column['image']));
+                    }
+                    if ($column['audio']) {
+                        unlink(public_path('/' . $column['audio']));
+                    }
+                }
+            } elseif ($task->type == 'equations') {
+                $columns = isset($content['content']) ? $content['content'] : [];
                 foreach ($columns as $column) {
                     if ($column['image']) {
                         unlink(public_path('/' . $column['image']));

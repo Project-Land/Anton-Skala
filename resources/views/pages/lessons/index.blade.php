@@ -68,7 +68,7 @@
             @foreach($lessons as $lesson)
 
             <a href="{{ route('tasks.index', ['lesson_id' => $lesson]) }}" class="block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-                <h5 class="mb-2 text-lg sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ __($lesson->name) }}</h5> <span class="text-gray-900 dark:text-gray-300">{{ $lesson->lang == "sr_lat" ? __('(Latinica)') : ( $lesson->lang == "sr_cir" ? __('(Ćirilica)') : "") }}</span>
+                <h5 class="text-lg sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ __($lesson->name) }}</h5> <span class="text-gray-900 dark:text-gray-300">{{ $lesson->lang == "sr_lat" ? __('(Latinica)') : ( $lesson->lang == "sr_cir" ? __('(Ćirilica)') : "") }}</span>
             </a>
             @endforeach
         </div>
