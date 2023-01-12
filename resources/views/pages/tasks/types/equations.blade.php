@@ -63,10 +63,10 @@
                                     <option value="*">*</option>
                                     <option value="/">/</option>
                                 </select>
-                                <input type="text" name="elements[]" id="" min="0"
+                                <input type="number" name="elements[]" id="" min="0"
                                     class="appearance-none w-1/5 text-center bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-purple-500 focus:border-purple-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500" required>
                                 <span class="font-bold text-2xl items-center dark:text-white">=</span>
-                                <input type="text" name="result" id="" min="0"
+                                <input type="number" name="result" id="" min="0"
                                     class="appearance-none w-1/5 text-center bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-purple-500 focus:border-purple-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500" required>
                             </div>
                         </div>

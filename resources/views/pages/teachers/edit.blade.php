@@ -7,7 +7,7 @@
         @include('components.alert')
 
         <div class="flex flex-col md:flex-row justify-between items-center mb-2">
-            <h2 class="my-3 md:my-6 text-lg md:text-2xl font-semibold text-gray-700 dark:text-gray-200">{{ $teacher->name }} - {{ __('Izmena nastavničkog naloga') }}</h2>
+            <h2 class="my-3 md:my-6 text-lg md:text-2xl text-gray-700 dark:text-gray-200"><span class="font-semibold">{{ $teacher->name }}</span> - {{ __('Izmena nastavničkog naloga') }}</h2>
             <div class="mb-2 md:my-6">
                 <a href="{{ route('teachers.index') }}" class="flex items-center justify-between w-full px-2 md:px-4 py-1 md:py-2 text-xs md:text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-lime">
                     {{ __('Nazad') }}
@@ -18,13 +18,15 @@
             </div>
         </div>
 
-        <div class="relative w-full sm:w-1/2 overflow-x-auto shadow-md sm:rounded-lg bg-white dark:bg-gray-800 mb-4">
+        <div class="relative w-1/2 overflow-x-auto shadow-md sm:rounded-lg bg-white dark:bg-gray-800 mb-4">
 
-            <form class="p-4" method="POST" action="{{ route('teachers.update', $teacher) }}">
+            <form class="p-4 w-full" method="POST" action="{{ route('teachers.update', $teacher) }}">
                 @csrf
                 @method('PUT')
 
-                <div class="mb-6">
+                <span class="text-md text-gray-700 dark:text-gray-300 font-medium">{{ __('Osnovne informacije') }}</span>
+
+                <div class="my-6">
                     <label for="school" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ __('Škola') }}</label>
                     <select name="school" id="school" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500" required>
                         <option value="">{{ __('Izaberi') }}...</option>
@@ -88,7 +90,6 @@
                     @error('old_password')
                     <span class="mt-2 text-xs italic text-red-600 dark:text-red-400">{{ $message }}</span>
                     @enderror
-                    <p class="mt-2 text-xs italic font-semibold text-gray-600 dark:text-gray-400">* {{ __('Popuniti samo ako se menja lozinka') }}</p>
                 </div>
 
                 <div class="mb-6">

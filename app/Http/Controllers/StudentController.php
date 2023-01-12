@@ -128,7 +128,6 @@ class StudentController extends Controller
             'password.required_with' => __('Unesite novu lozinku')
         ]);
 
-
         try {
             if ($request->password && Hash::check($request->old_password, $user->password)) {
                 $user->update(['password' => Hash::make($request->password)]);

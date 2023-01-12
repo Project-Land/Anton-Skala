@@ -51,6 +51,8 @@ class Tasks extends Component
                         unlink(public_path('/' . $column['audio']));
                     }
                 }
+            } elseif ($task->type == 'add_letter') {
+                //skip
             } else {
                 foreach ($answers as $answer) {
                     if ($answer['image']) {

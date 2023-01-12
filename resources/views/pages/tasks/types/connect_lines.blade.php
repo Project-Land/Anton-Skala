@@ -228,6 +228,12 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="mb-6">
+                    <label for="color_border" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ __('Dodaj pojmovima okvir u boji') }}</label>
+                    <input id="color_border" name="color_border" type="checkbox" value="1" class="w-4 h-4 text-purple-600 bg-gray-100 rounded border-gray-300 focus:ring-purple-600 dark:focus:ring-purple-700 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                </div>
+
                 <div class="flex justify-between items-center">
                     <div class="mt-4">
                         <button type="button" class="text-gray-900 cursor-pointer bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 rounded-lg text-sm px-2 py-2 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"

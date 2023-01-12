@@ -99,20 +99,21 @@ class TeacherController extends Controller
             'username' => ['required', Rule::unique('users')->ignore($id), 'min:3', 'max:100'],
             'email' => 'required|email',
             'school' => 'required',
+            'lang' => 'required',
             'old_password' => [
+                'nullable',
                 'required_with:password',
                 function ($attribute, $value, $fail) use ($user) {
                     if (!Hash::check($value, $user->password)) {
                         $fail(__('Lozinke se ne podudaraju'));
                     }
-                }
+                },
             ],
             'password' => [
                 'nullable',
                 'required_with:old_password',
                 Password::defaults()
             ],
-            'lang' => 'required'
         ], [
             'name.required' =>  __('Unesite ime i prezime'),
             'name.max' => __('Ime i prezime ne sme biti duže od 255 karaktera'),
@@ -140,6 +141,7 @@ class TeacherController extends Controller
                 'lang' => $request->lang,
                 'school_id' => $request->school
             ]);
+
             $request->session()->flash('message', __('Nastavnički nalog uspešno izmenjen'));
         } catch (Exception $e) {
             Log::channel('errors')->error('Greška prilikom izmene nastavničkog naloga: ' . $e->getMessage());

@@ -150,12 +150,9 @@ class TaskController extends Controller
             $questions = [];
 
             $colors = [
-                0 => 'red',
-                1 => 'green',
-                2 => 'blue',
-                3 => 'yellow',
-                4 => 'brown',
-                5 => 'purple'
+                0 => '#457b9d',
+                1 => '#9D6745',
+                2 => '#5ca39f',
             ];
 
             for ($i = 0; $i < $numberOfAnswers; $i++) {
@@ -280,12 +277,9 @@ class TaskController extends Controller
             $columns = [];
             $answers = [];
             $colors = [
-                0 => 'red',
-                1 => 'green',
-                2 => 'blue',
-                3 => 'yellow',
-                4 => 'brown',
-                5 => 'purple'
+                0 => '#457b9d',
+                1 => '#9D6745',
+                2 => '#5ca39f',
             ];
 
             for ($i = 0; $i < $numberOfColumns; $i++) {
@@ -726,6 +720,11 @@ class TaskController extends Controller
             $answers = [];
             $numberOfQuestions = count($request->question_text);
             $questions = [];
+            $colors = [
+                0 => '#457b9d',
+                1 => '#9D6745',
+                2 => '#5ca39f',
+            ];
 
             for ($i = 0; $i < $numberOfAnswers; $i++) {
                 $answers += [
@@ -733,7 +732,8 @@ class TaskController extends Controller
                         'text' => $request->answer_text[$i],
                         'image' => $request->answer_image[$i] ?? null,
                         'audio' => $request->answer_audio[$i] ?? null,
-                        'id' => $i + 1
+                        'id' => $i + 1,
+                        'color' => $request->color_border ? $colors[$i] : null
                     ]
                 ];
             }
@@ -744,7 +744,8 @@ class TaskController extends Controller
                         'text' => $request->question_text[$i],
                         'image' => $request->question_image[$i] ?? null,
                         'audio' => $request->question_audio[$i] ?? null,
-                        'id' => $i + 1
+                        'id' => $i + 1,
+                        'color' => $request->color_border ? $colors[$i] : null
                     ]
                 ];
             }
@@ -752,6 +753,7 @@ class TaskController extends Controller
             $content = [
                 'answers' => $answers,
                 'questions' => $questions,
+                'color_border' => $request->color_border ? true : false
             ];
 
             foreach ($content['answers'] as $key => $answer) {
@@ -810,6 +812,7 @@ class TaskController extends Controller
         }
 
         try {
+            $content = [];
             $elements = [];
             $result = (int)$request->result;
 
@@ -841,15 +844,15 @@ class TaskController extends Controller
             $answers = [
                 0 => [
                     'answer' => $result,
-                    'correct' => true
+                    'correct' => true,
                 ],
                 1 => [
                     'answer' => $random1,
-                    'correct' => false
+                    'correct' => false,
                 ],
                 2 => [
                     'answer' => $random2,
-                    'correct' => false
+                    'correct' => false,
                 ]
             ];
 
@@ -859,8 +862,6 @@ class TaskController extends Controller
                 'elements' => $elements,
                 'answers' => $answers
             ];
-
-            dd($content);
 
             Task::create([
                 'lesson_id' => $request->lesson_id,
